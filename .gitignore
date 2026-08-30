@@ -1,0 +1,18 @@
+# macOS
+.DS_Store
+.ds_store
+
+# 本地运行时数据
+postgres_data/
+
+# 本地工具配置目录（根目录与 AI_agent 内）
+.zcode/
+AI_agent/.agents/
+AI_agent/.claude/
+AI_agent/.copilot/
+AI_agent/.obsidian/
+AI_agent/.opencode/
+AI_agent/.smart-env/
+AI_agent/.vscode/
+AI_agent/.workbuddy-ai/
+AI_agent/.zcode/
