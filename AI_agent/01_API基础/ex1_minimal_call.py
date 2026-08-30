@@ -14,8 +14,10 @@ resp = requests.post(
     json={
         "model": MODEL,
         "messages": [
+            {"role": "system", "content": "你是一个只用文言文回答的助手"},
             {"role": "user", "content": "用一句话解释什么是 token"},
         ],
+        # "max_tokens": 100,
     },
     timeout=60,
 )
