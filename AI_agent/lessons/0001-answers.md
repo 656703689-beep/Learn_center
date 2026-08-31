@@ -31,7 +31,7 @@
 
 ## 提示 1：请求和响应怎么接起来（任务 2）
 
-发送的是**整个 messages 列表 + 新的 user 消息**；收到响应后，把 `resp["choices"][0]["message"]`（它恰好就是一个 `{"role": "assistant", "content": ...}` 字典）整个 append 回同一个列表。下一轮循环发出去的，就是这个变长了的历史。
+发送的是**整个 messages 数组 + 新的 user 消息**；收到响应后 `const data = await resp.json()`，把 `data.choices[0].message`（它恰好就是一个 `{ role: "assistant", content: "..." }` 对象）整个 push 回同一个数组。下一轮循环发出去的，就是这个变长了的历史。
 
 [← 返回课件](0001-llm-api-stateless-messages.md)
 
@@ -41,7 +41,7 @@
 
 ## 提示 2：细节清单（任务 2）
 
-用户直接回车（空输入）就 continue 跳过；`Ctrl+C` 想优雅退出可以包一层 `try/except KeyboardInterrupt`；把 API 调用抽成一个函数 `chat(messages) -> tuple[str, dict]`（返回回复文本和 usage），任务 3 会感谢这个设计。
+用户直接回车（空输入）就 continue 跳过；`Ctrl+C` 想优雅退出可以包一层 `try/catch`；把 API 调用抽成一个 async 函数 `chat(messages: Message[]): Promise<{ content: string; usage: Usage }>`（返回回复文本和 usage），任务 3 会感谢这个设计。另外：如果拼出来的 URL 里出现 `undefined`，说明环境变量没设——回 §0 把三个 export 跑一遍。
 
 [← 返回课件](0001-llm-api-stateless-messages.md)
 

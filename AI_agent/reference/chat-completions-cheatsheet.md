@@ -52,7 +52,8 @@
       "index": 0,                 // ← 候选序号
       "message": {
         "role": "assistant",      // ← 整个对象原样 append 回 messages
-        "content": "回复正文"      // ← 99% 的场景你只取这个字段
+        "content": "回复正文",     // ← 99% 的场景你只取这个字段
+        "reasoning_content": "……" // ← 思考模式的思维链，非 OpenAI 标准字段，见 §3.1
       }
     }
   ],
@@ -63,6 +64,32 @@
   }
 }
 ```
+
+---
+
+## §3.1 思考模式（reasoning_content）
+
+> 2026-08-31 依据三家官方文档核实。
+
+开了思考模式的模型（DeepSeek V4 默认就开）会先生成一段**思维链**再给最终答案，这段思考过程通过 `message.reasoning_content` 返回（流式在 `delta.reasoning_content`），与 `content` 同级。**它不是 OpenAI 标准字段**——DeepSeek 率先使用、国内各家跟进的事实惯例；OpenAI 自家推理模型并不通过它暴露思考过程。取正文照旧 `choices[0].message.content`，不受影响。
+
+| 供应商 | 默认状态 | 开关 |
+|---|---|---|
+| DeepSeek V4 | 默认开启，effort 默认 high | `"thinking": {"type": "enabled/disabled"}`；强度 `"reasoning_effort": "low/high/max"` |
+| 智谱 GLM | 默认开启；**glm-5.3 / 5.3-flash 强制思考，关不掉** | `"thinking": {"type": "disabled"}`（其余型号可用） |
+| Qwen（百炼） | 默认**关闭** | 请求体加 `"enable_thinking": true` |
+
+**多轮对话要不要把 reasoning_content 传回去？**
+
+- **不带工具调用**：无需回传；传了也会被忽略（DeepSeek 官方明示）。所以把整个 message 对象 push 回 messages 无害，放心做任务 2。
+- **带工具调用**：DeepSeek / GLM 都要求**完整回传**历史轮次的 reasoning_content，漏传直接 400——第 3 课的主角，先混个脸熟。
+
+**两个坑**：
+
+1. 思考内容也是模型输出，**照常计入 completion_tokens 计费**——观察 usage 时输出 token 比答案字数多，多出来的就是思考开销。
+2. DeepSeek 思考模式下 `temperature` / `top_p` 等采样参数**不生效**（设了不报错但被忽略）。
+
+参考：[DeepSeek · Thinking Mode](https://api-docs.deepseek.com/zh-cn/guides/thinking_mode) · [智谱 · 思考模式](https://docs.bigmodel.cn/cn/guide/capabilities/thinking-mode) · [阿里云百炼 · 深度思考](https://www.alibabacloud.com/help/zh/model-studio/deep-thinking)
 
 ---
 
@@ -91,14 +118,23 @@
 
 ## §6 你会写一千遍的三行
 
+```typescript
+// TypeScript（Node 内建 fetch）
+const resp = await fetch(url, { method: "POST", headers, body: JSON.stringify(payload) });
+const data = await resp.json();
+const text  = data.choices[0].message.content;   // ← 取正文
+const usage = data.usage;                        // ← 记账
+```
+
 ```python
+# Python（requests）
 resp = requests.post(url, headers=..., json=payload, timeout=60)
 data = resp.json()
 text = data["choices"][0]["message"]["content"]   # ← 取正文
 usage = data["usage"]                             # ← 记账
 ```
 
-记住取数路径 `choices[0].message.content`，以后用 SDK 只是把这个爬楼梯换成属性访问：`resp.choices[0].message.content`——路还是同一条。
+记住取数路径 `choices[0].message.content`——TypeScript 里是 `data.choices[0].message.content`，Python 里是 `data["choices"][0]["message"]["content"]`；以后用 SDK 只是把这段路径换成属性访问：`resp.choices[0].message.content`。路还是同一条。
 
 ---
 

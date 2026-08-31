@@ -28,6 +28,7 @@
 - [Docs: 阿里云百炼 OpenAI 兼容接口](https://help.aliyun.com/zh/model-studio/compatibility-of-openai-with-dashscope)
   base_url `https://dashscope.aliyuncs.com/compatible-mode/v1`，入门模型 `qwen-plus` / `qwen-turbo`。用于：第 1 课学前阅读（备选供应商）。
 - 速查表：工作区 [reference/chat-completions-cheatsheet.md](reference/chat-completions-cheatsheet.md)——四家接入参数、请求/响应逐字段、错误码第一反应。
+- 速查表：工作区 [reference/ts-debug-repl.md](reference/ts-debug-repl.md)——TS 调试与 REPL（`debugger;`、VS Code launch.json、tsx REPL、main guard），Node 22 + tsx 实测结论。
 
 ## Wisdom (Communities)
 
