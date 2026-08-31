@@ -8,7 +8,7 @@
 
 ## §1 环境前提
 
-`01_API基础/` 里已有 npm 项目（`package.json` + `tsx` + `@types/node`）。跑法：
+npm 项目在工作区根目录（`package.json` + `tsx` + `@types/node`；在 `01_API基础/` 里跑也没问题，npx 会自动向上找到它）。跑法：
 
 ```bash
 npx tsx ex1_minimal_call.ts      # 跑脚本

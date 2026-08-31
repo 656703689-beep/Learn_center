@@ -144,14 +144,14 @@ usage = data["usage"]                             # ← 记账
 
 用法就一行（加在请求体里）：
 
-```python
+```jsonc
 "response_format": {"type": "json_object"}
 ```
 
 | 供应商 | 支持的类型 | 硬性要求 / 已知坑 |
 |---|---|---|
 | DeepSeek | `json_object` | **prompt 必须含 "json" 字样**（否则 400），建议附格式示例；**有概率返回空 `content`**（官方文档明示）；不支持 `json_schema` |
-| 智谱 GLM | `json_object` | 官方未演示 `json_schema`；推荐做法：Schema 写进 system prompt + 本地 `jsonschema` 校验 |
+| 智谱 GLM | `json_object` | 官方未演示 `json_schema`；推荐做法：Schema 写进 system prompt + 本地校验（Python 生态 jsonschema、TS 生态 zod；本课手写 if 就够） |
 | Qwen（百炼） | `json_object`；`json_schema` 仅 Qwen3.8-Max / 3.7-Max / 3.7-Plus / 3.8-Flash / 3.7-Flash 系列 | `json_object` 要求 messages 里含 "JSON" 字样，否则 400；**开启结构化输出时不要设 `max_tokens`** |
 
 （OpenAI 另支持最严格的 `json_schema` 严格模式，本次未逐条核实，用得上时以[官方文档](https://platform.openai.com/docs/guides/structured-outputs)为准。）
