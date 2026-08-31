@@ -35,9 +35,9 @@ npm i -D typescript tsx @types/node
 | ------------- | ------------------------------------- | --------------------- |
 | `typescript`  | 类型检查器 + 编译器（提供 `tsc` 命令）              | mypy，但是官方内建           |
 | `tsx`         | 直接跑 `.ts` 文件，**不检查类型**                | `python` 之于带注解的 `.py` |
-| `@types/node` | 给编辑器的 Node API 类型提示（`process`、`fs`……） | `.pyi` 存根文件           |
+| `@types/node` | 给编辑器和 tsc 提供 Node API 类型（`process`、`fs`……） | `.pyi` 存根文件           |
 
-### §0.3 两行 tsconfig（2 分钟）
+### §0.3 三行 tsconfig（2 分钟）
 
 在工作区根目录新建 `tsconfig.json`，内容只有这些：
 
@@ -45,15 +45,17 @@ npm i -D typescript tsx @types/node
 {
   "compilerOptions": {
     "strict": true,
-    "noEmit": true
+    "noEmit": true,
+    "types": ["node"]
   }
 }
 ```
 
-为什么需要它：**没有这个文件，编辑器对散装的 `.ts` 文件默认不开 strict**——你看到的红线是"宽松版"的，和课程底线"strict 下 0 error"对不上。注意这不是总纲里砍掉的"tsconfig 全家桶"：全家桶指网上抄来的二十行陈年配置（target ES5、各种 paths），这里只有两个开关，每个都说得清——
+为什么需要它：**没有这个文件，编辑器对散装的 `.ts` 文件默认不开 strict**——你看到的红线是"宽松版"的，和课程底线"strict 下 0 error"对不上。注意这不是总纲里砍掉的"tsconfig 全家桶"：全家桶指网上抄来的二十行陈年配置（target ES5、各种 paths），这里只有三个开关，每个都说得清——
 
 - `strict`：把严格检查一揽子打开（§2.4 细说），课程的底线；
-- `noEmit`：只检查、不产出 JS 文件（我们用 tsx 直跑，不需要 tsc 生成产物）。
+- `noEmit`：只检查、不产出 JS 文件（我们用 tsx 直跑，不需要 tsc 生成产物）；
+- `types: ["node"]`：启用 `@types/node`（§0.2 刚装的），`process`、`console` 这些 Node API 的类型全靠它。TypeScript 7 **不会**自动装载 `node_modules/@types/` 里的包——漏了这一行，第一条用到 `process` 的代码就会报 `error TS2591: Cannot find name 'process'`。
 
 ### §0.4 建练习目录 + 冒烟测试（3 分钟）
 
@@ -70,7 +72,7 @@ console.log(greeting);
 
 ```bash
 npx tsx 01_语法起步/hello.ts   # ← 跑起来
-npx tsc --noEmit               # ← 查类型（在工作区根目录跑）
+npx tsc --noEmit               # ← 查类型（项目里任何目录跑都行，见下方的坑）
 ```
 
 第一条打印出问候；第二条**什么都不输出**——恭喜，0 error 就是这个样子（tsc 的沉默 = 安检通过）。这两条命令从此定型：
@@ -79,6 +81,9 @@ npx tsc --noEmit               # ← 查类型（在工作区根目录跑）
 - **`npx tsc --noEmit`** = 安检（只看类型，不跑）
 
 以后每次课说"0 error"，都以第二条命令的沉默为准。
+
+> ⚠️ **tsc 认项目，不认文件——别给它带文件名**
+> `npx tsc --noEmit` 在项目任何子目录里跑都行：它会向上找到根目录的 tsconfig.json，按它检查整个项目。但**不要带文件名**——`npx tsc --noEmit ex2_bmi.ts` 意味着"绕过 tsconfig、按默认配置只查这一个文件"，TypeScript 7 会直接拒绝：`error TS5112: tsconfig.json is present but will not be loaded if files are specified on commandline`。一句话记：**tsx 认文件，你指哪它跑哪；tsc 认项目，只按 tsconfig 圈定的范围干活。**
 
 > 💡 **课前读什么**
 > 按计划，学前阅读是[官方 Handbook](https://www.typescriptlang.org/docs/handbook/intro.html) 的 "The Basics" 与 "Everyday Types" 前半章；英文吃力就看[阮一峰 TypeScript 教程](https://wangdoc.com/typescript/)的对应章节。
@@ -163,9 +168,9 @@ count = count + 1;
 | 检查类型？ | ❌ 完全不检查 | ✅ 只干这个 |
 | 跑你的代码？ | ✅ | ❌ |
 | 出 JS 产物？ | ❌（内存里转译） | ❌（noEmit；去掉它才产出） |
-| 什么时候用 | 日常开发，改完就跑 | 练习完成前，验 0 error |
+| 什么时候用 | 日常开发，改完就跑 | 练习完成前，验 0 error（不带文件名，见 §0.4 的坑） |
 
-二者没有替代关系。任务 3 你还会见到第三种用法：`npx tsc --strict --outDir tmp 文件名.ts`——真的编译出 JS 文件，用来看"类型擦除后剩下什么"。
+二者没有替代关系。任务 3 你还会见到第三种用法：`npx tsc --strict --outDir tmp --ignoreConfig 文件名.ts`——真的编译出 JS 文件，用来看"类型擦除后剩下什么"；`--ignoreConfig` 是向 tsc 声明"我知道这条命令绕过了 tsconfig，是故意的"。
 
 ### §2.2 注解 vs 推断：谁来写类型
 
@@ -236,6 +241,7 @@ strict 下的满屏红不是找麻烦，是编译器在逐个指出"这里可能
 1. 写 5 个类型错误的赋值/调用。每写一个，跑一次 `npx tsc --noEmit`，把报错原文贴进文件顶部注释，并用一句中文翻译它。
 2. **读报错的姿势**：每条报错里最值钱的是两段——**期望什么**（`Type 'X' is not assignable to type 'Y'` 的 Y）和**实际什么**（X）。5 条报错，每条都找出这两段。
 3. 删掉注解后对照：悬停变量看推断出的类型——感受"推断在干活"：你没写，类型也在。
+4. 观察完把错误行**注释掉**（报错原文和翻译留着）——错误代码活着，项目级 `npx tsc --noEmit` 就永远不沉默，§3.4 的 0 error 门禁过不了。
 
 - 💡 凑不满 5 个错误方向？折叠在下面，先自己凑：
 
@@ -289,7 +295,7 @@ const weight = Number(args[1]);
 
 1. **看类型去哪了（15 分钟）**：写 `ex3_erasure.ts`，塞满注解——几个带类型的变量、一个数组、一个完整注解的函数（参数 + 返回值）、一个返回字面量联合的函数。然后：
    ```bash
-   npx tsc --strict --outDir tmp ex3_erasure.ts
+   npx tsc --strict --outDir tmp --ignoreConfig ex3_erasure.ts
    ```
    打开 `tmp/ex3_erasure.js`，和源文件并排逐行对照：哪些消失了？哪些留下了？在源文件注释里写下观察（比如"参数注解没了""字面量联合没了""函数体原样保留"）。看完删掉 `tmp/`，别混进后面的练习。
 
@@ -303,11 +309,11 @@ const weight = Number(args[1]);
 
 ### §3.4 自查清单
 
-- [ ] 任务 1–3 全部跑通；`npx tsc --noEmit` 沉默（0 error）
-- [ ] 能口述：tsx 和 tsc 各干什么、谁在检查类型
-- [ ] BMI 四种输入检查全过：无裸崩、无 NaN 分级
-- [ ] 亲眼看过编译产物：所有类型注解一个不剩
-- [ ] 能向别人解释 `JSON.parse` 那两行为什么编译放行、运行时炸
+- [x] 任务 1–3 全部跑通；`npx tsc --noEmit` 沉默（0 error） ✅ 2026-08-31
+- [x] 能口述：tsx 和 tsc 各干什么、谁在检查类型 ✅ 2026-08-31
+- [x] BMI 四种输入检查全过：无裸崩、无 NaN 分级 ✅ 2026-08-31
+- [x] 亲眼看过编译产物：所有类型注解一个不剩 ✅ 2026-08-31
+- [x] 能向别人解释 `JSON.parse` 那两行为什么编译放行、运行时炸 ✅ 2026-08-31
 
 > 💡 **卡住 20 分钟就求助**
 > 老规矩：期望什么、实际发生什么、完整报错、相关代码，四样贴给我。环境问题（npm 装不上、编辑器不出红线之类）也直接贴——环境问题不是学习问题，不该耗你的时间。
