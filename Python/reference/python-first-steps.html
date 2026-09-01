@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Python 第一步速查：运行、输入输出、变量、类型、缩进与常见报错。">
+  <title>Python 第一步速查</title>
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <span>Python for AI · Reference 01</span>
+      <nav aria-label="页面导航">
+        <a href="#run">运行</a>
+        <a href="#types">类型</a>
+        <a href="#errors">报错</a>
+        <a href="../lessons/0001-data-in-data-out.html">返回第一课</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <p class="eyebrow">Reference / keep nearby</p>
+      <h1>Python 第一步速查</h1>
+      <p class="lede">需要时看一眼，然后回到代码。目标不是背诵，而是迅速找回“输入 → 处理 → 输出”的路线。</p>
+
+      <div class="pipeline" aria-label="Python 程序的基本数据流">
+        <div class="pipeline-step">
+          <small>input</small>
+          <strong>"45"</strong>
+        </div>
+        <div class="pipeline-step">
+          <small>variable</small>
+          <strong>minutes_text</strong>
+        </div>
+        <div class="pipeline-step">
+          <small>convert</small>
+          <strong>int("45") → 45</strong>
+        </div>
+        <div class="pipeline-step">
+          <small>print</small>
+          <strong>45 分钟</strong>
+        </div>
+      </div>
+    </section>
+
+    <main>
+      <section class="section" id="run">
+        <span class="step-label">Run</span>
+        <h2>运行脚本</h2>
+        <p>在 PowerShell 中进入课程目录，再把脚本文件交给 Python 解释器：</p>
+        <div class="terminal-line">cd "C:\Users\ZhongHui\Documents\ChatGPT\学习\Python"</div>
+        <div class="terminal-line">python study_log.py</div>
+        <div class="callout">
+          <strong>终端命令 ≠ Python 代码</strong>
+          <code>python study_log.py</code> 写在 PowerShell；<code>print("你好")</code> 写在 <code>.py</code> 文件。
+        </div>
+      </section>
+
+      <section class="section" id="types">
+        <span class="step-label">Core tools</span>
+        <h2>五个最先用到的工具</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>写法</th>
+              <th>作用</th>
+              <th>最小例子</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>input()</code></td>
+              <td>显示提示、等待键盘输入，返回 <code>str</code></td>
+              <td><code>name = input("名字：")</code></td>
+            </tr>
+            <tr>
+              <td><code>print()</code></td>
+              <td>把值输出到终端</td>
+              <td><code>print(name)</code></td>
+            </tr>
+            <tr>
+              <td><code>int()</code></td>
+              <td>把合适的值转换为整数</td>
+              <td><code>age = int("18")</code></td>
+            </tr>
+            <tr>
+              <td><code>float()</code></td>
+              <td>把合适的值转换为小数</td>
+              <td><code>height = float("1.72")</code></td>
+            </tr>
+            <tr>
+              <td><code>type()</code></td>
+              <td>查看一个值当前的类型</td>
+              <td><code>print(type(height))</code></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>四种基础类型</h3>
+        <div class="grid-2">
+          <article class="card">
+            <h4><code>str</code> 文本</h4>
+            <p><code>"AI"</code>、<code>"45"</code>。引号中的数字仍是文本。</p>
+          </article>
+          <article class="card">
+            <h4><code>int</code> 整数</h4>
+            <p><code>45</code>、<code>-2</code>。没有小数部分。</p>
+          </article>
+          <article class="card">
+            <h4><code>float</code> 小数</h4>
+            <p><code>36.5</code>、<code>1.72</code>。适合温度、身高等量。</p>
+          </article>
+          <article class="card">
+            <h4><code>bool</code> 真或假</h4>
+            <p><code>True</code>、<code>False</code>。常用于判断条件。</p>
+          </article>
+        </div>
+
+        <h3>格式化输出</h3>
+        <pre><code>name = "小智"
+minutes = 45
+print(f"{name} 今天学习 {minutes} 分钟")</code></pre>
+        <p><code>f</code> 让大括号中的变量值进入文本。</p>
+      </section>
+
+      <section class="section" id="names">
+        <span class="step-label">Structure</span>
+        <h2>变量名与缩进</h2>
+        <div class="grid-2">
+          <article class="card">
+            <h3>变量名</h3>
+            <p>推荐小写英文单词，用下划线分隔：<code>study_minutes</code>。不能含空格、不能以数字开头，也不能前后拼写不一致。</p>
+          </article>
+          <article class="card">
+            <h3>缩进</h3>
+            <p>冒号后的代码块通常缩进 4 个空格；同一代码块必须对齐。缩进决定代码属于哪个判断或循环。</p>
+          </article>
+        </div>
+        <pre><code>if minutes >= 30:
+    print("完成半小时练习")
+    print("继续保持")
+
+print("这个输出不受 if 控制")</code></pre>
+      </section>
+
+      <section class="section" id="errors">
+        <span class="step-label">Debug</span>
+        <h2>读报错：先看最后一行</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>最后一行</th>
+              <th>通常表示</th>
+              <th>第一反应</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>SyntaxError</code></td>
+              <td>语法结构不合法</td>
+              <td>检查箭头附近，也检查前一个引号、括号或冒号</td>
+            </tr>
+            <tr>
+              <td><code>IndentationError</code></td>
+              <td>缺少缩进或对齐不一致</td>
+              <td>检查冒号后的行，统一为 4 个空格</td>
+            </tr>
+            <tr>
+              <td><code>NameError</code></td>
+              <td>使用了不存在的变量名</td>
+              <td>检查是否赋值、是否拼错、大小写是否一致</td>
+            </tr>
+            <tr>
+              <td><code>TypeError</code></td>
+              <td>操作与值的类型不匹配</td>
+              <td>用 <code>type()</code> 检查参与运算的值</td>
+            </tr>
+            <tr>
+              <td><code>ValueError</code></td>
+              <td>类型转换的内容不合适</td>
+              <td>确认输入真的是数字，例如不要执行 <code>int("AI")</code></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="callout warning">
+          <strong>报错不是判分，是定位报告</strong>
+          从最后一行得到错误类型，再根据文件名和行号回到代码。一次只修改一个原因，然后重新运行。
+        </div>
+      </section>
+
+      <section class="section" id="sources">
+        <span class="step-label">Primary sources</span>
+        <h2>官方依据</h2>
+        <ul>
+          <li><a href="https://docs.python.org/zh-cn/3.13/tutorial/interpreter.html">使用 Python 的解释器</a></li>
+          <li><a href="https://docs.python.org/zh-cn/3.13/tutorial/introduction.html">Python 速览：变量、数字、文本与缩进</a></li>
+          <li><a href="https://docs.python.org/zh-cn/3.13/library/functions.html#input">内置函数：input、print、int、float、type</a></li>
+          <li><a href="https://docs.python.org/zh-cn/3.13/tutorial/errors.html">错误和异常</a></li>
+        </ul>
+        <p class="source-note">课程说明以 Python 3.13 中文官方文档为准。官方教程本身假设读者已有少量编程概念，因此本速查表只压缩了第一课真正需要的部分。</p>
+      </section>
+    </main>
+
+    <footer class="footer">
+      Python for AI · 第一次学习的随身速查 · 有疑问随时问你的 AI 老师
+    </footer>
+  </div>
+</body>
+</html>

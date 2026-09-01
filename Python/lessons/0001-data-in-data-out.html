@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Python for AI 第一课：运行第一个脚本，掌握变量、类型、输入输出和缩进。">
+  <title>第一课：让数据走完第一趟</title>
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <span>Python for AI · Lesson 01</span>
+      <nav aria-label="课程导航">
+        <a href="#start">开始</a>
+        <a href="#practice">练习</a>
+        <a href="#review">复盘</a>
+        <a href="../reference/python-first-steps.html">速查表</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <p class="eyebrow">Session 01 / data in, data out</p>
+      <h1>让数据走完第一趟</h1>
+      <p class="lede">今天不背一整本语法。你只做一件事：亲手让数据进入程序、发生变化，再从程序出来。这也是以后理解 AI 应用的第一条主线。</p>
+
+      <div class="meta-row" aria-label="课程信息">
+        <span class="pill">25–45 分钟</span>
+        <span class="pill">零基础可做</span>
+        <span class="pill">产出：study_log.py</span>
+        <span class="pill">Python 3.13.14 已就绪</span>
+      </div>
+
+      <div class="pipeline" aria-label="本课的数据流水线">
+        <div class="pipeline-step">
+          <small>input</small>
+          <strong>键盘输入 45</strong>
+        </div>
+        <div class="pipeline-step">
+          <small>str</small>
+          <strong>"45"</strong>
+        </div>
+        <div class="pipeline-step">
+          <small>int</small>
+          <strong>45</strong>
+        </div>
+        <div class="pipeline-step">
+          <small>print</small>
+          <strong>45 分钟</strong>
+        </div>
+      </div>
+    </section>
+
+    <main>
+      <section class="section" id="start">
+        <span class="step-label">Checkpoint 1</span>
+        <h2>先运行，再解释</h2>
+        <p>我已经替你确认：这台电脑安装了 Python 3.13.14，并准备好一个最小可运行脚本。打开 PowerShell，依次执行：</p>
+
+        <div class="terminal-line">cd "C:\Users\ZhongHui\Documents\ChatGPT\学习\Python"</div>
+        <div class="terminal-line">python study_log.py</div>
+
+        <p>程序会问你的称呼和今天计划学习的分钟数。输入后按 <kbd>Enter</kbd>。</p>
+
+        <div class="callout">
+          <strong>运行前先预测</strong>
+          如果你键入 <code>45</code>，<code>minutes_text</code> 和 <code>minutes</code> 显示的类型会相同吗？先在心里选“相同”或“不同”，再运行验证。
+        </div>
+
+        <ul class="checklist">
+          <li>终端出现 <code>=== Python 第 1 次学习 ===</code></li>
+          <li>程序显示了你的称呼和计划分钟数</li>
+          <li>你看到了 <code>str</code> 与 <code>int</code> 两个类型名</li>
+        </ul>
+
+        <details>
+          <summary>如果运行失败，先看这里</summary>
+          <div class="answer">
+            <p>确认当前目录是 <code>...\学习\Python</code>，命令写作 <code>python study_log.py</code>。不要把终端前面的提示符复制进命令。仍失败时，把完整报错发给你的 AI 老师，不要只发“运行不了”。</p>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="anatomy">
+        <span class="step-label">Understand</span>
+        <h2>拆开刚才的数据流</h2>
+
+        <pre><code>learner = input("你希望我怎么称呼你？ ")
+goal = "AI"
+minutes_text = input("今天计划学习多少分钟？ ")
+minutes = int(minutes_text)
+
+print(f"{learner}，你正在为 {goal} 学习 Python。")</code></pre>
+
+        <div class="grid-3">
+          <article class="card">
+            <h3>1. 输入</h3>
+            <p><code>input()</code> 显示提示并等待键盘输入。它返回的永远是文本 <code>str</code>，即使你键入的是数字。</p>
+          </article>
+          <article class="card">
+            <h3>2. 处理</h3>
+            <p><code>=</code> 把值绑定到变量名；<code>int()</code> 把合适的数字文本转换成整数。</p>
+          </article>
+          <article class="card">
+            <h3>3. 输出</h3>
+            <p><code>print()</code> 把信息送到终端。前缀 <code>f</code> 让大括号中的变量值进入文本。</p>
+          </article>
+        </div>
+
+        <h3>变量不是盒子上的装饰，而是你以后要再次使用的名字</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>写法</th>
+              <th>结果</th>
+              <th>原因</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>study_minutes = 45</code></td>
+              <td>正确</td>
+              <td>小写单词用下划线连接，含义清楚</td>
+            </tr>
+            <tr>
+              <td><code>study minutes = 45</code></td>
+              <td><code>SyntaxError</code></td>
+              <td>变量名不能包含空格</td>
+            </tr>
+            <tr>
+              <td><code>2minutes = 45</code></td>
+              <td><code>SyntaxError</code></td>
+              <td>变量名不能以数字开头</td>
+            </tr>
+            <tr>
+              <td><code>minutes = 45</code> 后使用 <code>minute</code></td>
+              <td><code>NameError</code></td>
+              <td>两个名字不同，后者没有被赋值</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p><a href="../reference/python-first-steps.html#types">打开“类型与工具”速查表</a>，需要时查，不要求今天背完。</p>
+      </section>
+
+      <section class="section" id="practice">
+        <span class="step-label">Checkpoint 2</span>
+        <h2>练习一：温度换算</h2>
+        <p>打开 <a href="../study_log.py"><code>study_log.py</code></a>，在文件末尾亲手输入下面四行。先不要复制粘贴；慢一点敲，留意引号、括号和变量名。</p>
+
+        <pre><code>celsius = float(input("请输入摄氏温度："))
+fahrenheit = celsius * 9 / 5 + 32
+print(f"{celsius}°C = {fahrenheit:.1f}°F")
+print("温度换算完成")</code></pre>
+
+        <p>保存后重新运行 <code>python study_log.py</code>。依次测试：</p>
+        <ul>
+          <li>输入 <code>0</code>，应得到 <code>32.0°F</code></li>
+          <li>输入 <code>100</code>，应得到 <code>212.0°F</code></li>
+        </ul>
+
+        <details>
+          <summary>为什么这里用 float，不用 int？</summary>
+          <div class="answer">
+            <p>温度可能是 <code>36.5</code>。<code>float("36.5")</code> 可以转换，<code>int("36.5")</code> 会触发 <code>ValueError</code>。选择类型要看数据可能长什么样。</p>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="bmi">
+        <span class="step-label">Checkpoint 3</span>
+        <h2>练习二：BMI 计算</h2>
+        <p>公式是：<strong>BMI = 体重（kg）÷ 身高（m）的平方</strong>。先自己把三个空补出来，再展开答案核对。</p>
+
+        <pre><code>weight = float(input("体重（kg）："))
+height = float(input("身高（m）："))
+bmi = ________
+print(f"你的 BMI 是 ________")</code></pre>
+
+        <div class="callout">
+          <strong>测试数据</strong>
+          体重输入 <code>60</code>、身高输入 <code>1.70</code>，结果约为 <code>20.76</code>。Python 中平方写作 <code>** 2</code>。
+        </div>
+
+        <details>
+          <summary>核对 BMI 代码</summary>
+          <div class="answer">
+            <pre><code>weight = float(input("体重（kg）："))
+height = float(input("身高（m）："))
+bmi = weight / (height ** 2)
+print(f"你的 BMI 是 {bmi:.2f}")</code></pre>
+            <p><code>:.2f</code> 表示把浮点数显示为小数点后两位。它改变显示方式，不会把变量本身变成文本。</p>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="indentation">
+        <span class="step-label">Checkpoint 4</span>
+        <h2>练习三：猜数字，第一次使用缩进</h2>
+        <p>把秘密数字固定为 <code>7</code>。程序根据猜测进入三个分支之一。冒号后的四个空格决定哪条输出属于哪个分支。</p>
+
+        <pre><code>secret = 7
+guess = int(input("猜一个 1～10 的整数："))
+
+if guess == secret:
+    print("猜对了")
+elif guess &lt; secret:
+    print("小了")
+else:
+    print("大了")</code></pre>
+
+        <p>分别输入 <code>7</code>、<code>3</code>、<code>9</code>，确认三个分支都实际运行过。</p>
+
+        <div class="callout warning">
+          <strong>错误实验：故意弄坏一次，再修好</strong>
+          暂时删掉 <code>print("猜对了")</code> 前面的 4 个空格并运行。记录报错最后一行；然后把 4 个空格加回来，再次运行。你应该看到 <code>IndentationError</code>，也应该能独立消除它。
+        </div>
+
+        <details>
+          <summary>为什么缩进不只是“让代码好看”？</summary>
+          <div class="answer">
+            <p>Python 用缩进划定代码块。它决定某行是否属于 <code>if</code>、<code>elif</code> 或 <code>else</code>。缺少或不一致的缩进会让解析器无法确定程序结构，因此属于语法问题。</p>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="review">
+        <span class="step-label">Retrieval</span>
+        <h2>合上代码，凭记忆回答</h2>
+        <p>先口述，再展开答案。卡住是正常的；努力回忆的过程本身就在加固记忆。</p>
+
+        <details>
+          <summary>Q1：键入 45 后，input() 返回 int 还是 str？</summary>
+          <div class="answer">
+            <p>返回 <code>str</code>，值可写成 <code>"45"</code>。需要计算时再用 <code>int()</code> 或 <code>float()</code> 转换。</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Q2：print() 与 input() 各负责什么？</summary>
+          <div class="answer">
+            <p><code>input()</code> 把用户输入带进程序；<code>print()</code> 把程序中的值显示到终端。一个负责进入，一个负责出来。</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Q3：为什么变量名拼错会报 NameError？</summary>
+          <div class="answer">
+            <p>Python 按名字寻找已经绑定的值。<code>minutes</code> 与 <code>minute</code> 是两个不同名字；如果后者从未赋值，Python 就找不到它。</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Q4：为什么 if 后面的输出要缩进？</summary>
+          <div class="answer">
+            <p>缩进表示输出属于该判断分支。Python 通过缩进理解代码块边界，而不使用大括号。</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Q5：AI 目标与今天的小程序有什么关系？</summary>
+          <div class="answer">
+            <p>AI 应用也要接收输入、把输入整理为正确类型或结构、交给程序处理，再输出结果。今天建立的是这条数据流的最小模型。</p>
+          </div>
+        </details>
+
+        <div class="next-action">
+          <h3>把证据发给你的 AI 老师</h3>
+          <p>完成到哪里就发到哪里：粘贴运行输出、你遇到并修复的报错，以及 Q1–Q4 的口述答案。老师会按你的实际表现调整下一步，不会仅因为“看过课件”就假定你已经学会。</p>
+        </div>
+      </section>
+
+      <section class="section" id="source">
+        <span class="step-label">Primary reading</span>
+        <h2>只推荐一段官方阅读</h2>
+        <p>完成练习后，用 5 分钟浏览 Python 官方的 <a href="https://docs.python.org/zh-cn/3.13/tutorial/introduction.html">《Python 速览》3.1 与 3.2</a>。重点只看数字、赋值、文本、<code>print()</code> 与缩进；陌生内容先跳过。</p>
+        <p class="source-note">还没完成练习时不要先读长文档。先动手，让官方文档用于确认和加深，而不是代替实践。</p>
+      </section>
+    </main>
+
+    <footer class="footer">
+      有任何一行看不懂，直接把那一行发给你的 AI 老师。问题越具体，反馈越快。
+    </footer>
+  </div>
+</body>
+</html>
