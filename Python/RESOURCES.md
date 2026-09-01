@@ -12,6 +12,10 @@
   官方说明如何阅读 `SyntaxError`、`NameError`、`TypeError` 等错误。用于：把报错当作定位线索。
 - [Python 3.13 语言参考：缩进](https://docs.python.org/zh-cn/3.13/reference/lexical_analysis.html#indentation)
   Python 如何用缩进生成代码块的正式规则。用于：理解缩进不是排版装饰，而是语法。
+- [Python 3.13 教程：走向编程的第一步](https://docs.python.org/zh-cn/3.13/tutorial/introduction.html#first-steps-towards-programming)
+  Python 官方用一个会更新状态的示例介绍 `while`。用于：观察“初始值 → 条件检查 → 状态更新”的基本循环。
+- [Python 3.13 语言参考：while 语句](https://docs.python.org/zh-cn/3.13/reference/compound_stmts.html#the-while-statement)
+  `while` 的正式执行规则：重复检查条件，为真时执行循环体，为假时终止。用于：核对循环何时开始、重复和退出。
 
 ## Wisdom (Communities)
 

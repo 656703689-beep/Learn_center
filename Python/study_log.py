@@ -21,11 +21,22 @@
 # height = float(input("身高(m)："))
 # bmi = weight/(height**2)
 # print(f"你的 BMI 是 {bmi:.2f}")
-secret  =   7
-guess   =   int(input("猜一个1到10的数字"))
-if  guess   ==  secret:
-    print("猜对了")
-elif guess > secret:
-    print("猜大了")
-else:
-    print("猜小了")
+# secret  =   7
+# guess   =   int(input("猜一个1到10的数字"))
+# if  guess   ==  secret:
+#     print("猜对了")
+# elif guess > secret:
+#     print("猜大了")
+# else:
+#     print("猜小了")
+secret = 7
+guess = 0
+attempts = 0
+while guess != secret:
+    guess = int(input("猜一个1~10的整数:"))
+    attempts = attempts+1
+    if guess < secret:
+        print("小了")
+    elif guess > secret:
+        print("大了")
+print(f"猜对了!你一共猜了{attempts}次。")

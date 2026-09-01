@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Python while 循环速查：条件、状态更新、缩进、停止与常见错误。">
+  <title>Python while 循环速查</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <span>Python for AI · Reference 02</span>
+      <nav aria-label="页面导航">
+        <a href="#shape">结构</a>
+        <a href="#trace">追踪</a>
+        <a href="#errors">排错</a>
+        <a href="../lessons/0002-repeat-until-right.html">返回第二课</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <p class="eyebrow">Reference / while loop</p>
+      <h1>条件为真，就再来一轮</h1>
+      <p class="lede">需要时看一眼，然后回到代码。一个可靠的 <code>while</code> 循环通常能回答三个问题：从什么状态开始、什么条件下继续、每轮如何接近停止。</p>
+
+      <div class="pipeline" aria-label="while 循环的四个阶段">
+        <div class="pipeline-step">
+          <small>start</small>
+          <strong>设置初始状态</strong>
+        </div>
+        <div class="pipeline-step">
+          <small>check</small>
+          <strong>计算条件真假</strong>
+        </div>
+        <div class="pipeline-step">
+          <small>update</small>
+          <strong>执行并更新状态</strong>
+        </div>
+        <div class="pipeline-step">
+          <small>stop</small>
+          <strong>条件为假时退出</strong>
+        </div>
+      </div>
+    </section>
+
+    <main>
+      <section class="section" id="shape">
+        <span class="step-label">Core shape</span>
+        <h2>最小结构</h2>
+
+        <pre><code>状态 = 初始值
+
+while 条件:
+    做一轮工作
+    更新状态
+
+循环结束后的工作</code></pre>
+
+        <p>对应猜数字程序：</p>
+
+        <pre><code>secret = 7
+guess = 0
+
+while guess != secret:
+    guess = int(input("请猜："))
+
+print("猜对了")</code></pre>
+
+        <table>
+          <thead>
+            <tr>
+              <th>部位</th>
+              <th>本例</th>
+              <th>作用</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>初始状态</td>
+              <td><code>guess = 0</code></td>
+              <td>让第一次检查时变量已经存在</td>
+            </tr>
+            <tr>
+              <td>继续条件</td>
+              <td><code>guess != secret</code></td>
+              <td>没猜中时得到 <code>True</code></td>
+            </tr>
+            <tr>
+              <td>状态更新</td>
+              <td><code>guess = int(input(...))</code></td>
+              <td>让下一次检查得到新的结果</td>
+            </tr>
+            <tr>
+              <td>循环之后</td>
+              <td><code>print("猜对了")</code></td>
+              <td>只在条件变为 <code>False</code> 后执行</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout">
+          <strong>先检查，后执行</strong>
+          <code>while</code> 会在进入每一轮前检查条件。因此，如果条件第一次就是 <code>False</code>，循环体可以一次也不执行。
+        </div>
+      </section>
+
+      <section class="section" id="trace">
+        <span class="step-label">Trace</span>
+        <h2>手动追踪四问</h2>
+        <ol>
+          <li>检查条件时，各变量当前是多少？</li>
+          <li>条件结果是 <code>True</code> 还是 <code>False</code>？</li>
+          <li>如果进入循环，这一轮改变了哪个变量？</li>
+          <li>这个改变是否让程序更接近停止？</li>
+        </ol>
+
+        <p>计数器的常用写法：</p>
+
+        <pre><code>attempts = 0
+
+while guess != secret:
+    guess = int(input("请猜："))
+    attempts = attempts + 1</code></pre>
+
+        <p><code>attempts = attempts + 1</code> 是“读旧值 → 加一 → 写回新值”，不是数学等式。</p>
+      </section>
+
+      <section class="section" id="indentation">
+        <span class="step-label">Indentation</span>
+        <h2>缩进决定执行时机</h2>
+
+        <div class="grid-2">
+          <article class="card">
+            <h3>缩进 4 个空格</h3>
+            <p>属于循环体，每进入一轮就可能执行一次。</p>
+          </article>
+          <article class="card">
+            <h3>退回最左侧</h3>
+            <p>不再属于循环，只在循环结束后继续执行。</p>
+          </article>
+        </div>
+
+        <pre><code>while guess != secret:
+    guess = int(input("请猜："))  # 循环内
+
+print("结束")                     # 循环外</code></pre>
+      </section>
+
+      <section class="section" id="errors">
+        <span class="step-label">Debug</span>
+        <h2>四个高频问题</h2>
+
+        <table>
+          <thead>
+            <tr>
+              <th>症状</th>
+              <th>常见原因</th>
+              <th>检查位置</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>NameError</code></td>
+              <td>条件第一次检查前，变量还不存在</td>
+              <td>确认循环前已有初始赋值</td>
+            </tr>
+            <tr>
+              <td><code>SyntaxError</code></td>
+              <td><code>while</code> 行末漏写冒号</td>
+              <td>确认条件后有 <code>:</code></td>
+            </tr>
+            <tr>
+              <td>程序一直运行</td>
+              <td>循环内没有更新条件依赖的状态</td>
+              <td>确认 <code>guess</code> 会获得新值</td>
+            </tr>
+            <tr>
+              <td>输出次数不对</td>
+              <td>某行缩进在循环内外放错位置</td>
+              <td>逐行标记“每轮”或“结束后”</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout warning">
+          <strong>停止意外的无限循环</strong>
+          回到正在运行程序的终端，按 <kbd>Ctrl</kbd> + <kbd>C</kbd>。然后检查循环条件依赖了哪些变量，以及这些变量是否在循环中更新。
+        </div>
+      </section>
+
+      <section class="section" id="sources">
+        <span class="step-label">Primary sources</span>
+        <h2>官方依据</h2>
+        <ul>
+          <li><a href="https://docs.python.org/zh-cn/3.13/tutorial/introduction.html#first-steps-towards-programming">Python 速览：走向编程的第一步</a></li>
+          <li><a href="https://docs.python.org/zh-cn/3.13/reference/compound_stmts.html#the-while-statement">Python 语言参考：while 语句</a></li>
+        </ul>
+        <p class="source-note">官方定义的核心是：重复检查表达式；为真时执行循环体，为假时终止。当前课程先练这一核心行为，暂不引入 <code>while ... else</code>、<code>break</code> 与 <code>continue</code>。</p>
+      </section>
+    </main>
+
+    <footer class="footer">
+      Python for AI · while 循环随身速查 · <a href="python-first-steps.html">返回 Python 第一步速查</a>
+    </footer>
+  </div>
+</body>
+</html>

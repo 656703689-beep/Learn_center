@@ -29,18 +29,23 @@ class StudyLogScriptTests(unittest.TestCase):
 
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("猜对了", result.stdout)
+        self.assertIn("1次", result.stdout)
 
-    def test_guess_too_large(self) -> None:
-        result = self.run_script("8\n")
-
-        self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn("猜大了", result.stdout)
-
-    def test_guess_too_small(self) -> None:
-        result = self.run_script("6\n")
+    def test_guess_too_large_then_secret(self) -> None:
+        result = self.run_script("8\n7\n")
 
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn("猜小了", result.stdout)
+        self.assertIn("大了", result.stdout)
+        self.assertIn("猜对了", result.stdout)
+        self.assertIn("2次", result.stdout)
+
+    def test_guess_too_small_then_secret(self) -> None:
+        result = self.run_script("6\n7\n")
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("小了", result.stdout)
+        self.assertIn("猜对了", result.stdout)
+        self.assertIn("2次", result.stdout)
 
 
 if __name__ == "__main__":
