@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Python for 与 range() 速查：基本结构、边界、循环选择与常见错误。">
+  <title>Python for / range 速查</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <span>Python for AI · Reference 03</span>
+      <nav aria-label="页面导航">
+        <a href="#shape">结构</a>
+        <a href="#range">边界</a>
+        <a href="#choose">选择</a>
+        <a href="#errors">排错</a>
+        <a href="../lessons/0003-count-with-for.html">返回第三课</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <p class="eyebrow">Reference / for and range</p>
+      <h1>数字取完，循环就停</h1>
+      <p class="lede"><code>for</code> 负责逐个取值，<code>range()</code> 负责给出一串整数。先看任务的重复方式，再决定是否需要它们。</p>
+
+      <div class="range-visual" aria-label="range 从 1 开始，到 4 之前停止">
+        <div class="range-expression"><code>range(1, 4)</code></div>
+        <ol class="range-track">
+          <li>
+            <small>take</small>
+            <strong>1</strong>
+          </li>
+          <li>
+            <small>take</small>
+            <strong>2</strong>
+          </li>
+          <li>
+            <small>take</small>
+            <strong>3</strong>
+          </li>
+          <li class="is-stop">
+            <small>stop</small>
+            <strong>4</strong>
+            <span>不包含</span>
+          </li>
+        </ol>
+        <p class="range-caption"><strong>包含 start，不包含 stop。</strong></p>
+      </div>
+    </section>
+
+    <main>
+      <section class="section" id="shape">
+        <span class="step-label">Core shape</span>
+        <h2>最小结构</h2>
+
+        <pre><code>for 当前值 in 一组值:
+    对当前值做一轮工作
+
+循环结束后的工作</code></pre>
+
+        <p>对应三轮训练日志：</p>
+
+        <pre><code>for epoch in range(1, 4):
+    print(f"第 {epoch} 轮")
+
+print("全部完成")</code></pre>
+
+        <table>
+          <thead>
+            <tr>
+              <th>部位</th>
+              <th>本例</th>
+              <th>作用</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>循环变量</td>
+              <td><code>epoch</code></td>
+              <td>保存这一轮取到的值</td>
+            </tr>
+            <tr>
+              <td>可迭代对象</td>
+              <td><code>range(1, 4)</code></td>
+              <td>依次提供 1、2、3</td>
+            </tr>
+            <tr>
+              <td>循环体</td>
+              <td>缩进的 <code>print()</code></td>
+              <td>每取到一个值就执行一次</td>
+            </tr>
+            <tr>
+              <td>循环之后</td>
+              <td>顶格的 <code>print()</code></td>
+              <td>所有值取完后执行一次</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="section" id="range">
+        <span class="step-label">Range forms</span>
+        <h2>三种常见写法</h2>
+
+        <table>
+          <thead>
+            <tr>
+              <th>写法</th>
+              <th>结果</th>
+              <th>记法</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>range(3)</code></td>
+              <td><code>0, 1, 2</code></td>
+              <td>省略 start 时从 0 开始</td>
+            </tr>
+            <tr>
+              <td><code>range(1, 4)</code></td>
+              <td><code>1, 2, 3</code></td>
+              <td>到 4 之前停止</td>
+            </tr>
+            <tr>
+              <td><code>range(2, 7, 2)</code></td>
+              <td><code>2, 4, 6</code></td>
+              <td>第三个参数是 step</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout">
+          <strong>显示第 1 到第 N 轮</strong>
+          写作 <code>range(1, n + 1)</code>。因为 <code>stop</code> 不包含，所以用目标数字后面的整数作为停止边界。
+        </div>
+
+        <p><code>range()</code> 的参数必须是整数。当前阶段把它理解成“按需提供整数的一把尺子”即可，不需要先把它转换成列表。</p>
+      </section>
+
+      <section class="section" id="choose">
+        <span class="step-label">Decision</span>
+        <h2>while 还是 for？</h2>
+
+        <table>
+          <thead>
+            <tr>
+              <th>先问</th>
+              <th>优先考虑</th>
+              <th>典型例子</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>重复次数未知，停止取决于条件？</td>
+              <td><code>while</code></td>
+              <td>一直猜，直到猜对</td>
+            </tr>
+            <tr>
+              <td>要依次处理一组值，或次数已知？</td>
+              <td><code>for</code></td>
+              <td>明确执行 5 轮</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p><a href="python-while-loop.html">打开 while 循环速查</a>，可以并排比较两种结构。</p>
+      </section>
+
+      <section class="section" id="trace">
+        <span class="step-label">Trace</span>
+        <h2>手动追踪四问</h2>
+        <ol>
+          <li><code>range()</code> 实际会给出哪些整数？</li>
+          <li>这一轮循环变量拿到哪个值？</li>
+          <li>缩进块改变了哪些状态？</li>
+          <li>数字取完后，哪一行最先执行？</li>
+        </ol>
+
+        <pre><code>score = 60
+
+for epoch in range(1, 4):
+    score = score + 5
+    print(epoch, score)
+
+print(score)</code></pre>
+
+        <p>三轮中的 <code>epoch</code> 依次为 <code>1</code>、<code>2</code>、<code>3</code>；<code>score</code> 依次变为 <code>65</code>、<code>70</code>、<code>75</code>。</p>
+      </section>
+
+      <section class="section" id="errors">
+        <span class="step-label">Debug</span>
+        <h2>四个高频问题</h2>
+
+        <table>
+          <thead>
+            <tr>
+              <th>症状</th>
+              <th>常见原因</th>
+              <th>检查位置</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>SyntaxError</code></td>
+              <td><code>for</code> 行末漏写冒号</td>
+              <td>确认最后有 <code>:</code></td>
+            </tr>
+            <tr>
+              <td>少执行一轮</td>
+              <td>忘记 <code>stop</code> 不包含</td>
+              <td>检查是否需要 <code>n + 1</code></td>
+            </tr>
+            <tr>
+              <td>某行只执行一次</td>
+              <td>它没有缩进，位于循环外</td>
+              <td>逐行标记“每轮”或“结束后”</td>
+            </tr>
+            <tr>
+              <td><code>TypeError</code></td>
+              <td>把小数或文本直接交给 <code>range()</code></td>
+              <td>确保边界是 <code>int</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="section" id="sources">
+        <span class="step-label">Primary sources</span>
+        <h2>官方依据</h2>
+        <ul>
+          <li><a href="https://docs.python.org/zh-cn/3.13/tutorial/controlflow.html#for-statements">Python 教程：for 语句</a></li>
+          <li><a href="https://docs.python.org/zh-cn/3.13/tutorial/controlflow.html#the-range-function">Python 教程：range() 函数</a></li>
+          <li><a href="https://docs.python.org/zh-cn/3.13/library/stdtypes.html#typesseq-range">Python 标准库：range 对象</a></li>
+        </ul>
+        <p class="source-note">官方教程说明 <code>for</code> 会按顺序迭代对象中的元素，且 <code>range()</code> 不包含终止值。本页只压缩第三课所需的基本结构和边界。</p>
+      </section>
+    </main>
+
+    <footer class="footer">
+      Python for AI · for / range 随身速查 · 有疑问随时问你的 AI 老师
+    </footer>
+  </div>
+</body>
+</html>

@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Python for AI 第三课：用 for 和 range() 完成次数已知的重复任务。">
+  <title>第三课：把“做几次”交给 Python</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <span>Python for AI · Lesson 03</span>
+      <nav aria-label="课程导航">
+        <a href="0002-repeat-until-right.html">回顾第二课</a>
+        <a href="#warmup">热身</a>
+        <a href="#practice">实作</a>
+        <a href="#review">复盘</a>
+        <a href="../reference/python-for-range.html">for / range 速查</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <p class="eyebrow">Session 03 / known repetitions</p>
+      <h1>把“做几次”交给 Python</h1>
+      <p class="lede">昨天的 <code>while</code> 适合“直到猜对”。今天改做另一类重复：次数已经知道时，让 <code>for</code> 按 <code>range()</code> 给出的数字，一轮一轮自动向前。</p>
+
+      <div class="meta-row" aria-label="课程信息">
+        <span class="pill">25–35 分钟</span>
+        <span class="pill">新工具：for + range</span>
+        <span class="pill">旧工具：变量 + input</span>
+        <span class="pill">产出：training_rounds.py</span>
+      </div>
+
+      <div class="range-visual" aria-label="range 从 1 开始，到 4 之前停止">
+        <div class="range-expression"><code>range(1, 4)</code></div>
+        <ol class="range-track">
+          <li>
+            <small>进入循环</small>
+            <strong>1</strong>
+          </li>
+          <li>
+            <small>进入循环</small>
+            <strong>2</strong>
+          </li>
+          <li>
+            <small>进入循环</small>
+            <strong>3</strong>
+          </li>
+          <li class="is-stop">
+            <small>stop</small>
+            <strong>4</strong>
+            <span>不包含</span>
+          </li>
+        </ol>
+        <p class="range-caption"><strong>start 包含，stop 不包含。</strong>这是今天唯一必须盯紧的边界。</p>
+      </div>
+    </section>
+
+    <main>
+      <section class="section" id="warmup">
+        <span class="step-label">Retrieval · 3 min</span>
+        <h2>先把昨天的循环从记忆里叫出来</h2>
+        <p>先不要打开旧代码。请在纸上、记事本或聊天框里补完下面两处；费力回忆比重读更能加固记忆。</p>
+
+        <pre><code>guess = 0
+
+while ____________:
+    guess = int(input("请猜："))</code></pre>
+
+        <details>
+          <summary>核对停止条件</summary>
+          <div class="answer">
+            <pre><code>while guess != 7:
+    guess = int(input("请猜："))</code></pre>
+            <p>条件表达的是“还没有猜中”。循环内更新 <code>guess</code>，条件才可能变成 <code>False</code>。</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>回忆题：如果循环里不更新 guess，会发生什么？</summary>
+          <div class="answer">
+            <p>条件会一直使用同一个旧值，程序可能永远无法正常停止。意外进入无限循环时，在终端按 <kbd>Ctrl</kbd> + <kbd>C</kbd>。</p>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="model">
+        <span class="step-label">Understand</span>
+        <h2>for：依次取值，每个值做一轮</h2>
+        <p>先读一个只执行三轮的最小例子：</p>
+
+        <pre><code>for epoch in range(1, 4):
+    print(f"第 {epoch} 轮")
+
+print("全部完成")</code></pre>
+
+        <div class="grid-3">
+          <article class="card">
+            <h3>1. 给出数字</h3>
+            <p><code>range(1, 4)</code> 依次提供 <code>1</code>、<code>2</code>、<code>3</code>，不会提供终止值 <code>4</code>。</p>
+          </article>
+          <article class="card">
+            <h3>2. 取出一个</h3>
+            <p><code>for</code> 每轮把下一个数字赋给 <code>epoch</code>；不需要你手动写 <code>epoch = epoch + 1</code>。</p>
+          </article>
+          <article class="card">
+            <h3>3. 执行一轮</h3>
+            <p>缩进块对每个数字执行一次。数字取完后，程序继续执行循环外的代码。</p>
+          </article>
+        </div>
+
+        <h3>运行前预测</h3>
+        <p>不要运行，先写下输出顺序。特别留意最后一行出现几次。</p>
+
+        <pre><code>for number in range(1, 4):
+    print(number)
+
+print("停")</code></pre>
+
+        <details>
+          <summary>展开预测答案</summary>
+          <div class="answer">
+            <pre><code>1
+2
+3
+停</code></pre>
+            <p><code>4</code> 是停止边界，不会进入循环；“停”没有缩进，所以在整个循环结束后只输出一次。</p>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="range">
+        <span class="step-label">Boundary</span>
+        <h2>range() 的两种入门写法</h2>
+
+        <table>
+          <thead>
+            <tr>
+              <th>写法</th>
+              <th>实际提供的数字</th>
+              <th>适合的表达</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>range(3)</code></td>
+              <td><code>0, 1, 2</code></td>
+              <td>从零开始，恰好执行 3 次</td>
+            </tr>
+            <tr>
+              <td><code>range(1, 4)</code></td>
+              <td><code>1, 2, 3</code></td>
+              <td>显示给人看的第 1、2、3 轮</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout">
+          <strong>为什么常写 epochs + 1？</strong>
+          如果用户输入 <code>epochs = 3</code>，而你想显示第 1 到第 3 轮，就要写 <code>range(1, epochs + 1)</code>。终止值不包含，所以把边界放在目标值的后一个整数。
+        </div>
+
+        <p>第三个参数 <code>step</code> 可以改变步长，例如 <code>range(2, 7, 2)</code> 给出 <code>2, 4, 6</code>。今天只需要能看懂，不要求主动使用。</p>
+      </section>
+
+      <section class="section" id="choose">
+        <span class="step-label">Choose the loop</span>
+        <h2>先问任务，再选 while 或 for</h2>
+
+        <table>
+          <thead>
+            <tr>
+              <th>任务</th>
+              <th>更自然的循环</th>
+              <th>理由</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>一直猜，直到猜对</td>
+              <td><code>while</code></td>
+              <td>开始时不知道会猜几次，停止取决于条件</td>
+            </tr>
+            <tr>
+              <td>明确模拟 5 轮训练</td>
+              <td><code>for</code></td>
+              <td>次数已知，可以依次取出 5 个轮次编号</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p>这不是死规定，而是当前阶段很好用的选择法：<strong>次数未知，看条件；次数已知，看序列。</strong></p>
+      </section>
+
+      <section class="section" id="practice">
+        <span class="step-label">Checkpoint 1 · Build</span>
+        <h2>做一个训练轮次模拟器</h2>
+        <p>在 <code>Python</code> 文件夹中新建 <code>training_rounds.py</code>，亲手输入下面的代码。这里模拟的是控制流，不是真实机器学习训练。</p>
+
+        <pre><code>epochs = int(input("准备模拟几轮训练？ "))
+score = 60
+
+for epoch in range(1, epochs + 1):
+    score = score + 5
+    print(f"第 {epoch} 轮：模拟得分 {score}")
+
+print(f"训练结束，最终模拟得分 {score}")</code></pre>
+
+        <p>保存后，在 PowerShell 中运行：</p>
+        <div class="terminal-line">cd "C:\Users\ZhongHui\Documents\ChatGPT\学习\Python"</div>
+        <div class="terminal-line">python training_rounds.py</div>
+
+        <div class="callout">
+          <strong>固定测试输入：3</strong>
+          应依次看到第 <code>1</code>、<code>2</code>、<code>3</code> 轮，模拟得分依次为 <code>65</code>、<code>70</code>、<code>75</code>，最后只输出一次“训练结束”。
+        </div>
+
+        <details>
+          <summary>epoch 为什么不需要提前赋值？</summary>
+          <div class="answer">
+            <p><code>for</code> 每轮都会从 <code>range()</code> 取出一个值并赋给 <code>epoch</code>。第一次是 <code>1</code>，接着是 <code>2</code> 和 <code>3</code>。</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>score 为什么要在循环之前设为 60？</summary>
+          <div class="answer">
+            <p>循环第一轮需要读取旧的 <code>score</code> 再加 <code>5</code>，所以第一次进入循环前它必须已经存在。它会把每轮的更新保留下来。</p>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="trace">
+        <span class="step-label">Checkpoint 2 · Trace</span>
+        <h2>追踪三轮状态</h2>
+        <p>输入 <code>3</code> 时，<code>range(1, epochs + 1)</code> 等价于 <code>range(1, 4)</code>。</p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>循环时刻</th>
+              <th><code>epoch</code></th>
+              <th>更新前 <code>score</code></th>
+              <th>更新后 <code>score</code></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>第 1 轮</td>
+              <td><code>1</code></td>
+              <td><code>60</code></td>
+              <td><code>65</code></td>
+            </tr>
+            <tr>
+              <td>第 2 轮</td>
+              <td><code>2</code></td>
+              <td><code>65</code></td>
+              <td><code>70</code></td>
+            </tr>
+            <tr>
+              <td>第 3 轮</td>
+              <td><code>3</code></td>
+              <td><code>70</code></td>
+              <td><code>75</code></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p>第三轮结束后，<code>range()</code> 已经没有下一个数字；<code>for</code> 自动退出，不需要额外写停止条件。</p>
+      </section>
+
+      <section class="section" id="debug">
+        <span class="step-label">Checkpoint 3 · Debug</span>
+        <h2>亲手制造一次少一轮</h2>
+        <p>把循环行临时改成下面这样，用输入 <code>3</code> 再运行一次：</p>
+
+        <pre><code>for epoch in range(1, epochs):</code></pre>
+
+        <p>先预测：会出现哪些轮次？运行后再展开答案。</p>
+
+        <details>
+          <summary>查看原因与修复</summary>
+          <div class="answer">
+            <p>只会出现第 <code>1</code>、<code>2</code> 轮，因为终止值 <code>3</code> 不包含。这类“少一次”常叫边界错误。恢复为：</p>
+            <pre><code>for epoch in range(1, epochs + 1):</code></pre>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="translate">
+        <span class="step-label">Interleave</span>
+        <h2>把旧 while 翻译成新 for</h2>
+        <p>下面的 <code>while</code> 会输出 <code>1</code>、<code>2</code>、<code>3</code>。试着用两行 <code>for</code> 写出相同行为。</p>
+
+        <pre><code>count = 1
+
+while count &lt;= 3:
+    print(count)
+    count = count + 1</code></pre>
+
+        <details>
+          <summary>核对 for 版本</summary>
+          <div class="answer">
+            <pre><code>for count in range(1, 4):
+    print(count)</code></pre>
+            <p>两段都正确；当目标只是依次处理固定的三个数字时，<code>for</code> 更直接，也省去了手动更新 <code>count</code>。</p>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="review">
+        <span class="step-label">Retrieval · Finish</span>
+        <h2>合上代码，用自己的话回答</h2>
+
+        <details>
+          <summary>Q1：range(1, 4) 会依次提供哪些数字？</summary>
+          <div class="answer">
+            <p><code>1</code>、<code>2</code>、<code>3</code>。开始值包含，终止值 <code>4</code> 不包含。</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Q2：为什么显示 1 到 epochs 时要写 epochs + 1？</summary>
+          <div class="answer">
+            <p>因为 <code>range()</code> 不包含终止值；把终止边界放在目标值后面，最后一个目标值才会被取到。</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Q3：for 循环里的 epoch 是谁更新的？</summary>
+          <div class="answer">
+            <p><code>for</code> 自动从 <code>range()</code> 取出下一个值并赋给 <code>epoch</code>，不需要手动加一。</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Q4：什么时候更适合 while，什么时候更适合 for？</summary>
+          <div class="answer">
+            <p>重复次数未知、依赖条件停止时优先考虑 <code>while</code>；要依次处理一组值或已知次数时优先考虑 <code>for</code>。</p>
+          </div>
+        </details>
+
+        <div class="next-action">
+          <h3>今天的第一个验收点</h3>
+          <p>运行 <code>training_rounds.py</code>，输入 <code>3</code>。把完整终端输出发给你的 AI 老师，再用一句话解释：“为什么要写 <code>epochs + 1</code>？”老师会根据这两份证据继续带你排错或进入加练。</p>
+        </div>
+      </section>
+
+      <section class="section" id="source">
+        <span class="step-label">Primary reading</span>
+        <h2>完成程序后，读官方文档的两小节</h2>
+        <p>用 5 分钟阅读 Python 官方教程中的 <a href="https://docs.python.org/zh-cn/3.13/tutorial/controlflow.html#for-statements"><code>for</code> 语句</a> 与 <a href="https://docs.python.org/zh-cn/3.13/tutorial/controlflow.html#the-range-function"><code>range()</code> 函数</a>。只确认两件事：<code>for</code> 会依次取值，以及 <code>range()</code> 不包含终止值。</p>
+        <p class="source-note">需要快速回忆时，打开本课程的 <a href="../reference/python-for-range.html">for / range 速查页</a>。任何一行看不懂，都可以直接把那一行发给你的 AI 老师。</p>
+      </section>
+    </main>
+
+    <footer class="footer">
+      Python for AI · 第三次学习 · 今天的胜利标准：能按任务选择循环，并准确写出次数边界
+    </footer>
+  </div>
+</body>
+</html>

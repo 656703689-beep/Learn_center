@@ -16,6 +16,10 @@
   Python 官方用一个会更新状态的示例介绍 `while`。用于：观察“初始值 → 条件检查 → 状态更新”的基本循环。
 - [Python 3.13 语言参考：while 语句](https://docs.python.org/zh-cn/3.13/reference/compound_stmts.html#the-while-statement)
   `while` 的正式执行规则：重复检查条件，为真时执行循环体，为假时终止。用于：核对循环何时开始、重复和退出。
+- [Python 3.13 教程：for 语句与 range() 函数](https://docs.python.org/zh-cn/3.13/tutorial/controlflow.html#for-statements)
+  Python 官方对按顺序迭代元素、用 `range()` 生成整数序列及终止值不包含规则的入门说明。用于：选择次数已知的循环并理解边界。
+- [Python 3.13 内置类型：range 对象](https://docs.python.org/zh-cn/3.13/library/stdtypes.html#typesseq-range)
+  `range(start, stop, step)` 的权威定义与参数规则。用于：核对起点、终点、步长和整数参数要求。
 
 ## Wisdom (Communities)
 
