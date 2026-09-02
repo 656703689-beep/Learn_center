@@ -10,8 +10,6 @@ node_modules/
 dist/
 build/
 .next/
-package-lock.json
-package.json
 
 # Python caches and virtual environments
 __pycache__/
@@ -53,4 +51,3 @@ TypeScript/.zcode/
 .ds_store
 Thumbs.db
 Desktop.ini
-.gitignore
