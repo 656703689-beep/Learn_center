@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Python for AI 第四课：用参数接收数据，用 return 交回函数结果。">
+  <title>第四课：把一段判断变成函数</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <span>Python for AI · Lesson 04</span>
+      <nav aria-label="课程导航">
+        <a href="0003-count-with-for.html">回顾第三课</a>
+        <a href="#warmup">热身</a>
+        <a href="#practice">实作</a>
+        <a href="#review">复盘</a>
+        <a href="../reference/python-function-basics.html">函数速查</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <p class="eyebrow">Session 04 / function data flow</p>
+      <h1>把一段判断变成函数</h1>
+      <p class="lede">你已经能让程序判断、重复和停止。今天只做一次结构升级：把“比较猜测”命名成一个函数，让数据进去，让结果回来。</p>
+
+      <div class="meta-row" aria-label="课程信息">
+        <span class="pill">25–35 分钟</span>
+        <span class="pill">新工具：def + return</span>
+        <span class="pill">旧工具：if + 变量</span>
+        <span class="pill">产出：function_lab.py</span>
+      </div>
+
+      <div class="pipeline" aria-label="一次函数调用的四个阶段">
+        <div class="pipeline-step">
+          <small>arguments</small>
+          <strong>20, 30</strong>
+        </div>
+        <div class="pipeline-step">
+          <small>parameters</small>
+          <strong>guess, secret</strong>
+        </div>
+        <div class="pipeline-step">
+          <small>body</small>
+          <strong>比较大小</strong>
+        </div>
+        <div class="pipeline-step">
+          <small>return</small>
+          <strong>"太小了"</strong>
+        </div>
+      </div>
+    </section>
+
+    <main>
+      <section class="section" id="warmup">
+        <span class="step-label">Retrieval · 3 min</span>
+        <h2>先从记忆里取回第三课</h2>
+        <p>先不要打开答案。你的程序允许猜 <code>8</code> 次：</p>
+
+        <pre><code>max_attempts = 8
+
+for attempt in range(1, max_attempts + 1):
+    print(attempt)</code></pre>
+
+        <p>请先说出两件事：会输出哪些数字？为什么不能把 <code>+ 1</code> 删掉？</p>
+
+        <details>
+          <summary>完成回忆后再核对</summary>
+          <div class="answer">
+            <p>输出 <code>1</code> 到 <code>8</code>。<code>range()</code> 不包含停止值，所以停止边界要放在目标值后面；删掉 <code>+ 1</code> 就只会到 <code>7</code>。</p>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="why">
+        <span class="step-label">Why a function?</span>
+        <h2>先给一段工作起名字</h2>
+        <p>猜数字程序里，“比较 <code>guess</code> 和 <code>secret</code>”是一件边界清楚的工作。把它变成函数后，主程序只需提出请求并接住结果：</p>
+
+        <pre><code>result = compare_guess(20, 30)
+print(result)</code></pre>
+
+        <div class="grid-2">
+          <article class="card">
+            <h3>函数负责一件事</h3>
+            <p><code>compare_guess</code> 只比较两个数字，不读取键盘，也不决定循环多少次。</p>
+          </article>
+          <article class="card">
+            <h3>主程序组织步骤</h3>
+            <p>主程序收集输入、调用函数，再决定在哪里显示返回的结果。</p>
+          </article>
+        </div>
+
+        <p>这种“输入数据 → 函数处理 → 返回结果”的形状，会反复出现在后续 AI 程序的数据预处理、模型调用和结果判断中。</p>
+      </section>
+
+      <section class="section" id="model">
+        <span class="step-label">Understand</span>
+        <h2>读懂定义、调用与返回</h2>
+
+        <pre><code>def compare_guess(guess, secret):
+    if guess &lt; secret:
+        return "太小了"
+    elif guess &gt; secret:
+        return "太大了"
+    else:
+        return "猜中了"
+
+message = compare_guess(20, 30)
+print(message)</code></pre>
+
+        <table>
+          <thead>
+            <tr>
+              <th>代码</th>
+              <th>名字</th>
+              <th>这一刻发生什么</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>def compare_guess(...):</code></td>
+              <td>定义</td>
+              <td>创建函数并给它命名；这里只定义，不执行函数体</td>
+            </tr>
+            <tr>
+              <td><code>guess, secret</code></td>
+              <td>参数</td>
+              <td>函数内部用来接收数据的名字</td>
+            </tr>
+            <tr>
+              <td><code>compare_guess(20, 30)</code></td>
+              <td>调用</td>
+              <td>把实参 <code>20</code>、<code>30</code> 交给函数并执行函数体</td>
+            </tr>
+            <tr>
+              <td><code>return "太小了"</code></td>
+              <td>返回</td>
+              <td>结束这次调用，把字符串交回调用的位置</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout">
+          <strong>参数是名字，实参是这次交进去的值</strong>
+          调用 <code>compare_guess(20, 30)</code> 时，<code>guess</code> 接到 <code>20</code>，<code>secret</code> 接到 <code>30</code>。
+        </div>
+      </section>
+
+      <section class="section" id="trace">
+        <span class="step-label">Trace before run</span>
+        <h2>先预测这次调用</h2>
+        <p>不要运行，沿着四步数据流回答：</p>
+
+        <pre><code>message = compare_guess(40, 30)
+print(message)</code></pre>
+
+        <ol>
+          <li><code>guess</code> 接到什么值？</li>
+          <li><code>secret</code> 接到什么值？</li>
+          <li>哪个判断为 <code>True</code>？</li>
+          <li><code>message</code> 最终保存什么？</li>
+        </ol>
+
+        <details>
+          <summary>展开数据流答案</summary>
+          <div class="answer">
+            <p><code>guess = 40</code>，<code>secret = 30</code>；第二个判断 <code>guess &gt; secret</code> 为 <code>True</code>，所以函数返回 <code>"太大了"</code>，这个字符串随后被赋给 <code>message</code>。</p>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="practice">
+        <span class="step-label">Checkpoint 1 · Build</span>
+        <h2>亲手写一个可验证的函数</h2>
+        <p>在 <code>Python</code> 文件夹中新建 <code>function_lab.py</code>。不要复制粘贴，亲手输入下面的函数和三个调用：</p>
+
+        <pre><code>def compare_guess(guess, secret):
+    if guess &lt; secret:
+        return "太小了"
+    elif guess &gt; secret:
+        return "太大了"
+    else:
+        return "猜中了"
+
+
+print(compare_guess(10, 30))
+print(compare_guess(30, 30))
+print(compare_guess(40, 30))</code></pre>
+
+        <p>保存后，在 PowerShell 中运行：</p>
+        <div class="terminal-line">cd "C:\Users\ZhongHui\Documents\ChatGPT\学习\Python"</div>
+        <div class="terminal-line">python function_lab.py</div>
+
+        <div class="callout">
+          <strong>固定验收输出</strong>
+          三行必须依次为：<code>太小了</code>、<code>猜中了</code>、<code>太大了</code>。顺序不对时，先检查三次调用的实参，再检查分支顺序。
+        </div>
+      </section>
+
+      <section class="section" id="connect">
+        <span class="step-label">Checkpoint 2 · Connect</span>
+        <h2>把键盘输入交给函数</h2>
+        <p>前三次固定调用都正确后，把文件底部的三行 <code>print(...)</code> 临时注释掉，再添加：</p>
+
+        <pre><code>secret = 30
+guess = int(input("猜一个 1 到 30 的整数："))
+
+result = compare_guess(guess, secret)
+print(result)</code></pre>
+
+        <p>这次主程序负责输入与输出，函数仍然只负责比较。分别输入 <code>10</code>、<code>30</code>、<code>40</code>，验证三条路径。</p>
+
+        <details>
+          <summary>print 和 return 是一回事吗？</summary>
+          <div class="answer">
+            <p>不是。<code>print()</code> 把文字显示在终端；<code>return</code> 把值交回调用处，让主程序还能保存、判断或继续处理它。这里先 <code>return</code> 给 <code>result</code>，再由主程序 <code>print(result)</code>。</p>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="debug">
+        <span class="step-label">Checkpoint 3 · Debug</span>
+        <h2>为什么什么都没有输出？</h2>
+        <p>下面的程序运行后没有报错，也没有显示“太小了”：</p>
+
+        <pre><code>def compare_guess(guess, secret):
+    if guess &lt; secret:
+        return "太小了"</code></pre>
+
+        <p>问题不在 <code>if</code>，而在函数只被定义、没有被调用。请凭记忆补两行，让结果显示出来。</p>
+
+        <details>
+          <summary>核对修复</summary>
+          <div class="answer">
+            <pre><code>result = compare_guess(10, 30)
+print(result)</code></pre>
+            <p>官方语言参考明确区分这两个时刻：执行 <code>def</code> 会创建函数；只有调用函数时，函数体才会执行。</p>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="review">
+        <span class="step-label">Retrieval · Finish</span>
+        <h2>合上代码，用自己的话回答</h2>
+
+        <details>
+          <summary>Q1：def 那一行会立刻执行函数体吗？</summary>
+          <div class="answer">
+            <p>不会。它创建并命名函数；看到函数调用时，函数体才执行。</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Q2：compare_guess(20, 30) 中的 20 和 30 叫什么？</summary>
+          <div class="answer">
+            <p>它们是这次调用传入的实参；函数定义中的 <code>guess</code> 和 <code>secret</code> 是参数。</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Q3：return "太小了" 做了哪两件事？</summary>
+          <div class="answer">
+            <p>结束当前函数调用，并把字符串 <code>"太小了"</code> 交回调用位置。</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Q4：为什么不直接在函数里 print？</summary>
+          <div class="answer">
+            <p>返回值可以继续保存、判断或组合；显示结果只是主程序可能选择的一种后续操作。</p>
+          </div>
+        </details>
+
+        <div class="next-action">
+          <h3>现在先完成第一关</h3>
+          <p>新建并运行 <code>function_lab.py</code> 的三个固定调用。把完整终端输出发给你的 AI 老师，再用一句话回答：“<code>message</code> 的值是从哪里来的？”老师会根据这两份证据继续带你接入键盘输入。</p>
+        </div>
+      </section>
+
+      <section class="section" id="source">
+        <span class="step-label">Primary reading</span>
+        <h2>完成第一关后，读官方文档的一小节</h2>
+        <p>用 5 分钟阅读 Python 官方教程的 <a href="https://docs.python.org/zh-cn/3.13/tutorial/controlflow.html#defining-functions">定义函数</a>。只确认三件事：<code>def</code> 后跟函数名和参数列表，函数体必须缩进，<code>return</code> 会把值交回调用处。</p>
+        <p class="source-note">需要快速回忆时，打开本课程的 <a href="../reference/python-function-basics.html">函数速查页</a>。任何一行看不懂，都可以直接把那一行发给你的 AI 老师。</p>
+      </section>
+    </main>
+
+    <footer class="footer">
+      Python for AI · 第四次学习 · 今天的胜利标准：能让数据进入函数，并接住返回结果
+    </footer>
+  </div>
+</body>
+</html>

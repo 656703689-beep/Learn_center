@@ -20,6 +20,12 @@
   Python 官方对按顺序迭代元素、用 `range()` 生成整数序列及终止值不包含规则的入门说明。用于：选择次数已知的循环并理解边界。
 - [Python 3.13 内置类型：range 对象](https://docs.python.org/zh-cn/3.13/library/stdtypes.html#typesseq-range)
   `range(start, stop, step)` 的权威定义与参数规则。用于：核对起点、终点、步长和整数参数要求。
+- [Python 3.13 教程：定义函数](https://docs.python.org/zh-cn/3.13/tutorial/controlflow.html#defining-functions)
+  Python 官方对 `def`、参数、函数调用与返回值的入门讲解。用于：第四课建立“实参 → 参数 → 函数体 → 返回值”的数据流。
+- [Python 3.13 语言参考：函数定义](https://docs.python.org/zh-cn/3.13/reference/compound_stmts.html#function-definitions)
+  函数定义的正式语法与执行规则，包括“定义时不执行函数体”。用于：区分定义函数和调用函数。
+- [Python 3.13 语言参考：return 语句](https://docs.python.org/zh-cn/3.13/reference/simple_stmts.html#the-return-statement)
+  `return` 离开当前函数调用并交回结果的权威定义。用于：区分 `return` 与 `print()`。
 
 ## Wisdom (Communities)
 

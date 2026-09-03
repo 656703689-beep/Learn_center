@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Python 函数速查：定义、参数、实参、调用、return 与常见错误。">
+  <title>Python 函数基础速查</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <span>Python for AI · Reference 04</span>
+      <nav aria-label="页面导航">
+        <a href="#shape">结构</a>
+        <a href="#flow">数据流</a>
+        <a href="#return">return</a>
+        <a href="#errors">排错</a>
+        <a href="../lessons/0004-function-data-flow.html">返回第四课</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <p class="eyebrow">Reference / function basics</p>
+      <h1>数据进去，结果回来</h1>
+      <p class="lede">函数把一段工作命名。调用时把数据交给参数，函数体处理数据，<code>return</code> 再把结果交回调用处。</p>
+
+      <div class="pipeline" aria-label="函数调用的数据流">
+        <div class="pipeline-step">
+          <small>arguments</small>
+          <strong>20, 30</strong>
+        </div>
+        <div class="pipeline-step">
+          <small>parameters</small>
+          <strong>guess, secret</strong>
+        </div>
+        <div class="pipeline-step">
+          <small>body</small>
+          <strong>比较大小</strong>
+        </div>
+        <div class="pipeline-step">
+          <small>return</small>
+          <strong>"太小了"</strong>
+        </div>
+      </div>
+    </section>
+
+    <main>
+      <section class="section" id="shape">
+        <span class="step-label">Core shape</span>
+        <h2>最小结构</h2>
+
+        <pre><code>def 函数名(参数):
+    处理数据
+    return 结果
+
+
+变量 = 函数名(实参)</code></pre>
+
+        <p>对应猜数字比较：</p>
+
+        <pre><code>def compare_guess(guess, secret):
+    if guess &lt; secret:
+        return "太小了"
+    elif guess &gt; secret:
+        return "太大了"
+    else:
+        return "猜中了"
+
+
+message = compare_guess(20, 30)</code></pre>
+
+        <div class="callout">
+          <strong>定义不等于调用</strong>
+          执行 <code>def</code> 会创建函数并绑定函数名；函数体要等到 <code>compare_guess(...)</code> 被调用时才执行。
+        </div>
+      </section>
+
+      <section class="section" id="flow">
+        <span class="step-label">Trace</span>
+        <h2>一次调用的四步追踪</h2>
+
+        <table>
+          <thead>
+            <tr>
+              <th>步骤</th>
+              <th><code>compare_guess(20, 30)</code></th>
+              <th>检查问题</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1. 实参进入</td>
+              <td><code>20</code>、<code>30</code></td>
+              <td>调用时给了哪些值？</td>
+            </tr>
+            <tr>
+              <td>2. 参数接收</td>
+              <td><code>guess = 20</code>、<code>secret = 30</code></td>
+              <td>每个参数接到哪个值？</td>
+            </tr>
+            <tr>
+              <td>3. 函数体处理</td>
+              <td><code>20 &lt; 30</code> 为 <code>True</code></td>
+              <td>走进哪个分支？</td>
+            </tr>
+            <tr>
+              <td>4. 返回结果</td>
+              <td><code>"太小了"</code></td>
+              <td>调用表达式最终变成什么值？</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="section" id="words">
+        <span class="step-label">Vocabulary</span>
+        <h2>四个词不要混</h2>
+
+        <table>
+          <thead>
+            <tr>
+              <th>术语</th>
+              <th>例子</th>
+              <th>记法</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>定义 definition</td>
+              <td><code>def compare_guess(...):</code></td>
+              <td>写下这台“小机器”如何工作</td>
+            </tr>
+            <tr>
+              <td>参数 parameter</td>
+              <td><code>guess</code>、<code>secret</code></td>
+              <td>定义里接收数据的名字</td>
+            </tr>
+            <tr>
+              <td>实参 argument</td>
+              <td><code>20</code>、<code>30</code></td>
+              <td>这次调用实际交进去的值</td>
+            </tr>
+            <tr>
+              <td>调用 call</td>
+              <td><code>compare_guess(20, 30)</code></td>
+              <td>让函数体真正执行一次</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="section" id="return">
+        <span class="step-label">Return</span>
+        <h2>return 与 print 的分工</h2>
+
+        <div class="grid-2">
+          <article class="card">
+            <h3><code>return value</code></h3>
+            <p>结束当前调用，把 <code>value</code> 交回调用位置；这个值还能被保存或继续处理。</p>
+          </article>
+          <article class="card">
+            <h3><code>print(value)</code></h3>
+            <p>把 <code>value</code> 显示到终端；它解决的是“让人看见”，不是“把结果交回”。</p>
+          </article>
+        </div>
+
+        <pre><code>result = compare_guess(20, 30)  # return 的值进入 result
+print(result)                   # 再把 result 显示出来</code></pre>
+      </section>
+
+      <section class="section" id="errors">
+        <span class="step-label">Debug</span>
+        <h2>四个高频问题</h2>
+
+        <table>
+          <thead>
+            <tr>
+              <th>症状</th>
+              <th>常见原因</th>
+              <th>检查位置</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>IndentationError</code></td>
+              <td>函数体没有缩进</td>
+              <td><code>def</code> 下一行开始缩进 4 个空格</td>
+            </tr>
+            <tr>
+              <td><code>NameError</code></td>
+              <td>在定义函数之前就调用它</td>
+              <td>先执行 <code>def</code>，后写调用</td>
+            </tr>
+            <tr>
+              <td><code>TypeError</code></td>
+              <td>调用时少给或多给了实参</td>
+              <td>对照参数数量与调用中的值</td>
+            </tr>
+            <tr>
+              <td>没有显示结果</td>
+              <td>只定义未调用，或返回后没有打印</td>
+              <td>分别检查“调用”和 <code>print()</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="section" id="sources">
+        <span class="step-label">Primary sources</span>
+        <h2>官方依据</h2>
+        <ul>
+          <li><a href="https://docs.python.org/zh-cn/3.13/tutorial/controlflow.html#defining-functions">Python 教程：定义函数</a></li>
+          <li><a href="https://docs.python.org/zh-cn/3.13/reference/compound_stmts.html#function-definitions">Python 语言参考：函数定义</a></li>
+          <li><a href="https://docs.python.org/zh-cn/3.13/reference/simple_stmts.html#the-return-statement">Python 语言参考：return 语句</a></li>
+        </ul>
+        <p class="source-note">官方文档说明：<code>def</code> 后跟函数名与参数列表，函数体必须缩进；定义本身不会执行函数体；<code>return</code> 会离开当前函数调用并交回一个值。本页只压缩第四课需要的基础部分。</p>
+      </section>
+    </main>
+
+    <footer class="footer">
+      Python for AI · 函数基础随身速查 · 有疑问随时问你的 AI 老师
+    </footer>
+  </div>
+</body>
+</html>
