@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="第五课速查：列表、元素、for 逐个取值，以及每轮调用函数。">
+  <title>Python 列表与 for 速查</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <span>Python for AI · Reference 05</span>
+      <nav aria-label="速查导航">
+        <a href="../lessons/0005-list-batch-check.html">第五课</a>
+        <a href="python-for-range.html">range 速查</a>
+        <a href="python-function-basics.html">函数速查</a>
+      </nav>
+    </header>
+    <section class="hero">
+      <p class="eyebrow">Reference / list and for</p>
+      <h1>整组与单个</h1>
+      <p class="lede">沿着每一轮看数据：列表里有什么，本轮取出什么，函数交回什么。</p>
+    </section>
+    <main>
+      <section class="section" id="shape">
+        <h2>三行核心结构</h2>
+        <pre><code>guesses = [10, 30, 40]
+for guess in guesses:
+    print(guess)</code></pre>
+        <table>
+          <thead><tr><th scope="col">写法</th><th scope="col">含义</th></tr></thead>
+          <tbody>
+            <tr><td><code>[10, 30, 40]</code></td><td>列表（list）：方括号内按顺序放置多个值，用英文逗号分隔。</td></tr>
+            <tr><td><code>10</code>、<code>30</code>、<code>40</code></td><td>元素（element）：列表中的各个值。</td></tr>
+            <tr><td><code>guesses</code></td><td>引用整个列表的变量名。</td></tr>
+            <tr><td><code>guess</code></td><td>循环变量：在本例中，每轮依次接到一个整数。</td></tr>
+          </tbody>
+        </table>
+        <p>变量名由程序员选择。<code>for number in guesses:</code> 也可以，循环体需相应使用 <code>number</code>。</p>
+        <p class="source-note">依据：<a href="https://docs.python.org/zh-cn/3.13/tutorial/introduction.html#lists">列表</a>、<a href="https://docs.python.org/zh-cn/3.13/tutorial/controlflow.html#for-statements">for 语句</a>。</p>
+      </section>
+      <section class="section" id="function">
+        <h2>逐个调用函数</h2>
+        <p>先定义第四课的 <code>compare_guess</code>，再执行：</p>
+        <pre><code>guesses = [10, 30, 40]
+secret = 30
+
+for guess in guesses:
+    result = compare_guess(guess, secret)
+    print(f"{guess}：{result}")</code></pre>
+        <table>
+          <thead><tr><th scope="col">轮次</th><th scope="col">本轮调用</th><th scope="col">result 接到</th></tr></thead>
+          <tbody>
+            <tr><td>第 1 轮</td><td><code>compare_guess(10, 30)</code></td><td><code>"太小了"</code></td></tr>
+            <tr><td>第 2 轮</td><td><code>compare_guess(30, 30)</code></td><td><code>"猜中了"</code></td></tr>
+            <tr><td>第 3 轮</td><td><code>compare_guess(40, 30)</code></td><td><code>"太大了"</code></td></tr>
+          </tbody>
+        </table>
+        <p><code>return</code> 结束当前函数调用，主程序随后继续执行。本例循环中没有提前退出的语句，因此每个元素都会被处理。</p>
+        <p class="source-note">依据：<a href="https://docs.python.org/zh-cn/3.13/reference/simple_stmts.html#the-return-statement">return 语句</a>。</p>
+      </section>
+      <section class="section" id="check">
+        <h2>常见困惑，按位置检查</h2>
+        <table>
+          <thead><tr><th scope="col">看到的情况</th><th scope="col">检查什么</th></tr></thead>
+          <tbody>
+            <tr><td>只显示最后一个结果</td><td>检查 <code>print</code> 是否缩进在 <code>for</code> 内；每轮工作要放进循环体。</td></tr>
+            <tr><td>提示函数名称不存在</td><td>确认当前脚本先定义了 <code>compare_guess</code>，然后才调用。</td></tr>
+            <tr><td>把整个列表交给比较函数后报错</td><td>本课函数需要两个数字；循环内应传入 <code>guess</code>，而非整个 <code>guesses</code>。</td></tr>
+            <tr><td>误以为会输出 0、1、2</td><td><code>for guess in guesses</code> 直接取元素，本例取到的是 10、30、40。</td></tr>
+          </tbody>
+        </table>
+        <details>
+          <summary>补充自测：如果列表是 [] 呢？</summary>
+          <div class="answer"><p><code>[]</code> 是空列表，没有元素可取，因此这个 <code>for</code> 的循环体执行零次。循环后的代码仍会执行；不要在循环后依赖一个只在循环内赋值的变量。</p></div>
+        </details>
+      </section>
+    </main>
+    <footer class="footer">Python for AI · 列表与 for 随身速查 · 不清楚的代码随时发给老师</footer>
+  </div>
+</body>
+</html>

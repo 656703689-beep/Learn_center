@@ -6,7 +6,7 @@
 
 | 路线 | 当前进度 | 从这里开始 |
 | --- | --- | --- |
-| Python for AI | 第四课：函数的数据流已完成 | [学习使命](Python/MISSION.md) · [第四课](Python/lessons/0004-function-data-flow.html) · [函数速查](Python/reference/python-function-basics.html) · [学习记录](Python/NOTES.md) |
+| Python for AI | 第五课：列表与批量处理已完成 | [学习使命](Python/MISSION.md) · [第五课](Python/lessons/0005-list-batch-check.html) · [列表速查](Python/reference/python-list-and-for.html) · [学习记录](Python/NOTES.md) |
 | TypeScript | 第二课：用类型建模数据 | [学习路线](TypeScript/00_学习路线图.md) · [20 小时计划](TypeScript/00_20小时速通计划.md) · [导师备忘](TypeScript/NOTES.md) |
 | AI Agent | API 基础与结构化输出阶段 | [学习使命](AI_agent/MISSION.md) · [学习路线](AI_agent/00_学习路线图.md) · [20 小时计划](AI_agent/00_20小时速通计划.md) |
 | Prompt 方法 | 常用提示词与学习方法 | [常用 Prompt](Prompt常用合集/常用prompt列表.md) · [快速学习框架](Prompt常用合集/快速学习框架.md) |

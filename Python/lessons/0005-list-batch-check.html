@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Python 第五课：用列表保存多个猜测，再用 for 逐个交给函数检查。">
+  <title>第五课：一组数据，逐个处理</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <span>Python for AI · Lesson 05</span>
+      <nav aria-label="课程导航">
+        <a href="0004-function-data-flow.html">回顾第四课</a>
+        <a href="#warmup">回忆</a>
+        <a href="#list">列表</a>
+        <a href="#practice">实作</a>
+        <a href="../reference/python-list-and-for.html">列表速查</a>
+      </nav>
+    </header>
+
+    <section class="hero" aria-labelledby="lesson-title">
+      <p class="eyebrow">Session 05 / lists and loops</p>
+      <h1 id="lesson-title">一组数据，逐个处理</h1>
+      <p class="lede">第四天，你让函数判断一个数字。今天把几个数字放进列表，再交给同一个函数逐个检查。为以后处理多条 AI 输入，先练熟这段数据流。</p>
+      <div class="meta-row">
+        <span class="pill">15–20 分钟</span>
+        <span class="pill">新概念：list 列表</span>
+        <span class="pill">旧工具：for + 函数</span>
+      </div>
+      <div class="pipeline" aria-label="列表中的数据逐个进入函数，返回结果后打印">
+        <div class="pipeline-step"><small>列表</small><strong>[10, 30, 40]</strong></div>
+        <div class="pipeline-step"><small>for 逐个取值</small><strong>本轮的 guess</strong></div>
+        <div class="pipeline-step"><small>函数判断</small><strong>返回结果</strong></div>
+        <div class="pipeline-step"><small>本轮输出</small><strong>数字 + 结果</strong></div>
+      </div>
+    </section>
+
+    <main>
+      <section class="section" id="warmup">
+        <span class="step-label">01 · 回忆 · 2 分钟</span>
+        <h2>先取回第四天的知识</h2>
+        <p>先别运行，也先别展开答案：</p>
+        <pre><code>def double(number):
+    return number * 2
+
+result = double(7)
+print(result)</code></pre>
+        <p><code>result</code> 最终是多少？函数中的哪一行把这个值交回来？把答案发给老师，我们再进入列表。</p>
+        <details>
+          <summary>回答后核对</summary>
+          <div class="answer"><p><code>result</code> 是 <code>14</code>。这次 <code>number</code> 接到 <code>7</code>，<code>return number * 2</code> 交回 <code>14</code>。最后一行把它显示出来。</p></div>
+        </details>
+        <p class="source-note">需要提示时：<a href="../reference/python-function-basics.html#return">回看 return 与 print 的分工</a>。</p>
+      </section>
+
+      <section class="section" id="list">
+        <span class="step-label">02 · 新知识 · 3 分钟</span>
+        <h2>把多个值放进方括号</h2>
+        <pre><code>guesses = [10, 30, 40]</code></pre>
+        <p><code>guesses</code> 保存一个<strong>列表（list）</strong>；方括号 <code>[]</code> 内用英文逗号分隔，每个值叫一个<strong>元素</strong>。这里共有三个元素，按顺序是 <code>10</code>、<code>30</code>、<code>40</code>。</p>
+        <p>接上已经学过的 <code>for</code>：</p>
+        <pre><code>guesses = [10, 30, 40]
+
+for guess in guesses:
+    print(guess)</code></pre>
+        <p>这行读作：“从 <code>guesses</code> 中依次取出一个值，赋给 <code>guess</code>，再执行缩进的代码。”</p>
+        <div class="callout">
+          <strong>一整组与本轮的一个</strong>
+          <code>guesses</code> 是整个列表；<code>guess</code> 是这一轮取出的数字。这两个名字由我们选择，单复数只是帮助阅读的命名习惯。
+        </div>
+        <p class="source-note">依据：<a href="https://docs.python.org/zh-cn/3.13/tutorial/introduction.html#lists">官方列表教程</a>与<a href="https://docs.python.org/zh-cn/3.13/tutorial/controlflow.html#for-statements">for 按顺序遍历元素的规则</a>。</p>
+      </section>
+
+      <section class="section" id="trace">
+        <span class="step-label">03 · 预测 · 2 分钟</span>
+        <h2>for 取到的是哪一个值？</h2>
+        <p>把列表换成 <code>[40, 10, 30]</code>。先写出三行输出，再展开核对。</p>
+        <details>
+          <summary>核对取值顺序</summary>
+          <div class="answer">
+            <pre><code>40
+10
+30</code></pre>
+            <p>按照列表中写下的顺序取值，并不会自动从小到大排序，也不会变成 <code>0</code>、<code>1</code>、<code>2</code>。</p>
+          </div>
+        </details>
+        <p><code>range(1, 4)</code> 提供的是 <code>1</code>、<code>2</code>、<code>3</code>；这里列表已经提供了要处理的数字，所以直接写 <code>for guess in guesses:</code>。</p>
+      </section>
+
+      <section class="section" id="practice">
+        <span class="step-label">04 · 实作 · 6 分钟</span>
+        <h2>用一个循环检查三个猜测</h2>
+        <p>在 <code>Python</code> 文件夹中新建 <code>batch_guesses.py</code>。沿用第四天的函数，亲手补上列表和循环。今天做的是检查多组测试输入，每个数字都要得到结果。</p>
+        <pre id="batch-example"><code>def compare_guess(guess, secret):
+    if guess &lt; secret:
+        return "太小了"
+    elif guess &gt; secret:
+        return "太大了"
+    else:
+        return "猜中了"
+
+
+guesses = [10, 30, 40]
+secret = 30
+
+for guess in guesses:
+    result = compare_guess(guess, secret)
+    print(f"{guess}：{result}")
+
+print("全部检查完成")</code></pre>
+        <p>在 PowerShell 中进入 <code>Python</code> 文件夹后运行：</p>
+        <div class="terminal-line">cd "C:\Users\ZhongHui\Documents\ChatGPT\学习\Python"</div>
+        <div class="terminal-line">python batch_guesses.py</div>
+        <p>运行前先预测输出。这里的数据已写在列表中，程序会直接检查，不需要键盘输入。</p>
+        <details>
+          <summary>运行后核对完整输出</summary>
+          <div class="answer">
+            <pre id="batch-output"><code>10：太小了
+30：猜中了
+40：太大了
+全部检查完成</code></pre>
+            <p>每轮接收一次返回值并打印；最后一句在循环外，只打印一次。</p>
+          </div>
+        </details>
+        <details>
+          <summary>第二轮已经 return，为什么还能检查 40？</summary>
+          <div class="answer"><p><code>return</code> 结束的是这一次函数调用。主程序接到结果后继续打印，再由 <code>for</code> 取出下一个元素。这个循环里没有 <code>break</code>，因此会检查完整个列表。</p></div>
+        </details>
+        <p class="source-note">依据：<a href="https://docs.python.org/zh-cn/3.13/reference/simple_stmts.html#the-return-statement">return 结束当前函数调用</a>。</p>
+      </section>
+
+      <section class="section" id="transfer">
+        <span class="step-label">05 · 改一次 · 3 分钟</span>
+        <h2>只改数据，再检查一次</h2>
+        <p>将列表改为 <code>[10, 30, 40, 25]</code>。先预测会增加哪行输出，再运行核对。</p>
+        <details>
+          <summary>核对新增的一轮</summary>
+          <div class="answer"><p>在“全部检查完成”之前增加 <code>25：太小了</code>。列表多一个元素，循环就多取一次；函数与循环体都不必修改。</p></div>
+        </details>
+        <div class="next-action">
+          <h3>发回你的学习证据</h3>
+          <p>把运行输出发给老师，并用自己的话说清：<code>guesses</code> 和 <code>guess</code> 分别是什么？第三轮传给函数的实参是什么？有任何不清楚的代码，也可以直接发来逐行讲解。</p>
+        </div>
+        <p>下次开始时，先不看课件，凭记忆写出“一个列表 + 一个逐个打印的循环”，用来检查隔天还能否想起来。</p>
+      </section>
+
+      <section class="section" id="sources">
+        <span class="step-label">官方阅读 · 按需</span>
+        <h2>只读当前需要的部分</h2>
+        <p>首选 <a href="https://docs.python.org/zh-cn/3.13/tutorial/introduction.html#lists">Python 3.13 教程：列表</a>，先读第一段与方括号示例即可。配合 <a href="https://docs.python.org/zh-cn/3.13/tutorial/controlflow.html#for-statements">for 语句</a>的第一个循环，确认元素被逐个取出。</p>
+        <p>随用随查：<a href="../reference/python-list-and-for.html">列表与 for 速查</a>。索引、切片、排序留到需要时再学。</p>
+      </section>
+    </main>
+    <footer class="footer">Python for AI · 第五次学习 · 列表保存一组，循环取出一个，函数处理一次</footer>
+  </div>
+</body>
+</html>
