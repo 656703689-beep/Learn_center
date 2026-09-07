@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Python 第十一课：用 len() 得到列表长度，生成测试报告。">
+  <title>第十一课：输出一份小报告</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <span>Python for AI · Lesson 11</span>
+      <nav aria-label="课程导航">
+        <a href="0010-function-takes-list.html">回顾第十课</a>
+        <a href="#warmup">回忆</a>
+        <a href="#len">len</a>
+        <a href="#practice">实作</a>
+        <a href="../reference/python-len-report.html">len 速查</a>
+        <a href="0012-dict-report.html">下一课</a>
+      </nav>
+    </header>
+
+    <section class="hero" aria-labelledby="lesson-title">
+      <p class="eyebrow">Session 11 / report with len</p>
+      <h1 id="lesson-title">输出一份小报告</h1>
+      <p class="lede">第十天，函数已经能接收列表并返回总结。今天加一个新工具：<code>len()</code>，让程序说清“共测试几次，猜中几次”。</p>
+      <div class="meta-row">
+        <span class="pill">15–20 分钟</span>
+        <span class="pill">新概念：len()</span>
+        <span class="pill">旧工具：count + function</span>
+      </div>
+      <div class="pipeline" aria-label="结果列表进入 len 和 count，生成报告">
+        <div class="pipeline-step"><small>结果列表</small><strong>results</strong></div>
+        <div class="pipeline-step"><small>总次数</small><strong>len(results)</strong></div>
+        <div class="pipeline-step"><small>猜中次数</small><strong>count(...)</strong></div>
+        <div class="pipeline-step"><small>报告</small><strong>共测试 3 次</strong></div>
+      </div>
+    </section>
+
+    <main>
+      <section class="section" id="warmup">
+        <span class="step-label">01 · 回忆 · 2 分钟</span>
+        <h2>先取回第十天的返回值</h2>
+        <p>先别运行。写出最后输出：</p>
+        <pre><code>def suggest_from_results(results):
+    hit_count = results.count("猜中了")
+
+    if hit_count &gt; 0:
+        return "已经猜中过，测试通过"
+    else:
+        return "这组测试里没有猜中"
+
+
+summary = suggest_from_results(["太小了", "猜中了"])
+print(summary)</code></pre>
+        <details>
+          <summary>回答后核对</summary>
+          <div class="answer"><p>输出 <code>已经猜中过，测试通过</code>。函数返回的是字符串，不是列表。</p></div>
+        </details>
+      </section>
+
+      <section class="section" id="len">
+        <span class="step-label">02 · 新知识 · 3 分钟</span>
+        <h2>len() 返回列表里有几个元素</h2>
+        <pre><code>results = ["太小了", "猜中了", "太大了"]
+
+total_count = len(results)
+print(total_count)</code></pre>
+        <p>输出是 <code>3</code>。因为 <code>results</code> 这个列表里有三个元素。</p>
+        <div class="callout">
+          <strong>一句话抓住今天</strong>
+          <code>count()</code> 数某个值出现几次；<code>len()</code> 数整个列表一共有几个元素。
+        </div>
+        <p class="source-note">依据：<a href="https://docs.python.org/zh-cn/3.13/library/functions.html#len">Python 官方 len() 文档</a>说明它返回对象的长度。</p>
+      </section>
+
+      <section class="section" id="trace">
+        <span class="step-label">03 · 预测 · 3 分钟</span>
+        <h2>区分 len 和 count</h2>
+        <p>先别运行，写出两行输出：</p>
+        <pre><code>results = ["太小了", "猜中了", "太大了", "太小了"]
+
+print(len(results))
+print(results.count("太小了"))</code></pre>
+        <details>
+          <summary>核对输出</summary>
+          <div class="answer">
+            <pre><code>4
+2</code></pre>
+            <p><code>len(results)</code> 看整个列表有几个元素；<code>count("太小了")</code> 只数 <code>"太小了"</code> 出现几次。</p>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="practice">
+        <span class="step-label">04 · 实作 · 8 分钟</span>
+        <h2>生成“总次数 + 猜中次数 + 总结”</h2>
+        <p>在 <code>Python</code> 文件夹中新建 <code>report_results.py</code>。这次新增一个函数 <code>build_report(results)</code>，返回一行报告。</p>
+        <pre id="report-example"><code>def compare_guess(guess, secret):
+    if guess &lt; secret:
+        return "太小了"
+    elif guess &gt; secret:
+        return "太大了"
+    else:
+        return "猜中了"
+
+
+def suggest_from_results(results):
+    hit_count = results.count("猜中了")
+
+    if hit_count &gt; 0:
+        return "已经猜中过，测试通过"
+    else:
+        return "这组测试里没有猜中"
+
+
+def build_report(results):
+    total_count = len(results)
+    hit_count = results.count("猜中了")
+    summary = suggest_from_results(results)
+    return f"共测试 {total_count} 次，猜中 {hit_count} 次。{summary}"
+
+
+guesses = [10, 30, 40]
+secret = 30
+results = []
+
+for guess in guesses:
+    result = compare_guess(guess, secret)
+    results.append(result)
+
+report = build_report(results)
+
+print(results)
+print(report)</code></pre>
+        <p>运行：</p>
+        <div class="terminal-line">cd "C:\Users\ZhongHui\Documents\ChatGPT\学习\Python"</div>
+        <div class="terminal-line">python report_results.py</div>
+        <details>
+          <summary>运行后核对</summary>
+          <div class="answer">
+            <pre id="report-output"><code>['太小了', '猜中了', '太大了']
+共测试 3 次，猜中 1 次。已经猜中过，测试通过</code></pre>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="transfer">
+        <span class="step-label">05 · 改一次 · 3 分钟</span>
+        <h2>只改输入，报告数字改变</h2>
+        <p>把 <code>guesses</code> 改成：</p>
+        <pre><code>guesses = [10, 20, 25, 28]</code></pre>
+        <p>其他代码不动。先预测 <code>results</code> 和 <code>report</code>，再运行。</p>
+        <details>
+          <summary>核对结果</summary>
+          <div class="answer">
+            <pre><code>['太小了', '太小了', '太小了', '太小了']
+共测试 4 次，猜中 0 次。这组测试里没有猜中</code></pre>
+          </div>
+        </details>
+        <div class="next-action">
+          <h3>发回你的学习证据</h3>
+          <p>把运行输出发给老师，并说明：<code>len(results)</code> 数的是什么？<code>results.count("猜中了")</code> 数的是什么？</p>
+        </div>
+        <p>随用随查：<a href="../reference/python-len-report.html">len 报告速查</a>。完成后进入 <a href="0012-dict-report.html">第十二课：用 dict 装一份报告</a>。</p>
+      </section>
+
+      <section class="section" id="sources">
+        <span class="step-label">官方阅读 · 按需</span>
+        <h2>只读当前需要的部分</h2>
+        <p>首选 <a href="https://docs.python.org/zh-cn/3.13/library/functions.html#len">Python 3.13 内置函数：len()</a>。当前只需要知道：<code>len(x)</code> 返回对象长度；用于列表时，就是列表元素个数。</p>
+      </section>
+    </main>
+    <footer class="footer">Python for AI · 第十一次学习 · 用 len 和 count 生成测试报告</footer>
+  </div>
+</body>
+</html>

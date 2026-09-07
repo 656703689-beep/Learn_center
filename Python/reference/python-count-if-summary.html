@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="第八课速查：用 count() 得到次数，再用 if 输出总结。">
+  <title>Python count + if 速查</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <span>Python for AI · Reference 08</span>
+      <nav aria-label="速查导航">
+        <a href="../lessons/0008-summarize-with-if.html">第八课</a>
+        <a href="python-list-count.html">count 速查</a>
+        <a href="python-list-append.html">append 速查</a>
+      </nav>
+    </header>
+    <section class="hero">
+      <p class="eyebrow">Reference / count + if</p>
+      <h1>用数字做总结</h1>
+      <p class="lede">先用 <code>count()</code> 得到次数，再用 <code>if</code> 根据次数选择输出。</p>
+    </section>
+    <main>
+      <section class="section" id="shape">
+        <h2>核心结构</h2>
+        <pre><code>hit_count = results.count("猜中了")
+
+if hit_count &gt; 0:
+    print("这组测试里猜中过")
+else:
+    print("这组测试里没有猜中")</code></pre>
+        <table>
+          <thead><tr><th scope="col">写法</th><th scope="col">含义</th></tr></thead>
+          <tbody>
+            <tr><td><code>results.count("猜中了")</code></td><td>数 <code>"猜中了"</code> 在结果列表里出现几次。</td></tr>
+            <tr><td><code>hit_count</code></td><td>保存猜中次数的整数。</td></tr>
+            <tr><td><code>hit_count &gt; 0</code></td><td>判断是否至少猜中过一次。</td></tr>
+            <tr><td><code>else</code></td><td>当前面条件为假时执行。</td></tr>
+          </tbody>
+        </table>
+        <p class="source-note">依据：<a href="https://docs.python.org/zh-cn/3.13/tutorial/controlflow.html#if-statements">Python 官方 if 语句</a>与<a href="https://docs.python.org/zh-cn/3.13/tutorial/datastructures.html#more-on-lists">列表 count() 方法</a>。</p>
+      </section>
+      <section class="section" id="cases">
+        <h2>两种情况</h2>
+        <table>
+          <thead><tr><th scope="col">hit_count</th><th scope="col">条件</th><th scope="col">输出</th></tr></thead>
+          <tbody>
+            <tr><td><code>1</code></td><td><code>1 &gt; 0</code> 为真</td><td><code>这组测试里猜中过</code></td></tr>
+            <tr><td><code>0</code></td><td><code>0 &gt; 0</code> 为假</td><td><code>这组测试里没有猜中</code></td></tr>
+          </tbody>
+        </table>
+      </section>
+      <section class="section" id="pitfalls">
+        <h2>常见检查点</h2>
+        <table>
+          <thead><tr><th scope="col">现象</th><th scope="col">检查</th></tr></thead>
+          <tbody>
+            <tr><td>总是走 else</td><td>检查 <code>results.count("猜中了")</code> 里的字符串是否和函数返回值完全一致。</td></tr>
+            <tr><td>报缩进错误</td><td><code>if</code> 与 <code>else</code> 对齐；它们下面的 <code>print</code> 多缩进一级。</td></tr>
+            <tr><td>不知道 hit_count 是什么</td><td>先单独 <code>print(hit_count)</code>，确认它是一个数字。</td></tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+    <footer class="footer">Python for AI · count + if 随身速查 · 先问：这个 if 判断的是哪个数字？</footer>
+  </div>
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Python 第九课：用 if/elif/else 根据统计结果输出不同建议。">
+  <title>第九课：根据统计结果给建议</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <span>Python for AI · Lesson 09</span>
+      <nav aria-label="课程导航">
+        <a href="0008-summarize-with-if.html">回顾第八课</a>
+        <a href="#warmup">回忆</a>
+        <a href="#elif">elif</a>
+        <a href="#practice">实作</a>
+        <a href="../reference/python-elif-suggestions.html">建议速查</a>
+        <a href="0010-function-takes-list.html">下一课</a>
+      </nav>
+    </header>
+
+    <section class="hero" aria-labelledby="lesson-title">
+      <p class="eyebrow">Session 09 / suggest with elif</p>
+      <h1 id="lesson-title">根据统计结果给建议</h1>
+      <p class="lede">第八天，程序已经能判断“有没有猜中”。今天让它更像一个小助手：根据偏小次数和偏大次数，输出不同建议。</p>
+      <div class="meta-row">
+        <span class="pill">15–20 分钟</span>
+        <span class="pill">新连接：多个条件</span>
+        <span class="pill">旧工具：count + if</span>
+      </div>
+      <div class="pipeline" aria-label="统计次数进入多条件判断，输出建议">
+        <div class="pipeline-step"><small>统计</small><strong>small_count</strong></div>
+        <div class="pipeline-step"><small>统计</small><strong>big_count</strong></div>
+        <div class="pipeline-step"><small>判断</small><strong>if / elif / else</strong></div>
+        <div class="pipeline-step"><small>建议</small><strong>可以试大一点</strong></div>
+      </div>
+    </section>
+
+    <main>
+      <section class="section" id="warmup">
+        <span class="step-label">01 · 回忆 · 2 分钟</span>
+        <h2>先取回第八天的判断</h2>
+        <p>先别运行。写出最后一句输出：</p>
+        <pre><code>hit_count = 0
+
+if hit_count &gt; 0:
+    print("这组测试里猜中过")
+else:
+    print("这组测试里没有猜中")</code></pre>
+        <details>
+          <summary>回答后核对</summary>
+          <div class="answer"><p>输出 <code>这组测试里没有猜中</code>。因为 <code>0 &gt; 0</code> 为假，所以走 <code>else</code>。</p></div>
+        </details>
+      </section>
+
+      <section class="section" id="elif">
+        <span class="step-label">02 · 新连接 · 4 分钟</span>
+        <h2>elif 表示“否则如果”</h2>
+        <p>当程序有三种以上可能结果时，可以用 <code>if / elif / else</code> 串起来：</p>
+        <pre><code>if small_count &gt; big_count:
+    print("整体偏小，可以试大一点")
+elif big_count &gt; small_count:
+    print("整体偏大，可以试小一点")
+else:
+    print("偏小和偏大一样多")</code></pre>
+        <p>Python 会从上往下检查。第一个为真的分支会执行；后面的分支就不再检查。</p>
+        <div class="callout">
+          <strong>一句话抓住今天</strong>
+          <code>if</code> 先问第一种情况；<code>elif</code> 问第二种情况；<code>else</code> 处理前面都不满足的情况。
+        </div>
+        <p class="source-note">依据：<a href="https://docs.python.org/zh-cn/3.13/tutorial/controlflow.html#if-statements">Python 官方 if 语句</a>中的 <code>if / elif / else</code> 规则。</p>
+      </section>
+
+      <section class="section" id="trace">
+        <span class="step-label">03 · 预测 · 3 分钟</span>
+        <h2>先只看两个数字</h2>
+        <p>先别运行，写出输出：</p>
+        <pre><code>small_count = 3
+big_count = 1
+
+if small_count &gt; big_count:
+    print("整体偏小，可以试大一点")
+elif big_count &gt; small_count:
+    print("整体偏大，可以试小一点")
+else:
+    print("偏小和偏大一样多")</code></pre>
+        <details>
+          <summary>核对输出</summary>
+          <div class="answer"><p>输出 <code>整体偏小，可以试大一点</code>。因为 <code>3 &gt; 1</code> 为真。</p></div>
+        </details>
+      </section>
+
+      <section class="section" id="practice">
+        <span class="step-label">04 · 实作 · 8 分钟</span>
+        <h2>从猜测列表到建议</h2>
+        <p>在 <code>Python</code> 文件夹中新建 <code>suggest_results.py</code>。这次先收集结果，再统计三类次数，最后给出建议。</p>
+        <pre id="suggest-example"><code>def compare_guess(guess, secret):
+    if guess &lt; secret:
+        return "太小了"
+    elif guess &gt; secret:
+        return "太大了"
+    else:
+        return "猜中了"
+
+
+guesses = [10, 20, 25, 40]
+secret = 30
+results = []
+
+for guess in guesses:
+    result = compare_guess(guess, secret)
+    results.append(result)
+
+small_count = results.count("太小了")
+big_count = results.count("太大了")
+hit_count = results.count("猜中了")
+
+print(results)
+print("太小了次数：", small_count)
+print("太大了次数：", big_count)
+print("猜中了次数：", hit_count)
+
+if hit_count &gt; 0:
+    print("已经猜中过，测试通过")
+elif small_count &gt; big_count:
+    print("整体偏小，可以试大一点")
+elif big_count &gt; small_count:
+    print("整体偏大，可以试小一点")
+else:
+    print("还没猜中，但偏小和偏大一样多")</code></pre>
+        <p>运行：</p>
+        <div class="terminal-line">cd "C:\Users\ZhongHui\Documents\ChatGPT\学习\Python"</div>
+        <div class="terminal-line">python suggest_results.py</div>
+        <details>
+          <summary>运行后核对</summary>
+          <div class="answer">
+            <pre id="suggest-output"><code>['太小了', '太小了', '太小了', '太大了']
+太小了次数： 3
+太大了次数： 1
+猜中了次数： 0
+整体偏小，可以试大一点</code></pre>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="transfer">
+        <span class="step-label">05 · 改一次 · 3 分钟</span>
+        <h2>只改输入，观察建议改变</h2>
+        <p>把 <code>guesses</code> 改成：</p>
+        <pre><code>guesses = [35, 40, 20]</code></pre>
+        <p>其他代码不动。先预测三类次数和最后一句建议，再运行。</p>
+        <details>
+          <summary>核对结果</summary>
+          <div class="answer">
+            <pre><code>太小了次数： 1
+太大了次数： 2
+猜中了次数： 0
+整体偏大，可以试小一点</code></pre>
+          </div>
+        </details>
+        <div class="next-action">
+          <h3>发回你的学习证据</h3>
+          <p>把运行输出发给老师，并说明：为什么这次走的是 <code>elif big_count &gt; small_count:</code>？如果 <code>hit_count</code> 是 <code>1</code>，还会检查后面的 <code>elif</code> 吗？</p>
+        </div>
+        <p>随用随查：<a href="../reference/python-elif-suggestions.html">if/elif 建议速查</a>。报错时把完整终端输出发来。</p>
+      </section>
+
+      <section class="section" id="sources">
+        <span class="step-label">官方阅读 · 按需</span>
+        <h2>只读当前需要的部分</h2>
+        <p>首选 <a href="https://docs.python.org/zh-cn/3.13/tutorial/controlflow.html#if-statements">Python 3.13 教程：if 语句</a>，当前只读 <code>if / elif / else</code> 示例。列表统计继续参考 <a href="https://docs.python.org/zh-cn/3.13/tutorial/datastructures.html#more-on-lists">列表方法 count()</a>。</p>
+      </section>
+    </main>
+    <footer class="footer">Python for AI · 第九次学习 · 用多个条件把统计结果变成建议 · <a href="0010-function-takes-list.html">继续第十课</a></footer>
+  </div>
+</body>
+</html>

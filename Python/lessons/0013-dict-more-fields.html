@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Python 第十三课：给 dict 报告增加 small 和 big 字段。">
+  <title>第十三课：给 dict 多装两个字段</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <span>Python for AI · Lesson 13</span>
+      <nav aria-label="课程导航">
+        <a href="0012-dict-report.html">回顾第十二课</a>
+        <a href="#warmup">回忆</a>
+        <a href="#fields">字段</a>
+        <a href="#practice">实作</a>
+        <a href="../reference/python-dict-fields.html">字段速查</a>
+      </nav>
+    </header>
+
+    <section class="hero" aria-labelledby="lesson-title">
+      <p class="eyebrow">Session 13 / more dict fields</p>
+      <h1 id="lesson-title">给 dict 多装两个字段</h1>
+      <p class="lede">上一课的报告只有总次数、猜中次数和总结。今天给报告增加 <code>"small"</code> 和 <code>"big"</code>，让程序保留更多可分析的数据。</p>
+      <div class="meta-row">
+        <span class="pill">15–20 分钟</span>
+        <span class="pill">新动作：增加字段</span>
+        <span class="pill">旧工具：dict + count</span>
+      </div>
+      <div class="pipeline" aria-label="结果统计进入更多 dict 字段">
+        <div class="pipeline-step"><small>结果列表</small><strong>results</strong></div>
+        <div class="pipeline-step"><small>统计</small><strong>small / big / hits</strong></div>
+        <div class="pipeline-step"><small>报告</small><strong>{"small": 2}</strong></div>
+        <div class="pipeline-step"><small>读取</small><strong>report["big"]</strong></div>
+      </div>
+    </section>
+
+    <main>
+      <section class="section" id="warmup">
+        <span class="step-label">01 · 回忆 · 2 分钟</span>
+        <h2>先取回 dict 取值</h2>
+        <p>先别运行。写出两行输出：</p>
+        <pre><code>report = {
+    "total": 4,
+    "hits": 0,
+    "summary": "这组测试里没有猜中"
+}
+
+print(report["total"])
+print(report["summary"])</code></pre>
+        <details>
+          <summary>回答后核对</summary>
+          <div class="answer">
+            <pre><code>4
+这组测试里没有猜中</code></pre>
+            <p><code>report["total"]</code> 按 key 取总次数；<code>report["summary"]</code> 按 key 取总结文字。</p>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="fields">
+        <span class="step-label">02 · 新知识 · 4 分钟</span>
+        <h2>dict 可以继续增加字段</h2>
+        <p>字段就是一组 <code>key: value</code>。要多保存两个数字，就多写两行。</p>
+        <pre><code>report = {
+    "total": 4,
+    "hits": 0,
+    "small": 3,
+    "big": 1,
+    "summary": "整体偏小，可以试大一点"
+}
+
+print(report["small"])
+print(report["big"])</code></pre>
+        <p>输出是 <code>3</code> 和 <code>1</code>。因为 <code>"small"</code> 对应 <code>3</code>，<code>"big"</code> 对应 <code>1</code>。</p>
+        <div class="callout">
+          <strong>一句话抓住今天</strong>
+          <code>dict</code> 里想保存更多信息，就增加更多 <code>key: value</code>。
+        </div>
+        <p class="source-note">依据：<a href="https://docs.python.org/zh-cn/3.13/tutorial/datastructures.html#dictionaries">Python 官方教程：字典</a>说明字典是 key-value 集合，主要操作是通过 key 存储和提取 value。</p>
+      </section>
+
+      <section class="section" id="trace">
+        <span class="step-label">03 · 预测 · 3 分钟</span>
+        <h2>多字段不改变取值规则</h2>
+        <p>先别运行，写出三行输出：</p>
+        <pre><code>report = {
+    "total": 5,
+    "hits": 1,
+    "small": 2,
+    "big": 2,
+    "summary": "已经猜中过，测试通过"
+}
+
+print(report["small"])
+print(report["big"])
+print(report["hits"])</code></pre>
+        <details>
+          <summary>核对输出</summary>
+          <div class="answer">
+            <pre><code>2
+2
+1</code></pre>
+            <p>字段变多以后，仍然是用 key 取对应 value。</p>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="practice">
+        <span class="step-label">04 · 实作 · 8 分钟</span>
+        <h2>让报告同时保存 small、big、hits</h2>
+        <p>在 <code>Python</code> 文件夹中新建 <code>dict_fields.py</code>。这次 <code>build_report(results)</code> 返回更完整的 <code>dict</code>。</p>
+        <pre id="fields-example"><code>def compare_guess(guess, secret):
+    if guess &lt; secret:
+        return "太小了"
+    elif guess &gt; secret:
+        return "太大了"
+    else:
+        return "猜中了"
+
+
+def suggest_from_counts(small_count, big_count, hit_count):
+    if hit_count &gt; 0:
+        return "已经猜中过，测试通过"
+    elif small_count &gt; big_count:
+        return "整体偏小，可以试大一点"
+    elif big_count &gt; small_count:
+        return "整体偏大，可以试小一点"
+    else:
+        return "偏小和偏大一样多"
+
+
+def build_report(results):
+    total_count = len(results)
+    small_count = results.count("太小了")
+    big_count = results.count("太大了")
+    hit_count = results.count("猜中了")
+    summary = suggest_from_counts(small_count, big_count, hit_count)
+
+    return {
+        "total": total_count,
+        "small": small_count,
+        "big": big_count,
+        "hits": hit_count,
+        "summary": summary
+    }
+
+
+guesses = [10, 20, 40, 30]
+secret = 30
+results = []
+
+for guess in guesses:
+    result = compare_guess(guess, secret)
+    results.append(result)
+
+report = build_report(results)
+
+print(results)
+print(report)
+print("偏小次数：", report["small"])
+print("偏大次数：", report["big"])
+print("猜中次数：", report["hits"])
+print("总结：", report["summary"])</code></pre>
+        <p>运行：</p>
+        <div class="terminal-line">cd "C:\Users\ZhongHui\Documents\ChatGPT\学习\Python"</div>
+        <div class="terminal-line">python dict_fields.py</div>
+        <details>
+          <summary>运行后核对</summary>
+          <div class="answer">
+            <pre id="fields-output"><code>['太小了', '太小了', '太大了', '猜中了']
+{'total': 4, 'small': 2, 'big': 1, 'hits': 1, 'summary': '已经猜中过，测试通过'}
+偏小次数： 2
+偏大次数： 1
+猜中次数： 1
+总结： 已经猜中过，测试通过</code></pre>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="transfer">
+        <span class="step-label">05 · 改一次 · 3 分钟</span>
+        <h2>只改输入，看字段怎么变</h2>
+        <p>把 <code>guesses</code> 改成：</p>
+        <pre><code>guesses = [35, 40, 20]</code></pre>
+        <p>其他代码不动。先预测 <code>report["small"]</code>、<code>report["big"]</code>、<code>report["hits"]</code> 和 <code>report["summary"]</code>，再运行。</p>
+        <details>
+          <summary>核对结果</summary>
+          <div class="answer">
+            <pre><code>['太大了', '太大了', '太小了']
+{'total': 3, 'small': 1, 'big': 2, 'hits': 0, 'summary': '整体偏大，可以试小一点'}
+偏小次数： 1
+偏大次数： 2
+猜中次数： 0
+总结： 整体偏大，可以试小一点</code></pre>
+          </div>
+        </details>
+        <div class="next-action">
+          <h3>发回你的学习证据</h3>
+          <p>把运行输出发给老师，并说明：<code>report["small"]</code> 和 <code>report["big"]</code> 分别取出的是什么。</p>
+        </div>
+        <p>随用随查：<a href="../reference/python-dict-fields.html">dict 字段速查</a>。报错时把完整终端输出发来。</p>
+      </section>
+
+      <section class="section" id="sources">
+        <span class="step-label">官方阅读 · 按需</span>
+        <h2>只读当前需要的部分</h2>
+        <p>首选 <a href="https://docs.python.org/zh-cn/3.13/tutorial/datastructures.html#dictionaries">Python 3.13 教程：字典</a>。当前只需要知道：字典里可以放多个 key-value，并且用 <code>d[key]</code> 取出对应 value。</p>
+      </section>
+    </main>
+    <footer class="footer">Python for AI · 第十三次学习 · 给 dict 报告增加更多字段</footer>
+  </div>
+</body>
+</html>

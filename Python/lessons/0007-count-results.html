@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Python 第七课：用 count() 统计列表中某个结果出现几次。">
+  <title>第七课：统计结果出现几次</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <span>Python for AI · Lesson 07</span>
+      <nav aria-label="课程导航">
+        <a href="0006-collect-results-with-append.html">回顾第六课</a>
+        <a href="#warmup">回忆</a>
+        <a href="#count">count</a>
+        <a href="#practice">实作</a>
+        <a href="../reference/python-list-count.html">count 速查</a>
+        <a href="0008-summarize-with-if.html">下一课</a>
+      </nav>
+    </header>
+
+    <section class="hero" aria-labelledby="lesson-title">
+      <p class="eyebrow">Session 07 / count results</p>
+      <h1 id="lesson-title">统计结果出现几次</h1>
+      <p class="lede">第六天，你把每轮结果收集进 <code>results</code>。今天只加一个新动作：用 <code>count()</code> 问列表“这个值出现了几次”。</p>
+      <div class="meta-row">
+        <span class="pill">15–20 分钟</span>
+        <span class="pill">新概念：count()</span>
+        <span class="pill">旧工具：list + append</span>
+      </div>
+      <div class="pipeline" aria-label="结果列表进入统计，输出出现次数">
+        <div class="pipeline-step"><small>结果列表</small><strong>results</strong></div>
+        <div class="pipeline-step"><small>要找的值</small><strong>"太小了"</strong></div>
+        <div class="pipeline-step"><small>统计</small><strong>results.count(...)</strong></div>
+        <div class="pipeline-step"><small>次数</small><strong>2</strong></div>
+      </div>
+    </section>
+
+    <main>
+      <section class="section" id="warmup">
+        <span class="step-label">01 · 回忆 · 2 分钟</span>
+        <h2>先取回第六天的数据流</h2>
+        <p>先别运行。写出下面代码最后打印的列表：</p>
+        <pre><code>results = []
+
+results.append("太小了")
+results.append("猜中了")
+
+print(results)</code></pre>
+        <details>
+          <summary>回答后核对</summary>
+          <div class="answer">
+            <pre><code>['太小了', '猜中了']</code></pre>
+            <p>这是两个字符串元素，不是一个带逗号的大字符串。</p>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="count">
+        <span class="step-label">02 · 新知识 · 4 分钟</span>
+        <h2>count() 返回出现次数</h2>
+        <p>看这个列表：</p>
+        <pre><code>results = ["太小了", "猜中了", "太大了", "太小了"]</code></pre>
+        <p>如果要数 <code>"太小了"</code> 出现几次：</p>
+        <pre><code>too_small_count = results.count("太小了")
+print(too_small_count)</code></pre>
+        <p>输出是：</p>
+        <pre><code>2</code></pre>
+        <p><code>count()</code> 会在整个列表里数一遍，返回目标值出现的次数。没有出现时，结果是 <code>0</code>。</p>
+        <div class="callout">
+          <strong>一句话抓住今天</strong>
+          <code>append()</code> 是把结果放进列表；<code>count()</code> 是从列表里数某个结果出现几次。
+        </div>
+        <p class="source-note">依据：<a href="https://docs.python.org/zh-cn/3.13/tutorial/datastructures.html#more-on-lists">Python 官方列表方法</a>说明 <code>count()</code> 返回某个值出现的次数。</p>
+      </section>
+
+      <section class="section" id="trace">
+        <span class="step-label">03 · 预测 · 3 分钟</span>
+        <h2>先数已有列表</h2>
+        <p>先别运行，写出三行输出：</p>
+        <pre><code>results = ["太小了", "猜中了", "太大了", "太小了"]
+
+print(results.count("太小了"))
+print(results.count("猜中了"))
+print(results.count("错误"))</code></pre>
+        <details>
+          <summary>核对输出</summary>
+          <div class="answer">
+            <pre><code>2
+1
+0</code></pre>
+            <p><code>"错误"</code> 不在列表里，所以出现次数是 <code>0</code>。</p>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="practice">
+        <span class="step-label">04 · 实作 · 8 分钟</span>
+        <h2>先收集，再统计</h2>
+        <p>在 <code>Python</code> 文件夹中新建 <code>count_results.py</code>。这次先得到 <code>results</code>，再统计每类结果。</p>
+        <pre id="count-example"><code>def compare_guess(guess, secret):
+    if guess &lt; secret:
+        return "太小了"
+    elif guess &gt; secret:
+        return "太大了"
+    else:
+        return "猜中了"
+
+
+guesses = [10, 30, 40, 25]
+secret = 30
+results = []
+
+for guess in guesses:
+    result = compare_guess(guess, secret)
+    results.append(result)
+
+print(results)
+print("太小了次数：", results.count("太小了"))
+print("太大了次数：", results.count("太大了"))
+print("猜中了次数：", results.count("猜中了"))</code></pre>
+        <p>运行：</p>
+        <div class="terminal-line">cd "C:\Users\ZhongHui\Documents\ChatGPT\学习\Python"</div>
+        <div class="terminal-line">python count_results.py</div>
+        <details>
+          <summary>运行后核对</summary>
+          <div class="answer">
+            <pre id="count-output"><code>['太小了', '猜中了', '太大了', '太小了']
+太小了次数： 2
+太大了次数： 1
+猜中了次数： 1</code></pre>
+            <p>注意 <code>print("太小了次数：", 2)</code> 中间会自动加一个空格。</p>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="transfer">
+        <span class="step-label">05 · 改一次 · 3 分钟</span>
+        <h2>只改输入列表，再统计</h2>
+        <p>把 <code>guesses</code> 改成：</p>
+        <pre><code>guesses = [30, 31, 29, 30]</code></pre>
+        <p>其他代码不动。先预测三类次数，再运行。</p>
+        <details>
+          <summary>核对次数</summary>
+          <div class="answer">
+            <pre><code>太小了次数： 1
+太大了次数： 1
+猜中了次数： 2</code></pre>
+          </div>
+        </details>
+        <div class="next-action">
+          <h3>发回你的学习证据</h3>
+          <p>把运行输出发给老师，并说明：<code>results.count("太小了")</code> 数的是哪个列表？数的是哪个值？</p>
+        </div>
+        <p>随用随查：<a href="../reference/python-list-count.html">count 速查</a>。如果报错，把代码和完整终端输出发给老师。</p>
+      </section>
+
+      <section class="section" id="sources">
+        <span class="step-label">官方阅读 · 按需</span>
+        <h2>只读当前需要的部分</h2>
+        <p>首选 <a href="https://docs.python.org/zh-cn/3.13/tutorial/datastructures.html#more-on-lists">Python 3.13 教程：列表详解</a>。当前只读 <code>list.count()</code> 的说明和水果列表中 <code>fruits.count(...)</code> 的例子。</p>
+      </section>
+    </main>
+    <footer class="footer">Python for AI · 第七次学习 · 先收集结果，再统计次数 · <a href="0008-summarize-with-if.html">继续第八课</a></footer>
+  </div>
+</body>
+</html>

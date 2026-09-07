@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Python 第八课：根据 count() 得到的次数，用 if 输出一句总结。">
+  <title>第八课：根据统计结果做判断</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <span>Python for AI · Lesson 08</span>
+      <nav aria-label="课程导航">
+        <a href="0007-count-results.html">回顾第七课</a>
+        <a href="#warmup">回忆</a>
+        <a href="#if-count">判断</a>
+        <a href="#practice">实作</a>
+        <a href="../reference/python-count-if-summary.html">判断速查</a>
+        <a href="0009-suggest-with-elif.html">下一课</a>
+      </nav>
+    </header>
+
+    <section class="hero" aria-labelledby="lesson-title">
+      <p class="eyebrow">Session 08 / summarize with if</p>
+      <h1 id="lesson-title">根据统计结果做判断</h1>
+      <p class="lede">第七天，你已经能数出“猜中了”出现几次。今天把这个次数交给 <code>if</code>，让程序自己输出一句总结。</p>
+      <div class="meta-row">
+        <span class="pill">15–20 分钟</span>
+        <span class="pill">新连接：count + if</span>
+        <span class="pill">旧工具：list + function</span>
+      </div>
+      <div class="pipeline" aria-label="结果列表被统计，统计数字进入 if，输出总结">
+        <div class="pipeline-step"><small>结果列表</small><strong>results</strong></div>
+        <div class="pipeline-step"><small>统计次数</small><strong>hit_count</strong></div>
+        <div class="pipeline-step"><small>条件判断</small><strong>hit_count &gt; 0</strong></div>
+        <div class="pipeline-step"><small>总结输出</small><strong>有猜中</strong></div>
+      </div>
+    </section>
+
+    <main>
+      <section class="section" id="warmup">
+        <span class="step-label">01 · 回忆 · 2 分钟</span>
+        <h2>先取回第七天的 count()</h2>
+        <p>先别运行。写出下面代码的输出：</p>
+        <pre><code>results = ["太小了", "猜中了", "太大了", "猜中了"]
+
+print(results.count("猜中了"))</code></pre>
+        <details>
+          <summary>回答后核对</summary>
+          <div class="answer"><p>输出是 <code>2</code>。因为 <code>"猜中了"</code> 在列表里出现两次。</p></div>
+        </details>
+      </section>
+
+      <section class="section" id="if-count">
+        <span class="step-label">02 · 新连接 · 4 分钟</span>
+        <h2>把次数交给 if</h2>
+        <p>先把次数保存到变量：</p>
+        <pre><code>hit_count = results.count("猜中了")</code></pre>
+        <p>再判断这个次数是否大于 <code>0</code>：</p>
+        <pre><code>if hit_count &gt; 0:
+    print("这组测试里猜中过")
+else:
+    print("这组测试里没有猜中")</code></pre>
+        <p>读法是：如果猜中的次数大于 0，就说明至少猜中过一次；否则就是一次都没有猜中。</p>
+        <div class="callout">
+          <strong>一句话抓住今天</strong>
+          <code>count()</code> 给出数字，<code>if</code> 根据这个数字选择要输出哪句话。
+        </div>
+        <p class="source-note">依据：<a href="https://docs.python.org/zh-cn/3.13/tutorial/controlflow.html#if-statements">Python 官方 if 语句</a>与<a href="https://docs.python.org/zh-cn/3.13/tutorial/datastructures.html#more-on-lists">列表 count() 方法</a>。</p>
+      </section>
+
+      <section class="section" id="trace">
+        <span class="step-label">03 · 预测 · 3 分钟</span>
+        <h2>先判断已有列表</h2>
+        <p>先别运行，写出最终输出：</p>
+        <pre><code>results = ["太小了", "太大了", "太小了"]
+hit_count = results.count("猜中了")
+
+if hit_count &gt; 0:
+    print("这组测试里猜中过")
+else:
+    print("这组测试里没有猜中")</code></pre>
+        <details>
+          <summary>核对输出</summary>
+          <div class="answer">
+            <pre><code>这组测试里没有猜中</code></pre>
+            <p><code>"猜中了"</code> 出现 <code>0</code> 次，<code>0 &gt; 0</code> 为假，所以走 <code>else</code>。</p>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="practice">
+        <span class="step-label">04 · 实作 · 8 分钟</span>
+        <h2>从猜测列表到一句总结</h2>
+        <p>在 <code>Python</code> 文件夹中新建 <code>summarize_results.py</code>。这次仍然先收集、再统计，最后用 <code>if</code> 输出总结。</p>
+        <pre id="summary-example"><code>def compare_guess(guess, secret):
+    if guess &lt; secret:
+        return "太小了"
+    elif guess &gt; secret:
+        return "太大了"
+    else:
+        return "猜中了"
+
+
+guesses = [10, 30, 40, 25]
+secret = 30
+results = []
+
+for guess in guesses:
+    result = compare_guess(guess, secret)
+    results.append(result)
+
+hit_count = results.count("猜中了")
+
+print(results)
+print("猜中了次数：", hit_count)
+
+if hit_count &gt; 0:
+    print("这组测试里猜中过")
+else:
+    print("这组测试里没有猜中")</code></pre>
+        <p>运行：</p>
+        <div class="terminal-line">cd "C:\Users\ZhongHui\Documents\ChatGPT\学习\Python"</div>
+        <div class="terminal-line">python summarize_results.py</div>
+        <details>
+          <summary>运行后核对</summary>
+          <div class="answer">
+            <pre id="summary-output"><code>['太小了', '猜中了', '太大了', '太小了']
+猜中了次数： 1
+这组测试里猜中过</code></pre>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="transfer">
+        <span class="step-label">05 · 改一次 · 3 分钟</span>
+        <h2>只改输入，观察总结改变</h2>
+        <p>把 <code>guesses</code> 改成：</p>
+        <pre><code>guesses = [10, 20, 25]</code></pre>
+        <p>其他代码不动。先预测 <code>hit_count</code> 是多少，以及最后一句总结是什么，再运行。</p>
+        <details>
+          <summary>核对结果</summary>
+          <div class="answer">
+            <pre><code>猜中了次数： 0
+这组测试里没有猜中</code></pre>
+          </div>
+        </details>
+        <div class="next-action">
+          <h3>发回你的学习证据</h3>
+          <p>把运行输出发给老师，并说明：<code>if hit_count &gt; 0:</code> 判断的是哪个数字？什么时候走 <code>else</code>？</p>
+        </div>
+        <p>随用随查：<a href="../reference/python-count-if-summary.html">count + if 速查</a>。不清楚的报错直接发完整截图。</p>
+      </section>
+
+      <section class="section" id="sources">
+        <span class="step-label">官方阅读 · 按需</span>
+        <h2>只读当前需要的部分</h2>
+        <p>首选 <a href="https://docs.python.org/zh-cn/3.13/tutorial/controlflow.html#if-statements">Python 3.13 教程：if 语句</a>，只读 <code>if/elif/else</code> 示例；再配合 <a href="https://docs.python.org/zh-cn/3.13/tutorial/datastructures.html#more-on-lists">列表方法</a>中的 <code>count()</code> 说明。</p>
+      </section>
+    </main>
+    <footer class="footer">Python for AI · 第八次学习 · 用统计数字驱动判断和总结 · <a href="0009-suggest-with-elif.html">继续第九课</a></footer>
+  </div>
+</body>
+</html>

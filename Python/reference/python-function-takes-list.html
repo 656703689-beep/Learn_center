@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="第十课速查：函数接收列表参数，并返回一句总结。">
+  <title>Python 函数接收列表速查</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <span>Python for AI · Reference 10</span>
+      <nav aria-label="速查导航">
+        <a href="../lessons/0010-function-takes-list.html">第十课</a>
+        <a href="python-elif-suggestions.html">if/elif 建议</a>
+        <a href="python-function-basics.html">函数速查</a>
+      </nav>
+    </header>
+    <section class="hero">
+      <p class="eyebrow">Reference / list parameter</p>
+      <h1>函数也能处理一整组</h1>
+      <p class="lede">把列表作为实参传给函数，函数内部可以统计、判断，并 <code>return</code> 一句总结。</p>
+    </section>
+    <main>
+      <section class="section" id="shape">
+        <h2>核心结构</h2>
+        <pre><code>def suggest_from_results(results):
+    hit_count = results.count("猜中了")
+
+    if hit_count &gt; 0:
+        return "已经猜中过，测试通过"
+    else:
+        return "这组测试里没有猜中"
+
+
+summary = suggest_from_results(["太小了", "猜中了"])
+print(summary)</code></pre>
+        <table>
+          <thead><tr><th scope="col">位置</th><th scope="col">含义</th></tr></thead>
+          <tbody>
+            <tr><td><code>results</code> 参数</td><td>函数内部接收的一整个列表。</td></tr>
+            <tr><td><code>results.count(...)</code></td><td>在这个列表里统计某个结果出现几次。</td></tr>
+            <tr><td><code>return "..."</code></td><td>把一句总结交回调用处。</td></tr>
+            <tr><td><code>summary</code></td><td>接住函数返回值的变量。</td></tr>
+          </tbody>
+        </table>
+        <p class="source-note">依据：<a href="https://docs.python.org/zh-cn/3.13/tutorial/controlflow.html#defining-functions">Python 官方函数定义</a>与<a href="https://docs.python.org/zh-cn/3.13/reference/simple_stmts.html#the-return-statement">return 语句</a>。</p>
+      </section>
+      <section class="section" id="compare">
+        <h2>和以前的函数对比</h2>
+        <table>
+          <thead><tr><th scope="col">函数</th><th scope="col">接收什么</th><th scope="col">返回什么</th></tr></thead>
+          <tbody>
+            <tr><td><code>compare_guess(guess, secret)</code></td><td>一个猜测数字和一个答案数字</td><td>本轮判断结果</td></tr>
+            <tr><td><code>suggest_from_results(results)</code></td><td>一整个结果列表</td><td>整组结果的总结建议</td></tr>
+          </tbody>
+        </table>
+      </section>
+      <section class="section" id="pitfalls">
+        <h2>常见检查点</h2>
+        <table>
+          <thead><tr><th scope="col">现象</th><th scope="col">检查</th></tr></thead>
+          <tbody>
+            <tr><td>函数里提示变量不存在</td><td>确认函数参数名和函数内部使用的名字完全一致。</td></tr>
+            <tr><td>打印出 <code>None</code></td><td>检查每个分支是否都有 <code>return</code>。</td></tr>
+            <tr><td>函数直接打印建议但外面拿不到</td><td>需要继续使用结果时，用 <code>return</code>，再用变量接住。</td></tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+    <footer class="footer">Python for AI · 函数接收列表速查 · 先问：实参列表进来后，函数 return 了什么？</footer>
+  </div>
+</body>
+</html>

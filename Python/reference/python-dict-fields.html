@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="第十三课速查：给 dict 增加更多 key-value 字段。">
+  <title>Python dict 字段速查</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <span>Python for AI · Reference 13</span>
+      <nav aria-label="速查导航">
+        <a href="../lessons/0013-dict-more-fields.html">第十三课</a>
+        <a href="python-dict-report.html">dict 报告</a>
+        <a href="python-list-count.html">count 速查</a>
+      </nav>
+    </header>
+    <section class="hero">
+      <p class="eyebrow">Reference / dict fields</p>
+      <h1>多字段报告</h1>
+      <p class="lede"><code>dict</code> 可以同时保存多个 key-value；字段越完整，后续分析越方便。</p>
+    </section>
+    <main>
+      <section class="section" id="shape">
+        <h2>核心结构</h2>
+        <pre><code>report = {
+    "total": total_count,
+    "small": small_count,
+    "big": big_count,
+    "hits": hit_count,
+    "summary": summary
+}</code></pre>
+        <table>
+          <thead><tr><th scope="col">key</th><th scope="col">value 来源</th><th scope="col">含义</th></tr></thead>
+          <tbody>
+            <tr><td><code>"total"</code></td><td><code>len(results)</code></td><td>总测试次数。</td></tr>
+            <tr><td><code>"small"</code></td><td><code>results.count("太小了")</code></td><td>偏小次数。</td></tr>
+            <tr><td><code>"big"</code></td><td><code>results.count("太大了")</code></td><td>偏大次数。</td></tr>
+            <tr><td><code>"hits"</code></td><td><code>results.count("猜中了")</code></td><td>猜中次数。</td></tr>
+            <tr><td><code>"summary"</code></td><td><code>suggest_from_counts(...)</code></td><td>总结建议。</td></tr>
+          </tbody>
+        </table>
+        <p class="source-note">依据：<a href="https://docs.python.org/zh-cn/3.13/tutorial/datastructures.html#dictionaries">Python 官方教程：字典</a>。</p>
+      </section>
+      <section class="section" id="read">
+        <h2>按字段读取</h2>
+        <pre><code>print(report["small"])
+print(report["big"])
+print(report["summary"])</code></pre>
+        <div class="callout">
+          <strong>读法</strong>
+          <code>report["small"]</code> 读作：从 <code>report</code> 里取 key 为 <code>"small"</code> 的 value。
+        </div>
+      </section>
+      <section class="section" id="pitfalls">
+        <h2>常见检查点</h2>
+        <table>
+          <thead><tr><th scope="col">现象</th><th scope="col">检查</th></tr></thead>
+          <tbody>
+            <tr><td><code>KeyError: 'small'</code></td><td><code>return {...}</code> 里是否真的写了 <code>"small": small_count</code>。</td></tr>
+            <tr><td>偏大和偏小数字反了</td><td>检查 <code>small_count</code> 是否数 <code>"太小了"</code>，<code>big_count</code> 是否数 <code>"太大了"</code>。</td></tr>
+            <tr><td>总结不符合统计</td><td>检查传给 <code>suggest_from_counts</code> 的三个参数顺序。</td></tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+    <footer class="footer">Python for AI · dict 字段速查 · 多保存字段，少重新计算</footer>
+  </div>
+</body>
+</html>

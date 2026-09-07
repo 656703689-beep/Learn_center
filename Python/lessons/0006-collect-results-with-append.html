@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Python 第六课：用 append() 把每轮处理结果收集到新列表。">
+  <title>第六课：把结果收集起来</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <span>Python for AI · Lesson 06</span>
+      <nav aria-label="课程导航">
+        <a href="0005-list-batch-check.html">回顾第五课</a>
+        <a href="#warmup">回忆</a>
+        <a href="#append">append</a>
+        <a href="#practice">实作</a>
+        <a href="../reference/python-list-append.html">append 速查</a>
+        <a href="0007-count-results.html">下一课</a>
+      </nav>
+    </header>
+
+    <section class="hero" aria-labelledby="lesson-title">
+      <p class="eyebrow">Session 06 / collect results</p>
+      <h1 id="lesson-title">把每轮结果收集起来</h1>
+      <p class="lede">第五天，你已经能把一组数字逐个交给函数。今天只加一个新动作：每得到一个结果，就用 <code>append()</code> 放进新列表。</p>
+      <div class="meta-row">
+        <span class="pill">15–20 分钟</span>
+        <span class="pill">新概念：append()</span>
+        <span class="pill">旧工具：list + for + function</span>
+      </div>
+      <div class="pipeline" aria-label="输入列表逐个进入函数，结果被加入新列表">
+        <div class="pipeline-step"><small>输入列表</small><strong>guesses</strong></div>
+        <div class="pipeline-step"><small>本轮元素</small><strong>guess</strong></div>
+        <div class="pipeline-step"><small>函数结果</small><strong>result</strong></div>
+        <div class="pipeline-step"><small>结果列表</small><strong>results.append(result)</strong></div>
+      </div>
+    </section>
+
+    <main>
+      <section class="section" id="warmup">
+        <span class="step-label">01 · 回忆 · 2 分钟</span>
+        <h2>先检查第五天还记得多少</h2>
+        <p>先别运行。写出下面代码的输出：</p>
+        <pre><code>guesses = [10, 30, 40]
+
+for guess in guesses:
+    print(guess)</code></pre>
+        <details>
+          <summary>回答后核对</summary>
+          <div class="answer">
+            <pre><code>10
+30
+40</code></pre>
+            <p><code>guesses</code> 是整个列表；<code>guess</code> 是每轮取出来的当前数字。</p>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="append">
+        <span class="step-label">02 · 新知识 · 4 分钟</span>
+        <h2>append() 把一个值加到列表末尾</h2>
+        <p>先建一个空列表：</p>
+        <pre><code>results = []</code></pre>
+        <p>再往里面放一个值：</p>
+        <pre><code>results.append("太小了")
+print(results)</code></pre>
+        <p>输出是：</p>
+        <pre><code>['太小了']</code></pre>
+        <p><code>append()</code> 的意思是：把括号里的这个值，添加到列表末尾。列表会被改变。</p>
+        <div class="callout">
+          <strong>一句话抓住今天</strong>
+          <code>print(result)</code> 是立刻显示；<code>results.append(result)</code> 是先存起来，后面还能继续使用。
+        </div>
+        <p class="source-note">依据：<a href="https://docs.python.org/zh-cn/3.13/tutorial/datastructures.html#more-on-lists">Python 官方列表方法</a>说明 <code>append</code> 会在列表末尾添加一项。</p>
+      </section>
+
+      <section class="section" id="trace">
+        <span class="step-label">03 · 跟踪 · 3 分钟</span>
+        <h2>每一轮后，results 变成什么？</h2>
+        <pre><code>results = []
+
+results.append("太小了")
+results.append("猜中了")
+results.append("太大了")
+
+print(results)</code></pre>
+        <details>
+          <summary>核对最后的列表</summary>
+          <div class="answer">
+            <pre><code>['太小了', '猜中了', '太大了']</code></pre>
+            <p>每次 <code>append()</code> 加到末尾，所以顺序和添加顺序一致。</p>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="practice">
+        <span class="step-label">04 · 实作 · 7 分钟</span>
+        <h2>把 compare_guess 的结果收集成列表</h2>
+        <p>在 <code>Python</code> 文件夹中新建 <code>collect_results.py</code>。先沿用前两天的函数，再新增一个空列表 <code>results</code>。</p>
+        <pre id="collect-example"><code>def compare_guess(guess, secret):
+    if guess &lt; secret:
+        return "太小了"
+    elif guess &gt; secret:
+        return "太大了"
+    else:
+        return "猜中了"
+
+
+guesses = [10, 30, 40, 25]
+secret = 30
+results = []
+
+for guess in guesses:
+    result = compare_guess(guess, secret)
+    results.append(result)
+
+print(results)</code></pre>
+        <p>运行：</p>
+        <div class="terminal-line">cd "C:\Users\ZhongHui\Documents\ChatGPT\学习\Python"</div>
+        <div class="terminal-line">python collect_results.py</div>
+        <p>先预测输出，再运行核对。</p>
+        <details>
+          <summary>运行后核对</summary>
+          <div class="answer">
+            <pre id="collect-output"><code>['太小了', '猜中了', '太大了', '太小了']</code></pre>
+            <p>四个输入对应四个结果。结果现在不是一行一行打印，而是被收集到同一个列表里。</p>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="transfer">
+        <span class="step-label">05 · 改一次 · 3 分钟</span>
+        <h2>只改输入列表</h2>
+        <p>把 <code>guesses</code> 改成：</p>
+        <pre><code>guesses = [30, 31, 29]</code></pre>
+        <p>其他代码不动。先预测 <code>results</code> 最终是什么，再运行。</p>
+        <details>
+          <summary>核对结果</summary>
+          <div class="answer"><p><code>results</code> 最终是 <code>['猜中了', '太大了', '太小了']</code>。</p></div>
+        </details>
+        <div class="next-action">
+          <h3>发回你的学习证据</h3>
+          <p>把你的运行输出发给老师，并说明：<code>results = []</code> 是什么时候创建的？<code>results.append(result)</code> 每轮做了什么？</p>
+        </div>
+        <p>随用随查：<a href="../reference/python-list-append.html">append 速查</a>。不清楚的代码直接发给老师逐行拆。</p>
+      </section>
+
+      <section class="section" id="sources">
+        <span class="step-label">官方阅读 · 按需</span>
+        <h2>只读当前需要的部分</h2>
+        <p>首选 <a href="https://docs.python.org/zh-cn/3.13/tutorial/datastructures.html#more-on-lists">Python 3.13 教程：列表详解</a>，当前只读 <code>list.append()</code> 的说明，以及“创建平方值列表”的循环示例。列表推导式、排序、队列以后再学。</p>
+      </section>
+    </main>
+    <footer class="footer">Python for AI · 第六次学习 · 每轮处理一个值，再把结果收集到列表 · <a href="0007-count-results.html">继续第七课</a></footer>
+  </div>
+</body>
+</html>

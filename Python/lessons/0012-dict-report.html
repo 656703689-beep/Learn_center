@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Python 第十二课：用 dict 把报告整理成带名字的数据。">
+  <title>第十二课：用 dict 装一份报告</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <span>Python for AI · Lesson 12</span>
+      <nav aria-label="课程导航">
+        <a href="0011-report-with-len.html">回顾第十一课</a>
+        <a href="#warmup">回忆</a>
+        <a href="#dict">dict</a>
+        <a href="#practice">实作</a>
+        <a href="../reference/python-dict-report.html">dict 速查</a>
+        <a href="0013-dict-more-fields.html">下一课</a>
+      </nav>
+    </header>
+
+    <section class="hero" aria-labelledby="lesson-title">
+      <p class="eyebrow">Session 12 / report as dict</p>
+      <h1 id="lesson-title">用 dict 装一份报告</h1>
+      <p class="lede">第十一课已经能生成一句报告。今天把报告改成 <code>dict</code>：每个数据都有自己的名字，后面读 AI API 返回结果会经常遇到这种结构。</p>
+      <div class="meta-row">
+        <span class="pill">15–20 分钟</span>
+        <span class="pill">新概念：dict</span>
+        <span class="pill">旧工具：len + count + function</span>
+      </div>
+      <div class="pipeline" aria-label="结果列表进入 dict 报告">
+        <div class="pipeline-step"><small>结果列表</small><strong>results</strong></div>
+        <div class="pipeline-step"><small>计算数字</small><strong>len / count</strong></div>
+        <div class="pipeline-step"><small>命名保存</small><strong>{"total": 3}</strong></div>
+        <div class="pipeline-step"><small>按名字取</small><strong>report["total"]</strong></div>
+      </div>
+    </section>
+
+    <main>
+      <section class="section" id="warmup">
+        <span class="step-label">01 · 回忆 · 2 分钟</span>
+        <h2>先取回 len 和 count</h2>
+        <p>先别运行。写出两行输出：</p>
+        <pre><code>results = ["太小了", "猜中了", "太大了", "太小了"]
+
+print(len(results))
+print(results.count("猜中了"))</code></pre>
+        <details>
+          <summary>回答后核对</summary>
+          <div class="answer">
+            <pre><code>4
+1</code></pre>
+            <p><code>len(results)</code> 数全部元素；<code>count("猜中了")</code> 只数猜中出现几次。</p>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="dict">
+        <span class="step-label">02 · 新知识 · 4 分钟</span>
+        <h2>dict 是“带名字的数据盒子”</h2>
+        <pre><code>report = {
+    "total": 3,
+    "hits": 1,
+    "summary": "已经猜中过，测试通过"
+}
+
+print(report["hits"])</code></pre>
+        <p>输出是 <code>1</code>。因为 <code>"hits"</code> 这个名字对应的值是 <code>1</code>。</p>
+        <div class="callout">
+          <strong>一句话抓住今天</strong>
+          <code>list</code> 靠顺序保存多个值；<code>dict</code> 靠名字保存多个值。
+        </div>
+        <table>
+          <thead><tr><th scope="col">写法</th><th scope="col">含义</th></tr></thead>
+          <tbody>
+            <tr><td><code>"total": 3</code></td><td><code>"total"</code> 是 key，<code>3</code> 是 value。</td></tr>
+            <tr><td><code>report["total"]</code></td><td>从 <code>report</code> 里取出名字叫 <code>"total"</code> 的值。</td></tr>
+            <tr><td><code>report["summary"]</code></td><td>取出总结文字。</td></tr>
+          </tbody>
+        </table>
+        <p class="source-note">依据：<a href="https://docs.python.org/zh-cn/3.13/tutorial/datastructures.html#dictionaries">Python 官方教程：字典</a>说明字典是键值对集合，主要操作是通过 key 存储和提取 value。</p>
+      </section>
+
+      <section class="section" id="trace">
+        <span class="step-label">03 · 预测 · 3 分钟</span>
+        <h2>按 key 取 value</h2>
+        <p>先别运行，写出三行输出：</p>
+        <pre><code>report = {
+    "total": 4,
+    "hits": 0,
+    "summary": "这组测试里没有猜中"
+}
+
+print(report["total"])
+print(report["hits"])
+print(report["summary"])</code></pre>
+        <details>
+          <summary>核对输出</summary>
+          <div class="answer">
+            <pre><code>4
+0
+这组测试里没有猜中</code></pre>
+            <p>方括号里写的是 key，不是位置编号。</p>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="practice">
+        <span class="step-label">04 · 实作 · 8 分钟</span>
+        <h2>让 build_report 返回 dict</h2>
+        <p>在 <code>Python</code> 文件夹中新建 <code>dict_report.py</code>。这次 <code>build_report(results)</code> 不再返回一句字符串，而是返回一个 <code>dict</code>。</p>
+        <pre id="dict-example"><code>def compare_guess(guess, secret):
+    if guess &lt; secret:
+        return "太小了"
+    elif guess &gt; secret:
+        return "太大了"
+    else:
+        return "猜中了"
+
+
+def suggest_from_results(results):
+    hit_count = results.count("猜中了")
+
+    if hit_count &gt; 0:
+        return "已经猜中过，测试通过"
+    else:
+        return "这组测试里没有猜中"
+
+
+def build_report(results):
+    total_count = len(results)
+    hit_count = results.count("猜中了")
+    summary = suggest_from_results(results)
+
+    return {
+        "total": total_count,
+        "hits": hit_count,
+        "summary": summary
+    }
+
+
+guesses = [10, 30, 40]
+secret = 30
+results = []
+
+for guess in guesses:
+    result = compare_guess(guess, secret)
+    results.append(result)
+
+report = build_report(results)
+
+print(results)
+print(report)
+print("总次数：", report["total"])
+print("猜中次数：", report["hits"])
+print("总结：", report["summary"])</code></pre>
+        <p>运行：</p>
+        <div class="terminal-line">cd "C:\Users\ZhongHui\Documents\ChatGPT\学习\Python"</div>
+        <div class="terminal-line">python dict_report.py</div>
+        <details>
+          <summary>运行后核对</summary>
+          <div class="answer">
+            <pre id="dict-output"><code>['太小了', '猜中了', '太大了']
+{'total': 3, 'hits': 1, 'summary': '已经猜中过，测试通过'}
+总次数： 3
+猜中次数： 1
+总结： 已经猜中过，测试通过</code></pre>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="transfer">
+        <span class="step-label">05 · 改一次 · 3 分钟</span>
+        <h2>只改输入，dict 的值改变</h2>
+        <p>把 <code>guesses</code> 改成：</p>
+        <pre><code>guesses = [10, 20, 25, 28]</code></pre>
+        <p>其他代码不动。先预测 <code>report</code>，再运行。</p>
+        <details>
+          <summary>核对结果</summary>
+          <div class="answer">
+            <pre><code>['太小了', '太小了', '太小了', '太小了']
+{'total': 4, 'hits': 0, 'summary': '这组测试里没有猜中'}
+总次数： 4
+猜中次数： 0
+总结： 这组测试里没有猜中</code></pre>
+          </div>
+        </details>
+        <div class="next-action">
+          <h3>发回你的学习证据</h3>
+          <p>把运行输出发给老师，并说明：<code>report["total"]</code> 取出的是什么？<code>report["summary"]</code> 取出的是什么？</p>
+        </div>
+        <p>随用随查：<a href="../reference/python-dict-report.html">dict 报告速查</a>。完成后进入 <a href="0013-dict-more-fields.html">第十三课：给 dict 多装两个字段</a>。</p>
+      </section>
+
+      <section class="section" id="sources">
+        <span class="step-label">官方阅读 · 按需</span>
+        <h2>只读当前需要的部分</h2>
+        <p>首选 <a href="https://docs.python.org/zh-cn/3.13/tutorial/datastructures.html#dictionaries">Python 3.13 教程：字典</a>。当前只需要知道：字典由 key-value 组成，可以用 <code>d[key]</code> 按名字取值。</p>
+      </section>
+    </main>
+    <footer class="footer">Python for AI · 第十二次学习 · 用 dict 把报告整理成带名字的数据</footer>
+  </div>
+</body>
+</html>

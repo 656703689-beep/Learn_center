@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="第七课速查：count() 统计列表中某个值出现几次。">
+  <title>Python count() 速查</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <span>Python for AI · Reference 07</span>
+      <nav aria-label="速查导航">
+        <a href="../lessons/0007-count-results.html">第七课</a>
+        <a href="python-list-append.html">append 速查</a>
+        <a href="python-list-and-for.html">列表与 for</a>
+      </nav>
+    </header>
+    <section class="hero">
+      <p class="eyebrow">Reference / count</p>
+      <h1>数一数出现几次</h1>
+      <p class="lede"><code>count()</code> 用来统计列表中某个值出现的次数。它返回一个整数。</p>
+    </section>
+    <main>
+      <section class="section" id="shape">
+        <h2>核心结构</h2>
+        <pre><code>results = ["太小了", "猜中了", "太大了", "太小了"]
+
+small_count = results.count("太小了")
+print(small_count)</code></pre>
+        <table>
+          <thead><tr><th scope="col">写法</th><th scope="col">含义</th></tr></thead>
+          <tbody>
+            <tr><td><code>results</code></td><td>要统计的列表。</td></tr>
+            <tr><td><code>"太小了"</code></td><td>要查找和计数的目标值。</td></tr>
+            <tr><td><code>results.count("太小了")</code></td><td>返回 <code>"太小了"</code> 在 <code>results</code> 中出现的次数。</td></tr>
+            <tr><td><code>small_count</code></td><td>接住这个次数的变量，本例是整数 <code>2</code>。</td></tr>
+          </tbody>
+        </table>
+        <p class="source-note">依据：<a href="https://docs.python.org/zh-cn/3.13/tutorial/datastructures.html#more-on-lists">Python 官方列表方法</a>。</p>
+      </section>
+      <section class="section" id="examples">
+        <h2>常见结果</h2>
+        <pre><code>results.count("太小了")  # 2
+results.count("猜中了")  # 1
+results.count("错误")    # 0</code></pre>
+        <p>没找到不是报错，而是返回 <code>0</code>。</p>
+      </section>
+      <section class="section" id="pitfalls">
+        <h2>常见检查点</h2>
+        <table>
+          <thead><tr><th scope="col">现象</th><th scope="col">检查</th></tr></thead>
+          <tbody>
+            <tr><td>次数总是 0</td><td>检查字符串是否完全一致，例如 <code>"太小了"</code> 和 <code>"太小"</code> 不一样。</td></tr>
+            <tr><td>报名称不存在</td><td>确认先创建了 <code>results</code>，再写 <code>results.count(...)</code>。</td></tr>
+            <tr><td>把 count 写在循环里看不懂</td><td>本课先放在循环后统计完整结果，等数据都收集完再数。</td></tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+    <footer class="footer">Python for AI · count() 随身速查 · 不确定就先问：我在数哪个列表里的哪个值？</footer>
+  </div>
+</body>
+</html>

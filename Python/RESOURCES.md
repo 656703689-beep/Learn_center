@@ -8,6 +8,10 @@
   Python 官方对数字、字符串、赋值、变量和缩进的入门讲解。用于：前几课的基本语法。
 - [Python 3.13：内置函数](https://docs.python.org/zh-cn/3.13/library/functions.html#input)
   `input()`、`print()`、`int()`、`float()` 和 `type()` 的权威定义。用于：确认输入输出与类型转换的行为。
+- [Python 3.13：内置函数 len()](https://docs.python.org/zh-cn/3.13/library/functions.html#len)
+  Python 官方对 `len()` 的定义：返回对象长度。用于：第十一课统计结果列表长度，生成“共测试几次”的报告。
+- [Python 3.13 教程：字典](https://docs.python.org/zh-cn/3.13/tutorial/datastructures.html#dictionaries)
+  Python 官方对 `dict` 的入门说明：字典是 key-value 集合，可以通过 key 存储和提取 value。用于：第十二课把报告整理成带名字的数据。
 - [Python 3.13 教程：错误和异常](https://docs.python.org/zh-cn/3.13/tutorial/errors.html)
   官方说明如何阅读 `SyntaxError`、`NameError`、`TypeError` 等错误。用于：把报错当作定位线索。
 - [Python 3.13 语言参考：缩进](https://docs.python.org/zh-cn/3.13/reference/lexical_analysis.html#indentation)
@@ -28,6 +32,12 @@
   `return` 离开当前函数调用并交回结果的权威定义。用于：区分 `return` 与 `print()`。
 - [Python 3.13 教程：列表](https://docs.python.org/zh-cn/3.13/tutorial/introduction.html#lists)
   列表的方括号写法与元素概念；配合上面的 `for` 官方教程使用。用于：第五课把多个输入保存为列表，再逐个交给函数处理。当前先读首段与列表字面量示例，索引、切片等按需再学。
+- [Python 3.13 教程：列表详解](https://docs.python.org/zh-cn/3.13/tutorial/datastructures.html#more-on-lists)
+  Python 官方对 `list.append()` 等列表方法的说明，并展示“先创建空列表，再在循环里追加结果”的基本模式。用于：第六课把每轮函数返回值收集到新列表。
+- [Python 3.13 教程：列表方法 count()](https://docs.python.org/zh-cn/3.13/tutorial/datastructures.html#more-on-lists)
+  Python 官方说明 `list.count(value)` 返回某个值在列表中出现的次数，并给出水果列表计数示例。用于：第七课在 `results` 列表上统计“太小了/太大了/猜中了”的次数。
+- [Python 3.13 教程：if 语句](https://docs.python.org/zh-cn/3.13/tutorial/controlflow.html#if-statements)
+  Python 官方对 `if`、`elif`、`else` 的入门说明。用于：第八课把 `count()` 得到的数字交给条件判断，输出一条测试总结；第九课根据多个统计数字选择一条建议。
 
 ## Wisdom (Communities)
 
