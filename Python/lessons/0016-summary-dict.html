@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Python 第十六课：把多份报告汇总成一个 summary dict。">
+  <title>第十六课：生成总体报告 dict</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <span>Python for AI · Lesson 16</span>
+      <nav aria-label="课程导航">
+        <a href="0015-count-passed-reports.html">回顾第十五课</a>
+        <a href="#warmup">回忆</a>
+        <a href="#summary">summary</a>
+        <a href="#practice">实作</a>
+        <a href="../reference/python-summary-dict.html">总体报告速查</a>
+        <a href="0017-json-dumps.html">下一课</a>
+      </nav>
+    </header>
+
+    <section class="hero" aria-labelledby="lesson-title">
+      <p class="eyebrow">Session 16 / summary dict</p>
+      <h1 id="lesson-title">生成总体报告 dict</h1>
+      <p class="lede">第十五课已经能统计通过组数。今天把“总组数”和“通过组数”装进一个新的 <code>summary</code> 字典，形成一份总体报告。</p>
+      <div class="meta-row">
+        <span class="pill">15–20 分钟</span>
+        <span class="pill">新目标：汇总 dict</span>
+        <span class="pill">旧工具：len + counter + dict</span>
+      </div>
+      <div class="pipeline" aria-label="多份报告汇总成 summary dict">
+        <div class="pipeline-step"><small>多份报告</small><strong>reports</strong></div>
+        <div class="pipeline-step"><small>总组数</small><strong>len(reports)</strong></div>
+        <div class="pipeline-step"><small>通过组数</small><strong>passed_count</strong></div>
+        <div class="pipeline-step"><small>总体报告</small><strong>summary</strong></div>
+      </div>
+    </section>
+
+    <main>
+      <section class="section" id="warmup">
+        <span class="step-label">01 · 回忆 · 2 分钟</span>
+        <h2>先取回通过组数</h2>
+        <p>先别运行。写出最后输出：</p>
+        <pre><code>reports = [
+    {"name": "A组", "hits": 1},
+    {"name": "B组", "hits": 0},
+    {"name": "C组", "hits": 2}
+]
+
+passed_count = 0
+
+for report in reports:
+    if report["hits"] &gt; 0:
+        passed_count = passed_count + 1
+
+print(passed_count)</code></pre>
+        <details>
+          <summary>回答后核对</summary>
+          <div class="answer">
+            <pre><code>2</code></pre>
+            <p>A组和 C组 的 <code>hits</code> 大于 0，所以通过组数是 2。</p>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="summary">
+        <span class="step-label">02 · 新组合 · 4 分钟</span>
+        <h2>把汇总数字放进 summary</h2>
+        <pre><code>summary = {
+    "total_groups": len(reports),
+    "passed_groups": passed_count
+}
+
+print(summary["total_groups"])
+print(summary["passed_groups"])</code></pre>
+        <p><code>summary</code> 也是一个 <code>dict</code>。它不是某一组的报告，而是全部组的总体报告。</p>
+        <div class="callout">
+          <strong>一句话抓住今天</strong>
+          单组报告放在 <code>report</code>；全部组的汇总放在 <code>summary</code>。
+        </div>
+        <p class="source-note">依据：本课继续使用 <a href="https://docs.python.org/zh-cn/3.13/library/functions.html#len">Python 官方 len() 文档</a>和 <a href="https://docs.python.org/zh-cn/3.13/tutorial/datastructures.html#dictionaries">Python 官方教程：字典</a>。</p>
+      </section>
+
+      <section class="section" id="trace">
+        <span class="step-label">03 · 预测 · 3 分钟</span>
+        <h2>总体报告里有两个字段</h2>
+        <p>先别运行，写出两行输出：</p>
+        <pre><code>reports = [
+    {"name": "A组", "hits": 1},
+    {"name": "B组", "hits": 0},
+    {"name": "C组", "hits": 2}
+]
+
+passed_count = 2
+
+summary = {
+    "total_groups": len(reports),
+    "passed_groups": passed_count
+}
+
+print(summary["total_groups"])
+print(summary["passed_groups"])</code></pre>
+        <details>
+          <summary>核对输出</summary>
+          <div class="answer">
+            <pre><code>3
+2</code></pre>
+            <p><code>len(reports)</code> 是 3；<code>passed_count</code> 是 2。</p>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="practice">
+        <span class="step-label">04 · 实作 · 8 分钟</span>
+        <h2>生成 summary dict</h2>
+        <p>在 <code>Python</code> 文件夹中新建 <code>summary_report.py</code>。这次先生成三份报告，再生成一份总体 <code>summary</code>。</p>
+        <pre id="summary-example"><code>def compare_guess(guess, secret):
+    if guess &lt; secret:
+        return "太小了"
+    elif guess &gt; secret:
+        return "太大了"
+    else:
+        return "猜中了"
+
+
+def suggest_from_counts(small_count, big_count, hit_count):
+    if hit_count &gt; 0:
+        return "已经猜中过，测试通过"
+    elif small_count &gt; big_count:
+        return "整体偏小，可以试大一点"
+    elif big_count &gt; small_count:
+        return "整体偏大，可以试小一点"
+    else:
+        return "偏小和偏大一样多"
+
+
+def build_report(name, guesses, secret):
+    results = []
+
+    for guess in guesses:
+        result = compare_guess(guess, secret)
+        results.append(result)
+
+    small_count = results.count("太小了")
+    big_count = results.count("太大了")
+    hit_count = results.count("猜中了")
+    summary = suggest_from_counts(small_count, big_count, hit_count)
+
+    return {
+        "name": name,
+        "total": len(results),
+        "small": small_count,
+        "big": big_count,
+        "hits": hit_count,
+        "summary": summary
+    }
+
+
+def build_summary(reports):
+    passed_count = 0
+
+    for report in reports:
+        if report["hits"] &gt; 0:
+            passed_count = passed_count + 1
+
+    return {
+        "total_groups": len(reports),
+        "passed_groups": passed_count
+    }
+
+
+secret = 30
+
+report1 = build_report("第一组", [10, 30, 40], secret)
+report2 = build_report("第二组", [35, 40, 20], secret)
+report3 = build_report("第三组", [10, 30, 25, 28], secret)
+
+reports = [report1, report2, report3]
+summary = build_summary(reports)
+
+print(summary)
+print("总组数：", summary["total_groups"])
+print("通过组数：", summary["passed_groups"])</code></pre>
+        <p>运行：</p>
+        <div class="terminal-line">cd "C:\Users\ZhongHui\Documents\ChatGPT\学习\Python"</div>
+        <div class="terminal-line">python summary_report.py</div>
+        <details>
+          <summary>运行后核对</summary>
+          <div class="answer">
+            <pre id="summary-output"><code>{'total_groups': 3, 'passed_groups': 2}
+总组数： 3
+通过组数： 2</code></pre>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="transfer">
+        <span class="step-label">05 · 改一次 · 3 分钟</span>
+        <h2>让第二组也通过</h2>
+        <p>把 <code>report2</code> 改成：</p>
+        <pre><code>report2 = build_report("第二组", [35, 30, 20], secret)</code></pre>
+        <p>其他代码不动。先预测 <code>summary["total_groups"]</code> 和 <code>summary["passed_groups"]</code>，再运行。</p>
+        <details>
+          <summary>核对结果</summary>
+          <div class="answer">
+            <pre><code>{'total_groups': 3, 'passed_groups': 3}
+总组数： 3
+通过组数： 3</code></pre>
+          </div>
+        </details>
+        <div class="next-action">
+          <h3>发回你的学习证据</h3>
+          <p>把运行输出发给老师，并说明：<code>summary</code> 和单个 <code>report</code> 有什么区别？</p>
+        </div>
+        <p>随用随查：<a href="../reference/python-summary-dict.html">总体报告速查</a>。完成后进入 <a href="0017-json-dumps.html">第十七课：把报告转成 JSON</a>。</p>
+      </section>
+
+      <section class="section" id="sources">
+        <span class="step-label">官方阅读 · 按需</span>
+        <h2>只读当前需要的部分</h2>
+        <p>本课复用官方概念：<a href="https://docs.python.org/zh-cn/3.13/library/functions.html#len">len()</a> 返回对象长度；<a href="https://docs.python.org/zh-cn/3.13/tutorial/datastructures.html#dictionaries">dict</a> 用 key-value 保存字段。</p>
+      </section>
+    </main>
+    <footer class="footer">Python for AI · 第十六次学习 · 从多份报告生成总体 summary dict</footer>
+  </div>
+</body>
+</html>

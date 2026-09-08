@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Python 第十七课：用 json.dumps() 把 dict/list 转成 JSON 字符串。">
+  <title>第十七课：把报告转成 JSON</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <span>Python for AI · Lesson 17</span>
+      <nav aria-label="课程导航">
+        <a href="0016-summary-dict.html">回顾第十六课</a>
+        <a href="#warmup">回忆</a>
+        <a href="#json">JSON</a>
+        <a href="#practice">实作</a>
+        <a href="../reference/python-json-dumps.html">JSON 速查</a>
+        <a href="0018-json-loads.html">下一课</a>
+      </nav>
+    </header>
+
+    <section class="hero" aria-labelledby="lesson-title">
+      <p class="eyebrow">Session 17 / json.dumps</p>
+      <h1 id="lesson-title">把报告转成 JSON</h1>
+      <p class="lede">你已经能做出 Python 的 <code>dict</code> 和 <code>list</code>。今天用 <code>json.dumps()</code> 把它们转成 JSON 字符串，这是 AI API 最常见的数据交换格式。</p>
+      <div class="meta-row">
+        <span class="pill">15–20 分钟</span>
+        <span class="pill">新工具：json.dumps</span>
+        <span class="pill">旧数据：dict + list</span>
+      </div>
+      <div class="pipeline" aria-label="Python 数据转成 JSON 字符串">
+        <div class="pipeline-step"><small>Python 数据</small><strong>summary</strong></div>
+        <div class="pipeline-step"><small>导入模块</small><strong>import json</strong></div>
+        <div class="pipeline-step"><small>转换</small><strong>json.dumps(...)</strong></div>
+        <div class="pipeline-step"><small>JSON 字符串</small><strong>"{...}"</strong></div>
+      </div>
+    </section>
+
+    <main>
+      <section class="section" id="warmup">
+        <span class="step-label">01 · 回忆 · 2 分钟</span>
+        <h2>先取回 summary dict</h2>
+        <p>先别运行。写出两行输出：</p>
+        <pre><code>summary = {
+    "total_groups": 3,
+    "passed_groups": 2
+}
+
+print(summary["total_groups"])
+print(summary["passed_groups"])</code></pre>
+        <details>
+          <summary>回答后核对</summary>
+          <div class="answer">
+            <pre><code>3
+2</code></pre>
+            <p><code>summary</code> 是 Python 的 <code>dict</code>，用 key 取 value。</p>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="json">
+        <span class="step-label">02 · 新知识 · 4 分钟</span>
+        <h2>json.dumps() 把 Python 数据转成字符串</h2>
+        <pre><code>import json
+
+summary = {
+    "total_groups": 3,
+    "passed_groups": 2
+}
+
+json_text = json.dumps(summary, ensure_ascii=False)
+
+print(json_text)</code></pre>
+        <p>输出是一行 JSON 字符串：</p>
+        <pre><code>{"total_groups": 3, "passed_groups": 2}</code></pre>
+        <div class="callout">
+          <strong>一句话抓住今天</strong>
+          <code>dict</code> 是 Python 数据；<code>json.dumps()</code> 生成的是可以发给外部系统的 JSON 字符串。
+        </div>
+        <p class="source-note">依据：<a href="https://docs.python.org/zh-cn/3.13/library/json.html">Python 官方 json 文档</a>说明 <code>json.dumps(obj)</code> 会把 Python 对象序列化为 JSON 格式的 <code>str</code>；<code>ensure_ascii=False</code> 会让中文按原样输出。</p>
+      </section>
+
+      <section class="section" id="trace">
+        <span class="step-label">03 · 预测 · 3 分钟</span>
+        <h2>中文要保留，用 ensure_ascii=False</h2>
+        <p>先别运行，写出最后输出：</p>
+        <pre><code>import json
+
+report = {
+    "name": "第一组",
+    "summary": "已经猜中过，测试通过"
+}
+
+json_text = json.dumps(report, ensure_ascii=False)
+
+print(json_text)</code></pre>
+        <details>
+          <summary>核对输出</summary>
+          <div class="answer">
+            <pre><code>{"name": "第一组", "summary": "已经猜中过，测试通过"}</code></pre>
+            <p><code>ensure_ascii=False</code> 让中文直接显示，不变成 <code>\u7b2c...</code> 这种转义形式。</p>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="practice">
+        <span class="step-label">04 · 实作 · 8 分钟</span>
+        <h2>把总体报告转成 JSON</h2>
+        <p>在 <code>Python</code> 文件夹中新建 <code>json_report.py</code>。这次先生成 <code>summary</code>，再把它转成 JSON 字符串。</p>
+        <pre id="json-example"><code>import json
+
+
+summary = {
+    "total_groups": 3,
+    "passed_groups": 2
+}
+
+json_text = json.dumps(summary, ensure_ascii=False)
+
+print(summary)
+print(json_text)</code></pre>
+        <p>运行：</p>
+        <div class="terminal-line">cd "C:\Users\ZhongHui\Documents\ChatGPT\学习\Python"</div>
+        <div class="terminal-line">python json_report.py</div>
+        <details>
+          <summary>运行后核对</summary>
+          <div class="answer">
+            <pre id="json-output"><code>{'total_groups': 3, 'passed_groups': 2}
+{"total_groups": 3, "passed_groups": 2}</code></pre>
+            <p>第一行是 Python 打印 <code>dict</code> 的样子；第二行是 JSON 字符串，key 和字符串用双引号。</p>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="transfer">
+        <span class="step-label">05 · 改一次 · 3 分钟</span>
+        <h2>把 reports 列表也转成 JSON</h2>
+        <p>把文件改成：</p>
+        <pre><code>import json
+
+
+reports = [
+    {"name": "第一组", "hits": 1},
+    {"name": "第二组", "hits": 0}
+]
+
+json_text = json.dumps(reports, ensure_ascii=False)
+
+print(json_text)</code></pre>
+        <p>先预测输出，再运行。</p>
+        <details>
+          <summary>核对结果</summary>
+          <div class="answer">
+            <pre><code>[{"name": "第一组", "hits": 1}, {"name": "第二组", "hits": 0}]</code></pre>
+          </div>
+        </details>
+        <div class="next-action">
+          <h3>发回你的学习证据</h3>
+          <p>把运行输出发给老师，并说明：第一行 Python 的 <code>dict</code> 输出和 JSON 输出最明显的区别是什么？</p>
+        </div>
+        <p>随用随查：<a href="../reference/python-json-dumps.html">JSON dumps 速查</a>。完成后进入 <a href="0018-json-loads.html">第十八课：把 JSON 转回 Python 数据</a>。</p>
+      </section>
+
+      <section class="section" id="sources">
+        <span class="step-label">官方阅读 · 按需</span>
+        <h2>只读当前需要的部分</h2>
+        <p>首选 <a href="https://docs.python.org/zh-cn/3.13/library/json.html">Python 3.13 标准库：json</a>。当前只需要知道：<code>import json</code> 后，用 <code>json.dumps(data, ensure_ascii=False)</code> 把 Python 数据转成 JSON 字符串。</p>
+      </section>
+    </main>
+    <footer class="footer">Python for AI · 第十七次学习 · 用 json.dumps 转成 JSON 字符串</footer>
+  </div>
+</body>
+</html>

@@ -11,7 +11,11 @@
 - [Python 3.13：内置函数 len()](https://docs.python.org/zh-cn/3.13/library/functions.html#len)
   Python 官方对 `len()` 的定义：返回对象长度。用于：第十一课统计结果列表长度，生成“共测试几次”的报告。
 - [Python 3.13 教程：字典](https://docs.python.org/zh-cn/3.13/tutorial/datastructures.html#dictionaries)
-  Python 官方对 `dict` 的入门说明：字典是 key-value 集合，可以通过 key 存储和提取 value。用于：第十二课把报告整理成带名字的数据。
+  Python 官方对 `dict` 的入门说明：字典是 key-value 集合，可以通过 key 存储和提取 value。用于：第十二课把报告整理成带名字的数据；第二十课读取外层 `dict` 中嵌套的内层 `dict`。
+- [Python 3.13 教程：列表与字典组合](https://docs.python.org/zh-cn/3.13/tutorial/datastructures.html)
+  Python 官方数据结构教程。用于：第十四课把已学的列表和字典组合成 `reports = [report1, report2]`，理解外层列表和内层字典的职责；第十六课从多份报告汇总成总体 `summary` 字典；第二十一步读取 `choices` 列表里的第一份回复字典。
+- [Python 3.13 标准库：json](https://docs.python.org/zh-cn/3.13/library/json.html)
+  Python 官方对 JSON 编码和解码的说明。用于：第十七课用 `json.dumps(data, ensure_ascii=False)` 把 Python 的 `dict` / `list` 转成 JSON 字符串；第十八课用 `json.loads(json_text)` 把 JSON 字符串转回 Python 数据；第十九课把模拟 AI API 返回的 JSON 文本解析成 Python `dict` 后读取 `reply` 等字段；第二十课解析嵌套 JSON 并读取 `response["message"]["content"]`。
 - [Python 3.13 教程：错误和异常](https://docs.python.org/zh-cn/3.13/tutorial/errors.html)
   官方说明如何阅读 `SyntaxError`、`NameError`、`TypeError` 等错误。用于：把报错当作定位线索。
 - [Python 3.13 语言参考：缩进](https://docs.python.org/zh-cn/3.13/reference/lexical_analysis.html#indentation)
@@ -31,7 +35,7 @@
 - [Python 3.13 语言参考：return 语句](https://docs.python.org/zh-cn/3.13/reference/simple_stmts.html#the-return-statement)
   `return` 离开当前函数调用并交回结果的权威定义。用于：区分 `return` 与 `print()`。
 - [Python 3.13 教程：列表](https://docs.python.org/zh-cn/3.13/tutorial/introduction.html#lists)
-  列表的方括号写法与元素概念；配合上面的 `for` 官方教程使用。用于：第五课把多个输入保存为列表，再逐个交给函数处理。当前先读首段与列表字面量示例，索引、切片等按需再学。
+  列表的方括号写法与元素概念；配合上面的 `for` 官方教程使用。用于：第五课把多个输入保存为列表，再逐个交给函数处理；第二十一课用 `[0]` 读取 `choices` 列表里的第一项。当前先读首段、列表字面量和索引示例，切片等按需再学。
 - [Python 3.13 教程：列表详解](https://docs.python.org/zh-cn/3.13/tutorial/datastructures.html#more-on-lists)
   Python 官方对 `list.append()` 等列表方法的说明，并展示“先创建空列表，再在循环里追加结果”的基本模式。用于：第六课把每轮函数返回值收集到新列表。
 - [Python 3.13 教程：列表方法 count()](https://docs.python.org/zh-cn/3.13/tutorial/datastructures.html#more-on-lists)

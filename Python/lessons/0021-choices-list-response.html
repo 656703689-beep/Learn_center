@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Python 第二十一课：读取 choices 列表里的 AI 回复，用 response['choices'][0]['message']['content'] 取值。">
+  <title>第二十一课：读取 choices 里的 AI 回复</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <span>Python for AI · Lesson 21</span>
+      <nav aria-label="课程导航">
+        <a href="0020-nested-ai-response.html">回顾第二十课</a>
+        <a href="#warmup">回忆</a>
+        <a href="#choices">choices</a>
+        <a href="#practice">实作</a>
+        <a href="../reference/python-choices-list-response.html">choices 速查</a>
+      </nav>
+    </header>
+
+    <section class="hero" aria-labelledby="lesson-title">
+      <p class="eyebrow">Session 21 / list inside dict</p>
+      <h1 id="lesson-title">读取 choices 里的 AI 回复</h1>
+      <p class="lede">上一课你读了嵌套 <code>dict</code>：<code>response["message"]["content"]</code>。今天加一个真实 AI API 常见结构：<code>choices</code> 是一个 <code>list</code>，先用 <code>[0]</code> 取第一项，再继续读里面的 <code>message</code>。</p>
+      <div class="meta-row">
+        <span class="pill">15–20 分钟</span>
+        <span class="pill">新动作：list index</span>
+        <span class="pill">常见 AI 返回结构</span>
+      </div>
+      <div class="pipeline" aria-label="choices 读取流程">
+        <div class="pipeline-step"><small>外层 dict</small><strong>response</strong></div>
+        <div class="pipeline-step"><small>取 list</small><strong>response["choices"]</strong></div>
+        <div class="pipeline-step"><small>第 1 项</small><strong>[0]</strong></div>
+        <div class="pipeline-step"><small>回复文字</small><strong>["message"]["content"]</strong></div>
+      </div>
+    </section>
+
+    <main>
+      <section class="section" id="warmup">
+        <span class="step-label">01 · 回忆 · 2 分钟</span>
+        <h2>先复习嵌套 dict</h2>
+        <p>先别运行。写出输出：</p>
+        <pre><code>import json
+
+response_text = '{"message": {"content": "第二组还没有通过"}}'
+
+response = json.loads(response_text)
+
+print(response["message"]["content"])</code></pre>
+        <details>
+          <summary>回答后核对</summary>
+          <div class="answer">
+            <pre><code>第二组还没有通过</code></pre>
+            <p><code>response["message"]</code> 先取内层 <code>dict</code>，再用 <code>["content"]</code> 取文字。</p>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="choices">
+        <span class="step-label">02 · 新知识 · 5 分钟</span>
+        <h2>choices 是 list，所以用 [0]</h2>
+        <p>看这段更像真实 AI 返回的 JSON。<code>"choices"</code> 对应的 value 是一个 <code>list</code>，列表里第一个元素才是那份回复 <code>dict</code>。</p>
+        <pre><code>import json
+
+response_text = '{"choices": [{"message": {"content": "已经猜中过，测试通过"}}]}'
+
+response = json.loads(response_text)
+
+choices = response["choices"]
+first_choice = choices[0]
+message = first_choice["message"]
+
+print(message["content"])</code></pre>
+        <p>输出：</p>
+        <pre><code>已经猜中过，测试通过</code></pre>
+        <div class="callout">
+          <strong>两个规则合在一起</strong>
+          <code>dict</code> 用 key：<code>response["choices"]</code>。<code>list</code> 用 index：<code>choices[0]</code>。
+        </div>
+        <p class="source-note">依据：<a href="https://docs.python.org/zh-cn/3.13/tutorial/introduction.html#lists">Python 官方列表教程</a>说明列表用方括号索引取元素；<a href="https://docs.python.org/zh-cn/3.13/tutorial/datastructures.html#dictionaries">Python 官方字典教程</a>说明字典用 key 取 value。</p>
+      </section>
+
+      <section class="section" id="shortcut">
+        <span class="step-label">03 · 合并写法 · 3 分钟</span>
+        <h2>拆开看，再合起来</h2>
+        <div class="grid-2">
+          <div class="card">
+            <h3>拆开写</h3>
+            <pre><code>choices = response["choices"]
+first_choice = choices[0]
+message = first_choice["message"]
+print(message["content"])</code></pre>
+          </div>
+          <div class="card">
+            <h3>合起来写</h3>
+            <pre><code>print(response["choices"][0]["message"]["content"])</code></pre>
+          </div>
+        </div>
+        <p>含义完全一样。刚开始写长链条时，建议先拆开，方便看清每一步拿到的是什么。</p>
+      </section>
+
+      <section class="section" id="predict">
+        <span class="step-label">04 · 预测 · 3 分钟</span>
+        <h2>先预测输出</h2>
+        <p>先别运行。写出两行输出：</p>
+        <pre><code>import json
+
+response_text = '{"choices": [{"message": {"content": "整体偏大，可以试小一点"}}], "model": "demo"}'
+
+response = json.loads(response_text)
+
+print(response["choices"][0]["message"]["content"])
+print(response["model"])</code></pre>
+        <details>
+          <summary>核对输出</summary>
+          <div class="answer">
+            <pre><code>整体偏大，可以试小一点
+demo</code></pre>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="practice">
+        <span class="step-label">05 · 实作 · 8 分钟</span>
+        <h2>写一个 choices 回复读取脚本</h2>
+        <p>在 <code>Python</code> 文件夹中新建 <code>choices_response.py</code>：</p>
+        <pre id="choices-example"><code>import json
+
+
+response_text = '{"choices": [{"message": {"role": "assistant", "content": "第一组通过，第二组继续测试"}}], "usage": {"total_tokens": 156}}'
+
+response = json.loads(response_text)
+
+choices = response["choices"]
+first_choice = choices[0]
+message = first_choice["message"]
+usage = response["usage"]
+
+print("角色：", message["role"])
+print("内容：", message["content"])
+print("token数量：", usage["total_tokens"])</code></pre>
+        <p>运行：</p>
+        <div class="terminal-line">cd "C:\Users\ZhongHui\Documents\ChatGPT\学习\Python"</div>
+        <div class="terminal-line">python choices_response.py</div>
+        <details>
+          <summary>运行后核对</summary>
+          <div class="answer">
+            <pre id="choices-output"><code>角色： assistant
+内容： 第一组通过，第二组继续测试
+token数量： 156</code></pre>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="transfer">
+        <span class="step-label">06 · 改一次 · 3 分钟</span>
+        <h2>换一段回复</h2>
+        <p>把 <code>response_text</code> 改成这一行，其他代码不变：</p>
+        <pre><code>response_text = '{"choices": [{"message": {"role": "assistant", "content": "三组都通过，可以进入下一课"}}], "usage": {"total_tokens": 88}}'</code></pre>
+        <p>先预测输出，再运行。</p>
+        <details>
+          <summary>核对结果</summary>
+          <div class="answer">
+            <pre><code>角色： assistant
+内容： 三组都通过，可以进入下一课
+token数量： 88</code></pre>
+          </div>
+        </details>
+        <div class="next-action">
+          <h3>发回你的学习证据</h3>
+          <p>把运行输出发给老师，并补一句：<code>choices[0]</code> 为什么用数字 <code>0</code>，不是用 key？</p>
+        </div>
+        <p>随用随查：<a href="../reference/python-choices-list-response.html">choices 速查</a>。报错时把完整终端输出发来。</p>
+      </section>
+
+      <section class="section" id="sources">
+        <span class="step-label">官方阅读 · 按需</span>
+        <h2>只读当前需要的部分</h2>
+        <p>首选 <a href="https://docs.python.org/zh-cn/3.13/tutorial/introduction.html#lists">Python 3.13 教程：列表</a> 和 <a href="https://docs.python.org/zh-cn/3.13/tutorial/datastructures.html#dictionaries">Python 3.13 教程：字典</a>。当前只需要掌握：<code>list</code> 用数字位置取元素，<code>dict</code> 用 key 取 value。</p>
+      </section>
+    </main>
+    <footer class="footer">Python for AI · 第二十一次学习 · 读取 choices 里的 AI 回复</footer>
+  </div>
+</body>
+</html>

@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Python 第十五课：循环多份 dict 报告，统计有几组通过。">
+  <title>第十五课：统计有几组通过</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <span>Python for AI · Lesson 15</span>
+      <nav aria-label="课程导航">
+        <a href="0014-list-of-dicts.html">回顾第十四课</a>
+        <a href="#warmup">回忆</a>
+        <a href="#counter">计数器</a>
+        <a href="#practice">实作</a>
+        <a href="../reference/python-count-passed-reports.html">通过统计速查</a>
+        <a href="0016-summary-dict.html">下一课</a>
+      </nav>
+    </header>
+
+    <section class="hero" aria-labelledby="lesson-title">
+      <p class="eyebrow">Session 15 / count passed reports</p>
+      <h1 id="lesson-title">统计有几组通过</h1>
+      <p class="lede">上一课你已经能把多份报告放进 <code>reports</code>。今天用 <code>for</code> 和 <code>if</code> 检查每份报告的 <code>"hits"</code>，累计“通过了几组”。</p>
+      <div class="meta-row">
+        <span class="pill">15–20 分钟</span>
+        <span class="pill">新组合：for + if + counter</span>
+        <span class="pill">旧结构：list of dicts</span>
+      </div>
+      <div class="pipeline" aria-label="循环报告并累计通过组数">
+        <div class="pipeline-step"><small>多份报告</small><strong>reports</strong></div>
+        <div class="pipeline-step"><small>逐份取出</small><strong>for report in reports</strong></div>
+        <div class="pipeline-step"><small>判断通过</small><strong>report["hits"] &gt; 0</strong></div>
+        <div class="pipeline-step"><small>累计</small><strong>passed_count += 1</strong></div>
+      </div>
+    </section>
+
+    <main>
+      <section class="section" id="warmup">
+        <span class="step-label">01 · 回忆 · 2 分钟</span>
+        <h2>先取回 list 里放 dict</h2>
+        <p>先别运行。写出四行输出：</p>
+        <pre><code>reports = [
+    {"name": "A组", "hits": 1},
+    {"name": "B组", "hits": 0}
+]
+
+for report in reports:
+    print(report["name"])
+    print(report["hits"])</code></pre>
+        <details>
+          <summary>回答后核对</summary>
+          <div class="answer">
+            <pre><code>A组
+1
+B组
+0</code></pre>
+            <p><code>reports</code> 是整个列表；<code>report</code> 是循环里每次拿到的一份字典。</p>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="counter">
+        <span class="step-label">02 · 新组合 · 4 分钟</span>
+        <h2>检查 hits，大于 0 就算通过</h2>
+        <pre><code>passed_count = 0
+
+for report in reports:
+    if report["hits"] &gt; 0:
+        passed_count = passed_count + 1
+
+print(passed_count)</code></pre>
+        <p>规则是：每份报告里 <code>"hits"</code> 大于 <code>0</code>，说明这组至少猜中过一次，所以通过组数加 <code>1</code>。</p>
+        <div class="callout">
+          <strong>一句话抓住今天</strong>
+          计数器先从 <code>0</code> 开始；每遇到一份通过的报告，就加 <code>1</code>。
+        </div>
+        <p class="source-note">依据：本课组合 <a href="https://docs.python.org/zh-cn/3.13/tutorial/controlflow.html#for-statements">Python 官方教程：for 语句</a>、<a href="https://docs.python.org/zh-cn/3.13/tutorial/controlflow.html#if-statements">if 语句</a>、<a href="https://docs.python.org/zh-cn/3.13/tutorial/datastructures.html#dictionaries">字典</a>和已学计数器模式。</p>
+      </section>
+
+      <section class="section" id="trace">
+        <span class="step-label">03 · 预测 · 3 分钟</span>
+        <h2>数通过了几组</h2>
+        <p>先别运行，写出最后输出：</p>
+        <pre><code>reports = [
+    {"name": "A组", "hits": 1},
+    {"name": "B组", "hits": 0},
+    {"name": "C组", "hits": 2}
+]
+
+passed_count = 0
+
+for report in reports:
+    if report["hits"] &gt; 0:
+        passed_count = passed_count + 1
+
+print(passed_count)</code></pre>
+        <details>
+          <summary>核对输出</summary>
+          <div class="answer">
+            <pre><code>2</code></pre>
+            <p>A组和 C组 的 <code>hits</code> 都大于 <code>0</code>，所以通过了 2 组。</p>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="practice">
+        <span class="step-label">04 · 实作 · 8 分钟</span>
+        <h2>在 multi_reports 基础上统计通过组数</h2>
+        <p>在 <code>Python</code> 文件夹中新建 <code>passed_reports.py</code>。代码和上一课类似，但最后多一个 <code>passed_count</code>。</p>
+        <pre id="passed-example"><code>def compare_guess(guess, secret):
+    if guess &lt; secret:
+        return "太小了"
+    elif guess &gt; secret:
+        return "太大了"
+    else:
+        return "猜中了"
+
+
+def suggest_from_counts(small_count, big_count, hit_count):
+    if hit_count &gt; 0:
+        return "已经猜中过，测试通过"
+    elif small_count &gt; big_count:
+        return "整体偏小，可以试大一点"
+    elif big_count &gt; small_count:
+        return "整体偏大，可以试小一点"
+    else:
+        return "偏小和偏大一样多"
+
+
+def build_report(name, guesses, secret):
+    results = []
+
+    for guess in guesses:
+        result = compare_guess(guess, secret)
+        results.append(result)
+
+    small_count = results.count("太小了")
+    big_count = results.count("太大了")
+    hit_count = results.count("猜中了")
+    summary = suggest_from_counts(small_count, big_count, hit_count)
+
+    return {
+        "name": name,
+        "total": len(results),
+        "small": small_count,
+        "big": big_count,
+        "hits": hit_count,
+        "summary": summary
+    }
+
+
+secret = 30
+
+report1 = build_report("第一组", [10, 30, 40], secret)
+report2 = build_report("第二组", [35, 40, 20], secret)
+report3 = build_report("第三组", [10, 20, 25, 28], secret)
+
+reports = [report1, report2, report3]
+
+passed_count = 0
+
+for report in reports:
+    print(report["name"])
+    print("猜中次数：", report["hits"])
+    print("总结：", report["summary"])
+
+    if report["hits"] &gt; 0:
+        passed_count = passed_count + 1
+
+print("通过组数：", passed_count)</code></pre>
+        <p>运行：</p>
+        <div class="terminal-line">cd "C:\Users\ZhongHui\Documents\ChatGPT\学习\Python"</div>
+        <div class="terminal-line">python passed_reports.py</div>
+        <details>
+          <summary>运行后核对</summary>
+          <div class="answer">
+            <pre id="passed-output"><code>第一组
+猜中次数： 1
+总结： 已经猜中过，测试通过
+第二组
+猜中次数： 0
+总结： 整体偏大，可以试小一点
+第三组
+猜中次数： 0
+总结： 整体偏小，可以试大一点
+通过组数： 1</code></pre>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="transfer">
+        <span class="step-label">05 · 改一次 · 3 分钟</span>
+        <h2>让第三组也通过</h2>
+        <p>把 <code>report3</code> 改成：</p>
+        <pre><code>report3 = build_report("第三组", [10, 30, 25, 28], secret)</code></pre>
+        <p>其他代码不动。先预测最后一行 <code>通过组数</code> 是多少，再运行。</p>
+        <details>
+          <summary>核对结果</summary>
+          <div class="answer">
+            <pre><code>通过组数： 2</code></pre>
+            <p>第一组和第三组都至少猜中过一次，所以通过组数是 2。</p>
+          </div>
+        </details>
+        <div class="next-action">
+          <h3>发回你的学习证据</h3>
+          <p>把运行输出发给老师，并说明：为什么 <code>report["hits"] &gt; 0</code> 时要让 <code>passed_count</code> 加 1？</p>
+        </div>
+        <p>随用随查：<a href="../reference/python-count-passed-reports.html">通过统计速查</a>。完成后进入 <a href="0016-summary-dict.html">第十六课：生成总体报告 dict</a>。</p>
+      </section>
+
+      <section class="section" id="sources">
+        <span class="step-label">官方阅读 · 按需</span>
+        <h2>只读当前需要的部分</h2>
+        <p>本课复用官方概念：<a href="https://docs.python.org/zh-cn/3.13/tutorial/controlflow.html#for-statements">for 循环</a>逐个处理元素，<a href="https://docs.python.org/zh-cn/3.13/tutorial/controlflow.html#if-statements">if</a> 做条件判断，<a href="https://docs.python.org/zh-cn/3.13/tutorial/datastructures.html#dictionaries">dict</a> 用 key 取字段。</p>
+      </section>
+    </main>
+    <footer class="footer">Python for AI · 第十五次学习 · 统计多份报告里有几组通过</footer>
+  </div>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="第十六课速查：从多份报告生成总体 summary dict。">
+  <title>Python 总体报告 dict 速查</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <span>Python for AI · Reference 16</span>
+      <nav aria-label="速查导航">
+        <a href="../lessons/0016-summary-dict.html">第十六课</a>
+        <a href="../lessons/0017-json-dumps.html">第十七课</a>
+        <a href="python-count-passed-reports.html">通过统计</a>
+        <a href="python-list-of-dicts.html">list of dicts</a>
+      </nav>
+    </header>
+    <section class="hero">
+      <p class="eyebrow">Reference / summary dict</p>
+      <h1>总体报告</h1>
+      <p class="lede"><code>summary</code> 是从多份 <code>report</code> 汇总出来的新 <code>dict</code>。</p>
+    </section>
+    <main>
+      <section class="section" id="shape">
+        <h2>核心结构</h2>
+        <pre><code>summary = {
+    "total_groups": len(reports),
+    "passed_groups": passed_count
+}</code></pre>
+        <table>
+          <thead><tr><th scope="col">字段</th><th scope="col">来源</th><th scope="col">含义</th></tr></thead>
+          <tbody>
+            <tr><td><code>"total_groups"</code></td><td><code>len(reports)</code></td><td>一共有几组报告。</td></tr>
+            <tr><td><code>"passed_groups"</code></td><td><code>passed_count</code></td><td>通过了几组。</td></tr>
+          </tbody>
+        </table>
+        <p class="source-note">依据：<a href="https://docs.python.org/zh-cn/3.13/library/functions.html#len">Python 官方 len() 文档</a>和 <a href="https://docs.python.org/zh-cn/3.13/tutorial/datastructures.html#dictionaries">Python 官方教程：字典</a>。</p>
+      </section>
+      <section class="section" id="function">
+        <h2>封装成函数</h2>
+        <pre><code>def build_summary(reports):
+    passed_count = 0
+
+    for report in reports:
+        if report["hits"] &gt; 0:
+            passed_count = passed_count + 1
+
+    return {
+        "total_groups": len(reports),
+        "passed_groups": passed_count
+    }</code></pre>
+        <div class="callout">
+          <strong>读法</strong>
+          <code>build_summary(reports)</code> 接收多份报告，返回一份总体报告。
+        </div>
+      </section>
+      <section class="section" id="pitfalls">
+        <h2>常见检查点</h2>
+        <table>
+          <thead><tr><th scope="col">现象</th><th scope="col">检查</th></tr></thead>
+          <tbody>
+            <tr><td>总组数不对</td><td>确认 <code>len()</code> 传入的是整个 <code>reports</code> 列表。</td></tr>
+            <tr><td>通过组数不对</td><td>确认 <code>passed_count = 0</code> 在循环前，只写一次。</td></tr>
+            <tr><td>函数输出 <code>None</code></td><td>检查 <code>build_summary()</code> 最后是否 <code>return {...}</code>。</td></tr>
+          </tbody>
+        </table>
+      </section>
+      <section class="section" id="next">
+        <h2>下一步：转成 JSON</h2>
+        <p>总体报告 <code>summary</code> 可以用 <code>json.dumps(summary, ensure_ascii=False)</code> 转成 JSON 字符串。详见 <a href="python-json-dumps.html">json.dumps 速查</a>。</p>
+      </section>
+    </main>
+    <footer class="footer">Python for AI · 总体报告 dict 速查 · 多份 report 进来，一份 summary 出去</footer>
+  </div>
+</body>
+</html>

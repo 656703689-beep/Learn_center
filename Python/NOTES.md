@@ -30,9 +30,17 @@
 - 2026-09-07：已完成第十次学习，掌握让函数接收整个 `results` 列表，并 `return` 一句总结。用户亲手编写并运行 `summary_function.py`，通过 `summary = suggest_from_results(results)` 获取总结；还能修正“参数接到 if 判断”的误解，理解参数接收的是调用时传入的整个列表。证据保存在 `records/0010-function-takes-list.md`。
 - 2026-09-07：已完成第十一次学习，掌握用 `len()` 得到列表长度，并结合 `count()` 生成“共测试几次、猜中几次”的报告。用户亲手编写并运行 `report_results.py`，实现 `build_report(results)`；还能修正结果列表里误放列表本身的问题，并在迁移输入 `[10, 20, 25, 28]` 后得到正确报告。证据保存在 `records/0011-report-with-len.md`。
 - 2026-09-07：已完成第十二次学习，掌握用 `dict` 保存带名字的报告数据，并用 key 取出 value。用户亲手编写并运行 `dict_report.py`，实现 `build_report(results)` 返回包含 `"total"`、`"hits"`、`"summary"` 的字典；还能把输入迁移到 `[10, 20, 25, 28]`，得到正确的结果列表、报告字典和字段输出。证据保存在 `records/0012-dict-report.md`。
-- 2026-09-07：第十三次学习已开启，主题为给报告 `dict` 增加 `"small"` 和 `"big"` 字段。目标：让报告同时保存总次数、偏小次数、偏大次数、猜中次数和总结。课件保存在 `lessons/0013-dict-more-fields.html`，速查保存在 `reference/python-dict-fields.html`。
+- 2026-09-07：已完成第十三次学习，掌握给报告 `dict` 增加更多字段。用户亲手编写并运行 `dict_fields.py`，实现 `build_report(results)` 返回包含 `"total"`、`"small"`、`"big"`、`"hits"`、`"summary"` 的字典；还能把输入迁移到 `[35, 40, 20]`，正确得到偏小次数 `1`、偏大次数 `2`、猜中次数 `0` 和“整体偏大，可以试小一点”。证据保存在 `records/0013-dict-more-fields.md`。
+- 2026-09-07：已完成第十四次学习，掌握 `list` 里放多个 `dict`。用户亲手编写并运行 `multi_reports.py`，通过 `build_report(name, guesses, secret)` 生成多份报告字典，再用 `reports = [report1, report2, report3]` 保存多份报告；还能修正第三组名称误写为“第二组”的问题，理解 `build_report()` 的第一个实参决定报告名称。证据保存在 `records/0014-list-of-dicts.md`。
+- 2026-09-07：已完成第十五次学习，掌握循环多份报告并统计通过组数。用户亲手编写并运行 `passed_reports.py`，用 `for report in reports` 逐份检查 `report["hits"]`，在 `hits > 0` 时让 `passed_count` 加 1；还能把第三组改成 `[10, 30, 25, 28]` 后正确预测并运行得到 `通过组数： 2`。证据保存在 `records/0015-count-passed-reports.md`。
+- 2026-09-07：已完成第十六次学习，掌握从多份报告生成总体 `summary` 字典。用户亲手编写并运行 `summary_report.py`，通过 `build_summary(reports)` 返回包含 `"total_groups"` 和 `"passed_groups"` 的总体报告；还能把第二组改成 `[35, 30, 20]` 后正确预测并运行得到总组数 `3`、通过组数 `3`。证据保存在 `records/0016-summary-dict.md`。
+- 2026-09-07：已完成第十七次学习，掌握用 `json.dumps(data, ensure_ascii=False)` 把 Python 的 `dict` / `list` 转成 JSON 字符串。用户亲手编写并运行 `json_report.py`，能区分 Python `dict` 输出的单引号和 JSON 字符串内容的双引号；还能修正把 `reports` 列表误判成两行单独 dict 的问题，理解转换整个外层 `list` 时 JSON 会保留 `[` 和 `]`。证据保存在 `records/0017-json-dumps.md`。
+- 2026-09-07：已完成第十八次学习，掌握用 `json.loads(json_text)` 把 JSON 字符串转回 Python 数据。用户亲手编写并运行 `json_read.py`，能把 JSON 字符串解析成 Python `dict` 后按 key 取值，也能把 JSON 列表字符串解析成 Python `list` 后用 `for report in reports` 循环读取每份 `dict`。证据保存在 `records/0018-json-loads.md`。
+- 2026-09-08：已完成第十九次学习，掌握读取模拟 AI 回复。用户亲手编写并运行 `ai_response.py`，能把外部系统返回的 JSON 字符串 `response_text` 用 `json.loads(response_text)` 解析为 Python `dict`，再读取 `response["reply"]`、`response["passed_groups"]`、`response["total_groups"]`。证据保存在 `records/0019-parse-ai-response.md`。
+- 2026-09-08：已完成第二十次学习，掌握读取嵌套 AI 回复。用户亲手编写并运行 `nested_response.py`，能把外部 JSON 字符串解析为外层 Python `dict`，再读取内层 `message` 与 `usage` 字典中的字段，例如 `message["content"]` 和 `usage["total_tokens"]`。用户曾把 `content` key 名字误认为会一起输出，随后理解 key 取出的是 value。证据保存在 `records/0020-nested-ai-response.md`。
+- 2026-09-08：已完成第二十一次学习，掌握读取 `choices` 列表里的 AI 回复。用户亲手编写并运行 `choices_response.py`，能把外部 JSON 字符串解析后，按 `response["choices"][0]["message"]["content"]` 的顺序读取回复文字：先用 key 取出 `choices` 列表，再用 `[0]` 取第一份回复，最后继续用 key 读取内层字段。证据保存在 `records/0021-choices-list-response.md`。
 
 ## 后续教学要点
 
 - 第四课中，用户曾把分支条件与返回值的来源混淆，也曾需要逐项拆解 `def` 那一行；第五课已通过 `result = compare_guess(guess, secret)` 继续巩固“函数返回文字，再由 `print(result)` 显示”的数据流。
-- 聊天教学延续一题一反馈；第十三课重点是把 `small_count`、`big_count`、`hit_count` 放进同一个报告字典。继续强调字段名与变量名的对应关系，避免把 `"small"`、`"big"` 与中文返回值 `"太小了"`、`"太大了"` 混淆。
+- 聊天教学延续一题一反馈；下一课可以进入“读取 choices 列表里的多条回复”，例如 `for choice in response["choices"]`。继续强调：`dict` 用 key 取 value，`list` 用 index 取元素；如果链式取值看不清，先拆成中间变量。

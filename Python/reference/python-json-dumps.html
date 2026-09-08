@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="第十七课速查：用 json.dumps() 把 Python dict/list 转成 JSON 字符串。">
+  <title>Python json.dumps 速查</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <span>Python for AI · Reference 17</span>
+      <nav aria-label="速查导航">
+        <a href="../lessons/0017-json-dumps.html">第十七课</a>
+        <a href="../lessons/0018-json-loads.html">第十八课</a>
+        <a href="python-summary-dict.html">总体报告</a>
+        <a href="python-list-of-dicts.html">list of dicts</a>
+      </nav>
+    </header>
+    <section class="hero">
+      <p class="eyebrow">Reference / json.dumps</p>
+      <h1>Python 数据转 JSON</h1>
+      <p class="lede"><code>json.dumps(data, ensure_ascii=False)</code> 把 Python 的 <code>dict</code> 或 <code>list</code> 转成 JSON 字符串。</p>
+    </section>
+    <main>
+      <section class="section" id="shape">
+        <h2>核心结构</h2>
+        <pre><code>import json
+
+json_text = json.dumps(data, ensure_ascii=False)</code></pre>
+        <table>
+          <thead><tr><th scope="col">部分</th><th scope="col">含义</th></tr></thead>
+          <tbody>
+            <tr><td><code>import json</code></td><td>使用 Python 标准库里的 json 模块。</td></tr>
+            <tr><td><code>json.dumps(data)</code></td><td>把 Python 数据转成 JSON 格式字符串。</td></tr>
+            <tr><td><code>ensure_ascii=False</code></td><td>让中文直接显示，不强制转成 <code>\u...</code>。</td></tr>
+            <tr><td><code>json_text</code></td><td>保存转换后的字符串。</td></tr>
+          </tbody>
+        </table>
+        <p class="source-note">依据：<a href="https://docs.python.org/zh-cn/3.13/library/json.html">Python 官方 json 文档</a>。</p>
+      </section>
+      <section class="section" id="compare">
+        <h2>Python dict 和 JSON 字符串的外观区别</h2>
+        <table>
+          <thead><tr><th scope="col">类型</th><th scope="col">例子</th></tr></thead>
+          <tbody>
+            <tr><td>Python <code>dict</code> 打印</td><td><code>{'total_groups': 3, 'passed_groups': 2}</code></td></tr>
+            <tr><td>JSON 字符串内容</td><td><code>{"total_groups": 3, "passed_groups": 2}</code></td></tr>
+          </tbody>
+        </table>
+        <div class="callout">
+          <strong>检查问题</strong>
+          看到输出时先问：这是 Python 自己的数据，还是已经转成 JSON 文本？
+        </div>
+      </section>
+      <section class="section" id="pitfalls">
+        <h2>常见检查点</h2>
+        <table>
+          <thead><tr><th scope="col">现象</th><th scope="col">检查</th></tr></thead>
+          <tbody>
+            <tr><td><code>NameError: name 'json' is not defined</code></td><td>检查文件顶部是否写了 <code>import json</code>。</td></tr>
+            <tr><td>中文变成 <code>\u...</code></td><td>检查是否写了 <code>ensure_ascii=False</code>。</td></tr>
+            <tr><td>输出仍是单引号</td><td>你可能打印的是原始 <code>dict</code>，不是 <code>json_text</code>。</td></tr>
+          </tbody>
+        </table>
+      </section>
+      <section class="section" id="next">
+        <h2>下一步：JSON 转回 Python 数据</h2>
+        <p>JSON 字符串可以用 <code>json.loads(json_text)</code> 转回 Python 数据。详见 <a href="python-json-loads.html">json.loads 速查</a>。</p>
+      </section>
+    </main>
+    <footer class="footer">Python for AI · json.dumps 速查 · Python 数据进来，JSON 字符串出去</footer>
+  </div>
+</body>
+</html>
