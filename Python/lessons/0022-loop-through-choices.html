@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Python 第二十二课：用 for 循环逐条读取 choices 列表中的回复，分清整个列表与当前字典。">
+  <title>第二十二课：逐条读取 choices 里的回复</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/course.css">
+  <link rel="stylesheet" href="../assets/quiz.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <span>Python for AI · Lesson 22</span>
+      <nav aria-label="课程导航">
+        <a href="0021-choices-list-response.html">上一课</a>
+        <a href="#warmup">回忆</a>
+        <a href="#loop">逐条读取</a>
+        <a href="#practice">实作</a>
+        <a href="../reference/python-loop-through-choices.html">本课速查</a>
+      </nav>
+    </header>
+
+    <section class="hero" aria-labelledby="lesson-title">
+      <p class="eyebrow">Session 22 / one choice at a time</p>
+      <h1 id="lesson-title">逐条读取 choices 里的回复</h1>
+      <p class="lede">上一课用 <code>[0]</code> 读第一项。今天把已学的 <code>for</code> 用在这里：列表里有几份回复，就按顺序读取几份。</p>
+      <div class="meta-row">
+        <span class="pill">约 10 分钟</span>
+        <span class="pill">一个目标：逐条读出文字</span>
+        <span class="pill">本地模拟数据</span>
+      </div>
+      <div class="pipeline" aria-label="每轮读取的数据流">
+        <div class="pipeline-step"><small>整个列表</small><strong>response["choices"]</strong></div>
+        <div class="pipeline-step"><small>for 每次取一项</small><strong>choice</strong></div>
+        <div class="pipeline-step"><small>取内层字典</small><strong>choice["message"]</strong></div>
+        <div class="pipeline-step"><small>取回复文字</small><strong>message["content"]</strong></div>
+      </div>
+    </section>
+
+    <main>
+      <section class="section" id="warmup">
+        <span class="step-label">01 · 回忆 · 1 分钟</span>
+        <h2>先读第一条</h2>
+        <p>先别运行，写出这一行 <code>print()</code> 的输出。</p>
+        <pre id="warmup-code"><code>response = {
+    "choices": [
+        {"message": {"content": "先检查输入"}},
+        {"message": {"content": "再核对结果"}}
+    ]
+}
+
+print(response["choices"][0]["message"]["content"])</code></pre>
+        <details>
+          <summary>回答后核对</summary>
+          <div class="answer">
+            <pre><code>先检查输入</code></pre>
+            <p><code>[0]</code> 取第一份字典，后面的 key 继续取出文字；输出不带 <code>content:</code>。</p>
+          </div>
+        </details>
+        <p>这段 <code>response</code> 直接写成 Python 字典，用来集中练习取值。</p>
+      </section>
+
+      <section class="section" id="loop">
+        <span class="step-label">02 · 连接旧知识 · 3 分钟</span>
+        <h2>每一轮，拿到一份 choice</h2>
+        <p>保留上面的 <code>response</code>，把最后的 <code>print()</code> 换成：</p>
+        <pre id="loop-code"><code>choices = response["choices"]
+
+for choice in choices:
+    message = choice["message"]
+    print(message["content"])</code></pre>
+        <p><code>for</code> 按列表顺序，逐个把元素交给 <code>choice</code>。每拿到一份字典，就执行一次缩进里的两行。</p>
+        <table>
+          <thead><tr><th scope="col">轮次</th><th scope="col">当前 choice</th><th scope="col">这一轮输出</th></tr></thead>
+          <tbody>
+            <tr><td>第 1 轮</td><td><code>{"message": {"content": "先检查输入"}}</code></td><td>先检查输入</td></tr>
+            <tr><td>第 2 轮</td><td><code>{"message": {"content": "再核对结果"}}</code></td><td>再核对结果</td></tr>
+          </tbody>
+        </table>
+        <div class="callout">
+          <strong>choices 是整个 list；choice 是当前的一份 dict。</strong>
+          <code>choice</code> 是自己起的变量名。每轮已经取到一个元素，所以接着用 <code>["message"]</code> 读取它。
+        </div>
+        <details>
+          <summary>看懂后，再看合并写法</summary>
+          <div class="answer">
+            <pre id="compact-code"><code>for choice in response["choices"]:
+    print(choice["message"]["content"])</code></pre>
+            <p>两种写法结果一样。先用中间变量，看清每一步的数据。</p>
+          </div>
+        </details>
+        <p class="source-note">依据：<a href="https://docs.python.org/zh-cn/3.13/tutorial/controlflow.html#for-statements">Python 官方：for 语句</a>；按 key 取 value 见<a href="https://docs.python.org/zh-cn/3.13/tutorial/datastructures.html#dictionaries">官方字典教程</a>。</p>
+      </section>
+
+      <section class="section" id="check">
+        <span class="step-label">03 · 即时检查 · 1 分钟</span>
+        <h2>确认每轮拿到什么</h2>
+        <form class="quiz" data-quiz data-correct="dict">
+          <fieldset>
+            <legend>在本课的循环中，每一轮的 choice 是什么？</legend>
+            <label><input type="radio" name="choice-kind" value="list" data-explanation="choices 才是整个列表。for 每次从里面取出一个元素，再看看这个元素的花括号。">整份列表</label>
+            <label><input type="radio" name="choice-kind" value="dict" data-explanation="choice 是列表中的一份字典。还要读取 message 和 content，才能得到文字。">一份字典</label>
+            <label><input type="radio" name="choice-kind" value="text" data-explanation="文字藏在 message 字典的 content 字段里；choice 还包含这层结构。">一段文字</label>
+          </fieldset>
+          <button type="submit">检查答案</button>
+          <p data-feedback role="status" aria-live="polite" aria-atomic="true"></p>
+        </form>
+        <noscript><p>当前未启用 JavaScript，请用下面的核对说明检查答案。</p></noscript>
+        <details>
+          <summary>纸面学习：核对说明</summary>
+          <div class="answer"><p>答案：一份字典。<code>for</code> 取出的是一个列表元素；本例的每个元素都是包含 <code>message</code> 的字典。</p></div>
+        </details>
+      </section>
+
+      <section class="section" id="practice">
+        <span class="step-label">04 · 亲手完成 · 4 分钟</span>
+        <h2>从 JSON 文本读出两条回复</h2>
+        <p>在 <code>Python</code> 文件夹新建 <code>all_choices.py</code>。先写下面三行，再自己补上读取 <code>choices</code> 的循环。</p>
+        <pre id="practice-starter"><code>import json
+
+response_text = '{"choices": [{"message": {"content": "可以先检查输入"}}, {"message": {"content": "也可以核对输出"}}]}'
+response = json.loads(response_text)
+
+# 在下面补全：逐份读取 message，再打印 content</code></pre>
+        <p>这是同一次模拟响应里的两份回复数据。<code>json.loads()</code> 先把文本解析成 Python 数据，之后就能使用本课的循环。</p>
+        <p class="source-note">解析规则：<a href="https://docs.python.org/zh-cn/3.13/library/json.html#json.loads">Python 官方：json.loads()</a>。本课只处理上面给定的数据结构。</p>
+        <p>在终端进入 <code>Python</code> 文件夹后运行：</p>
+        <div class="terminal-line">python all_choices.py</div>
+        <details>
+          <summary>运行后核对输出</summary>
+          <div class="answer"><pre id="practice-output"><code>可以先检查输入
+也可以核对输出</code></pre></div>
+        </details>
+        <details>
+          <summary>卡住时看提示</summary>
+          <div class="answer"><p>先写 <code>choices = response["choices"]</code>，再写 <code>for choice in choices:</code>。循环里先取 <code>choice["message"]</code>，再打印 <code>message["content"]</code>，两行都要缩进。</p></div>
+        </details>
+        <p>完成后，把 <code>response_text</code> 换成下面一行，<strong>保持循环不变</strong>。先预测，再运行：</p>
+        <pre id="transfer-code"><code>response_text = '{"choices": [{"message": {"content": "先打印输入"}}, {"message": {"content": "再检查条件"}}, {"message": {"content": "最后核对结果"}}]}'</code></pre>
+        <details>
+          <summary>核对三条回复</summary>
+          <div class="answer"><pre><code>先打印输入
+再检查条件
+最后核对结果</code></pre><p>列表增加为三项，循环就执行三轮，不需要手写三个索引。</p></div>
+        </details>
+        <div class="next-action">
+          <h3>回到聊天，一题一反馈</h3>
+          <p>先发你当前这一步的预测或运行输出，我会检查后再带你往下走。任何一层看不清，都可以让我用中间变量拆开讲。</p>
+        </div>
+        <p>明天复习时，先不看课件，试着写出这段循环，再用<a href="../reference/python-loop-through-choices.html">本课速查</a>核对。</p>
+      </section>
+
+      <section class="section" id="sources">
+        <span class="step-label">官方阅读 · 按需</span>
+        <h2>只读一小段</h2>
+        <p>首选 <a href="https://docs.python.org/zh-cn/3.13/tutorial/controlflow.html#for-statements">Python 3.13 教程 §4.2：for 语句</a>的第一段和 <code>words</code> 示例。把那里“每轮取一个单词”，对应到这里“每轮取一份回复字典”。</p>
+        <p>需要回顾时：<a href="0021-choices-list-response.html">上一课的 [0]</a> · <a href="0015-count-passed-reports.html">循环多份报告</a> · <a href="../reference/python-json-loads.html">json.loads 速查</a>。</p>
+      </section>
+    </main>
+    <footer class="footer">Python for AI · 第二十二课 · 从整个列表到当前一项</footer>
+  </div>
+</body>
+</html>

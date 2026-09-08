@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Python 第二十四课速查：从 choices 中收集多条 content 到列表。">
+  <title>Python 收集 content 速查</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <span>Python for AI · Reference 24</span>
+      <nav aria-label="速查导航">
+        <a href="../lessons/0024-collect-ai-contents.html">第二十四课</a>
+        <a href="python-read-role-and-content.html">role/content</a>
+        <a href="python-loop-through-choices.html">逐条读取 choices</a>
+      </nav>
+    </header>
+    <section class="hero">
+      <p class="eyebrow">Reference / collect contents</p>
+      <h1>收集多条 content</h1>
+      <p class="lede">先创建空列表，再在循环里把当前文字追加进去。</p>
+    </section>
+    <main>
+      <section class="section" id="pattern">
+        <h2>读取模板</h2>
+        <pre id="reference-code"><code>import json
+
+response_text = '{"choices": [{"message": {"role": "assistant", "content": "第一步检查输入"}}, {"message": {"role": "assistant", "content": "第二步检查条件"}}]}'
+response = json.loads(response_text)
+
+contents = []
+
+for choice in response["choices"]:
+    message = choice["message"]
+    content = message["content"]
+    contents.append(content)
+
+print(contents)</code></pre>
+      </section>
+      <section class="section" id="shape">
+        <h2>三步记忆</h2>
+        <table>
+          <thead><tr><th scope="col">步骤</th><th scope="col">代码</th><th scope="col">作用</th></tr></thead>
+          <tbody>
+            <tr><td>准备</td><td><code>contents = []</code></td><td>创建空列表，用来保存结果</td></tr>
+            <tr><td>读取</td><td><code>content = message["content"]</code></td><td>拿到当前这一条文字</td></tr>
+            <tr><td>保存</td><td><code>contents.append(content)</code></td><td>把当前文字追加到列表末尾</td></tr>
+          </tbody>
+        </table>
+      </section>
+      <section class="section" id="checks">
+        <h2>写完检查三处</h2>
+        <ul>
+          <li><code>contents = []</code> 写在循环前，只创建一次。</li>
+          <li><code>contents.append(content)</code> 缩进在循环里，每条回复执行一次。</li>
+          <li>最后再 <code>print(contents)</code>，看列表里是否收集到了所有文字。</li>
+        </ul>
+        <p class="source-note">依据：<a href="https://docs.python.org/zh-cn/3.13/tutorial/datastructures.html#more-on-lists">Python 官方 list.append()</a> · <a href="https://docs.python.org/zh-cn/3.13/tutorial/controlflow.html#for-statements">Python 官方 for 教程</a> · <a href="https://docs.python.org/zh-cn/3.13/library/json.html#json.loads">官方 json.loads 文档</a>。</p>
+        <p>如果输出仍是一条一条文字，说明你在显示；如果输出是带方括号的列表，说明你已经保存了结果。</p>
+      </section>
+    </main>
+    <footer class="footer">Python for AI · 第二十四课速查 · contents.append(content)</footer>
+  </div>
+</body>
+</html>

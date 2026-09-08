@@ -13,9 +13,9 @@
 - [Python 3.13 教程：字典](https://docs.python.org/zh-cn/3.13/tutorial/datastructures.html#dictionaries)
   Python 官方对 `dict` 的入门说明：字典是 key-value 集合，可以通过 key 存储和提取 value。用于：第十二课把报告整理成带名字的数据；第二十课读取外层 `dict` 中嵌套的内层 `dict`。
 - [Python 3.13 教程：列表与字典组合](https://docs.python.org/zh-cn/3.13/tutorial/datastructures.html)
-  Python 官方数据结构教程。用于：第十四课把已学的列表和字典组合成 `reports = [report1, report2]`，理解外层列表和内层字典的职责；第十六课从多份报告汇总成总体 `summary` 字典；第二十一步读取 `choices` 列表里的第一份回复字典。
+  Python 官方数据结构教程。用于：第十四课把已学的列表和字典组合成 `reports = [report1, report2]`，理解外层列表和内层字典的职责；第十六课从多份报告汇总成总体 `summary` 字典；第二十一步读取 `choices` 列表里的第一份回复字典；第二十三课在每份 `message` 字典里同时读取 `role` 和 `content`。
 - [Python 3.13 标准库：json](https://docs.python.org/zh-cn/3.13/library/json.html)
-  Python 官方对 JSON 编码和解码的说明。用于：第十七课用 `json.dumps(data, ensure_ascii=False)` 把 Python 的 `dict` / `list` 转成 JSON 字符串；第十八课用 `json.loads(json_text)` 把 JSON 字符串转回 Python 数据；第十九课把模拟 AI API 返回的 JSON 文本解析成 Python `dict` 后读取 `reply` 等字段；第二十课解析嵌套 JSON 并读取 `response["message"]["content"]`。
+  Python 官方对 JSON 编码和解码的说明。用于：第十七课用 `json.dumps(data, ensure_ascii=False)` 把 Python 的 `dict` / `list` 转成 JSON 字符串；第十八课用 `json.loads(json_text)` 把 JSON 字符串转回 Python 数据；第十九课把模拟 AI API 返回的 JSON 文本解析成 Python `dict` 后读取 `reply` 等字段；第二十课解析嵌套 JSON 并读取 `response["message"]["content"]`；第二十三课解析带有 `role` 和 `content` 的模拟响应文本。
 - [Python 3.13 教程：错误和异常](https://docs.python.org/zh-cn/3.13/tutorial/errors.html)
   官方说明如何阅读 `SyntaxError`、`NameError`、`TypeError` 等错误。用于：把报错当作定位线索。
 - [Python 3.13 语言参考：缩进](https://docs.python.org/zh-cn/3.13/reference/lexical_analysis.html#indentation)
@@ -25,7 +25,9 @@
 - [Python 3.13 语言参考：while 语句](https://docs.python.org/zh-cn/3.13/reference/compound_stmts.html#the-while-statement)
   `while` 的正式执行规则：重复检查条件，为真时执行循环体，为假时终止。用于：核对循环何时开始、重复和退出。
 - [Python 3.13 教程：for 语句与 range() 函数](https://docs.python.org/zh-cn/3.13/tutorial/controlflow.html#for-statements)
-  Python 官方对按顺序迭代元素、用 `range()` 生成整数序列及终止值不包含规则的入门说明。用于：选择次数已知的循环并理解边界。
+  Python 官方对按顺序迭代元素、用 `range()` 生成整数序列及终止值不包含规则的入门说明。用于：选择次数已知的循环并理解边界；第二十二课用 `for choice in response["choices"]` 按顺序读取每份回复字典；第二十三课复用同一轮循环读取当前回复的多个字段。第二十三课只读 §4.2 首段与 `words` 示例，2026-09-08 已核对。
+- [OpenAI API Reference：Messages](https://platform.openai.com/docs/api-reference/messages)
+  OpenAI 官方 API 文档中的消息对象示例包含 `role` 字段，并展示消息内容结构。用于：第二十三课解释为什么 AI 相关数据里常见 `role` 和 `content`，但课堂只使用本地模拟 JSON，不调用真实 API。2026-09-08 已核对。
 - [Python 3.13 内置类型：range 对象](https://docs.python.org/zh-cn/3.13/library/stdtypes.html#typesseq-range)
   `range(start, stop, step)` 的权威定义与参数规则。用于：核对起点、终点、步长和整数参数要求。
 - [Python 3.13 教程：定义函数](https://docs.python.org/zh-cn/3.13/tutorial/controlflow.html#defining-functions)
@@ -37,7 +39,7 @@
 - [Python 3.13 教程：列表](https://docs.python.org/zh-cn/3.13/tutorial/introduction.html#lists)
   列表的方括号写法与元素概念；配合上面的 `for` 官方教程使用。用于：第五课把多个输入保存为列表，再逐个交给函数处理；第二十一课用 `[0]` 读取 `choices` 列表里的第一项。当前先读首段、列表字面量和索引示例，切片等按需再学。
 - [Python 3.13 教程：列表详解](https://docs.python.org/zh-cn/3.13/tutorial/datastructures.html#more-on-lists)
-  Python 官方对 `list.append()` 等列表方法的说明，并展示“先创建空列表，再在循环里追加结果”的基本模式。用于：第六课把每轮函数返回值收集到新列表。
+  Python 官方对 `list.append()` 等列表方法的说明，并展示“先创建空列表，再在循环里追加结果”的基本模式。用于：第六课把每轮函数返回值收集到新列表；第二十四课把多条 AI 回复的 `content` 收集到 `contents` 列表。第二十四课只读 `list.append()` 说明和 §5.1.3 的 `squares` 示例，2026-09-08 已核对。
 - [Python 3.13 教程：列表方法 count()](https://docs.python.org/zh-cn/3.13/tutorial/datastructures.html#more-on-lists)
   Python 官方说明 `list.count(value)` 返回某个值在列表中出现的次数，并给出水果列表计数示例。用于：第七课在 `results` 列表上统计“太小了/太大了/猜中了”的次数。
 - [Python 3.13 教程：if 语句](https://docs.python.org/zh-cn/3.13/tutorial/controlflow.html#if-statements)

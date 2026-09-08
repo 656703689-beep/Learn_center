@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Python 第二十四课：把 choices 里的多条 content 收集进列表。">
+  <title>第二十四课：把多条 content 收集进列表</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/course.css">
+  <link rel="stylesheet" href="../assets/quiz.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <span>Python for AI · Lesson 24</span>
+      <nav aria-label="课程导航">
+        <a href="0023-read-role-and-content.html">上一课</a>
+        <a href="#warmup">回忆</a>
+        <a href="#collect">收集</a>
+        <a href="#practice">实作</a>
+        <a href="../reference/python-collect-ai-contents.html">本课速查</a>
+      </nav>
+    </header>
+
+    <section class="hero" aria-labelledby="lesson-title">
+      <p class="eyebrow">Session 24 / collect contents</p>
+      <h1 id="lesson-title">把多条 content 收集进列表</h1>
+      <p class="lede">前两课已经能逐条打印回复。今天把打印出来的文字先保存到一个新列表里，后面程序就能继续处理这些结果。</p>
+      <div class="meta-row">
+        <span class="pill">约 10 分钟</span>
+        <span class="pill">一个目标：保存多条回复文字</span>
+        <span class="pill">复用 append()</span>
+      </div>
+      <div class="pipeline" aria-label="从 choices 收集 content 的数据流">
+        <div class="pipeline-step"><small>准备容器</small><strong>contents = []</strong></div>
+        <div class="pipeline-step"><small>逐条读取</small><strong>for choice in choices</strong></div>
+        <div class="pipeline-step"><small>取出文字</small><strong>content = message["content"]</strong></div>
+        <div class="pipeline-step"><small>追加保存</small><strong>contents.append(content)</strong></div>
+      </div>
+    </section>
+
+    <main>
+      <section class="section" id="warmup">
+        <span class="step-label">01 · 回忆 · 1 分钟</span>
+        <h2>先看逐条打印</h2>
+        <p>先别运行。下面代码会输出几行？每行是什么？</p>
+        <pre id="warmup-code"><code>response = {
+    "choices": [
+        {"message": {"content": "第一步检查输入"}},
+        {"message": {"content": "第二步检查条件"}}
+    ]
+}
+
+for choice in response["choices"]:
+    message = choice["message"]
+    print(message["content"])</code></pre>
+        <details>
+          <summary>回答后核对</summary>
+          <div class="answer">
+            <pre><code>第一步检查输入
+第二步检查条件</code></pre>
+            <p><code>choices</code> 里有两份回复，所以循环执行两轮。</p>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="collect">
+        <span class="step-label">02 · 新增一步 · 3 分钟</span>
+        <h2>打印之前，先 append 保存</h2>
+        <p>如果后面还要统计、筛选、拼接这些回复，不能只靠 <code>print()</code>。先准备一个空列表，每轮把当前文字追加进去。</p>
+        <pre id="collect-code"><code>response = {
+    "choices": [
+        {"message": {"content": "第一步检查输入"}},
+        {"message": {"content": "第二步检查条件"}}
+    ]
+}
+
+contents = []
+
+for choice in response["choices"]:
+    message = choice["message"]
+    content = message["content"]
+    contents.append(content)
+
+print(contents)</code></pre>
+        <table>
+          <thead><tr><th scope="col">时刻</th><th scope="col">contents 里有什么</th></tr></thead>
+          <tbody>
+            <tr><td>循环前</td><td><code>[]</code></td></tr>
+            <tr><td>第 1 轮后</td><td><code>["第一步检查输入"]</code></td></tr>
+            <tr><td>第 2 轮后</td><td><code>["第一步检查输入", "第二步检查条件"]</code></td></tr>
+          </tbody>
+        </table>
+        <div class="callout">
+          <strong><code>print()</code> 是显示；<code>append()</code> 是保存。</strong>
+          保存成列表以后，下一步程序还能继续使用这些文字。
+        </div>
+        <p class="source-note">依据：<a href="https://docs.python.org/zh-cn/3.13/tutorial/datastructures.html#more-on-lists">Python 官方：list.append()</a>；循环规则见 <a href="https://docs.python.org/zh-cn/3.13/tutorial/controlflow.html#for-statements">Python 官方：for 语句</a>。</p>
+      </section>
+
+      <section class="section" id="check">
+        <span class="step-label">03 · 即时检查 · 1 分钟</span>
+        <h2>确认 append 放在哪里</h2>
+        <form class="quiz" data-quiz data-correct="inside">
+          <fieldset>
+            <legend>要收集每一条 content，append 应该写在哪里？</legend>
+            <label><input type="radio" name="append-place" value="before" data-explanation="循环前只适合创建空列表。那时还没有当前 content。">循环之前</label>
+            <label><input type="radio" name="append-place" value="inside" data-explanation="每轮都会拿到一条 content，所以 append 要缩进在循环里面。">循环里面</label>
+            <label><input type="radio" name="append-place" value="after" data-explanation="循环后已经没有新的当前 content 需要逐条保存。">循环之后</label>
+          </fieldset>
+          <button type="submit">检查答案</button>
+          <p data-feedback role="status" aria-live="polite" aria-atomic="true"></p>
+        </form>
+        <noscript><p>当前未启用 JavaScript，请用下面的核对说明检查答案。</p></noscript>
+        <details>
+          <summary>纸面学习：核对说明</summary>
+          <div class="answer"><p>答案：循环里面。每轮拿到当前 <code>content</code>，就在这一轮执行 <code>contents.append(content)</code>。</p></div>
+        </details>
+      </section>
+
+      <section class="section" id="practice">
+        <span class="step-label">04 · 亲手完成 · 4 分钟</span>
+        <h2>新建 collected_contents.py</h2>
+        <p>在 <code>Python</code> 文件夹中新建 <code>collected_contents.py</code>。先写下面代码，再自己补全循环里的收集步骤。</p>
+        <pre id="practice-starter"><code>import json
+
+response_text = '{"choices": [{"message": {"role": "assistant", "content": "第一步检查输入"}}, {"message": {"role": "assistant", "content": "第二步检查条件"}}]}'
+response = json.loads(response_text)
+
+contents = []
+
+# 在下面补全：逐条读取 content，并 append 到 contents
+
+print(contents)</code></pre>
+        <p>目标输出：</p>
+        <pre id="practice-output"><code>['第一步检查输入', '第二步检查条件']</code></pre>
+        <details>
+          <summary>卡住时看提示</summary>
+          <div class="answer">
+            <pre><code>for choice in response["choices"]:
+    message = choice["message"]
+    content = message["content"]
+    contents.append(content)</code></pre>
+            <p><code>contents = []</code> 写在循环前；<code>append()</code> 写在循环里。</p>
+          </div>
+        </details>
+        <p>运行：</p>
+        <div class="terminal-line">python collected_contents.py</div>
+        <p>完成后，把 <code>response_text</code> 换成下面三条。保持循环不变，先预测再运行。</p>
+        <pre id="transfer-code"><code>response_text = '{"choices": [{"message": {"role": "assistant", "content": "先检查输入"}}, {"message": {"role": "assistant", "content": "再检查条件"}}, {"message": {"role": "assistant", "content": "最后整理回答"}}]}'</code></pre>
+        <div class="next-action">
+          <h3>回到聊天，一题一反馈</h3>
+          <p>先发你对开场代码的预测。我会检查后再带你写 <code>collected_contents.py</code>。</p>
+        </div>
+        <p>明天复习时，先不看课件，写出 <code>contents = []</code>、循环、<code>append()</code> 三步，再用<a href="../reference/python-collect-ai-contents.html">本课速查</a>核对。</p>
+      </section>
+
+      <section class="section" id="sources">
+        <span class="step-label">官方阅读 · 按需</span>
+        <h2>只读两小段</h2>
+        <p>读 <a href="https://docs.python.org/zh-cn/3.13/tutorial/datastructures.html#more-on-lists">Python 3.13 教程 §5.1</a>中 <code>list.append()</code> 的一行说明，以及 <a href="https://docs.python.org/zh-cn/3.13/tutorial/datastructures.html#list-comprehensions">§5.1.3</a>里先创建空列表、再在循环里 <code>append()</code> 的 <code>squares</code> 示例。当前不学列表推导式，只看“循环收集结果”的形状。</p>
+        <p>需要回顾时：<a href="0023-read-role-and-content.html">上一课 role/content</a> · <a href="0006-collect-results-with-append.html">第六课 append</a> · <a href="../reference/python-read-role-and-content.html">读取 role/content 速查</a>。</p>
+      </section>
+    </main>
+    <footer class="footer">Python for AI · 第二十四课 · 逐条读取，再保存结果</footer>
+  </div>
+</body>
+</html>

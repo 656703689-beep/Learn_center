@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Python 第二十二课速查：用 for 逐条读取 choices，分清列表、当前字典与回复文字。">
+  <title>Python 逐条读取 choices 速查</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <span>Python for AI · Reference 22</span>
+      <nav aria-label="速查导航">
+        <a href="../lessons/0022-loop-through-choices.html">第二十二课</a>
+        <a href="python-choices-list-response.html">读取第一条</a>
+        <a href="python-json-loads.html">json.loads</a>
+      </nav>
+    </header>
+    <section class="hero">
+      <p class="eyebrow">Reference / loop through choices</p>
+      <h1>逐条读取 choices</h1>
+      <p class="lede">从 <code>choices</code> 列表逐个取出 <code>choice</code> 字典，再读里面的文字。</p>
+    </section>
+    <main>
+      <section class="section" id="pattern">
+        <h2>读取模板</h2>
+        <p>用于本课模拟结构：<code>choices</code> 是列表，每一项含有 <code>message</code> 字典和其中的 <code>content</code> 字段。</p>
+        <pre id="reference-code"><code>import json
+
+response_text = '{"choices": [{"message": {"content": "先检查输入"}}, {"message": {"content": "再核对结果"}}]}'
+response = json.loads(response_text)
+
+choices = response["choices"]
+for choice in choices:
+    message = choice["message"]
+    print(message["content"])</code></pre>
+        <p>熟悉后可以合并最后四行：</p>
+        <pre><code>for choice in response["choices"]:
+    print(choice["message"]["content"])</code></pre>
+      </section>
+      <section class="section" id="shape">
+        <h2>变量与数据的对应关系</h2>
+        <table>
+          <thead><tr><th scope="col">表达式</th><th scope="col">在本例中是什么</th></tr></thead>
+          <tbody>
+            <tr><td><code>response["choices"]</code></td><td>包含全部回复的 <code>list</code></td></tr>
+            <tr><td><code>choice</code></td><td>当前这一份回复的 <code>dict</code></td></tr>
+            <tr><td><code>choice["message"]</code></td><td>当前回复里的 <code>message</code> 字典</td></tr>
+            <tr><td><code>message["content"]</code></td><td>当前回复的文字 value</td></tr>
+          </tbody>
+        </table>
+        <p class="source-note">依据：<a href="https://docs.python.org/zh-cn/3.13/tutorial/controlflow.html#for-statements">Python 官方 for 教程</a> · <a href="https://docs.python.org/zh-cn/3.13/tutorial/datastructures.html#dictionaries">官方字典教程</a> · <a href="https://docs.python.org/zh-cn/3.13/library/json.html#json.loads">官方 json.loads 文档</a>。</p>
+      </section>
+      <section class="section" id="checks">
+        <h2>写完检查三处</h2>
+        <ul>
+          <li><code>for</code> 后面遍历的是 <code>choices</code> 列表；每轮用 <code>choice</code> 读取当前元素。</li>
+          <li><code>message = …</code> 和 <code>print(…)</code> 都缩进在循环里，才会逐条输出。</li>
+          <li>循环里读 <code>choice["message"]</code>；如果每轮都读 <code>choices[0]</code>，就会重复第一条。</li>
+        </ul>
+        <details>
+          <summary>复习时再想：choices 是 [] 会怎样？</summary>
+          <div class="answer"><p>这个循环执行零轮，不输出回复。直接读取 <code>choices[0]</code> 则会触发 <code>IndexError</code>。这只说明空列表的行为，其他字段仍需符合示例结构。</p></div>
+        </details>
+        <p>随时回到聊天提问；保留完整代码和输出，方便一起定位当前拿到的是哪一层数据。</p>
+      </section>
+    </main>
+    <footer class="footer">Python for AI · 第二十二课速查 · list → 当前 dict → 文字</footer>
+  </div>
+</body>
+</html>

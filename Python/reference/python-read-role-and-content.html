@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Python 第二十三课速查：在 choices 循环里读取 role 和 content。">
+  <title>Python 读取 role 和 content 速查</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <span>Python for AI · Reference 23</span>
+      <nav aria-label="速查导航">
+        <a href="../lessons/0023-read-role-and-content.html">第二十三课</a>
+        <a href="python-loop-through-choices.html">逐条读取 choices</a>
+        <a href="python-json-loads.html">json.loads</a>
+      </nav>
+    </header>
+    <section class="hero">
+      <p class="eyebrow">Reference / role and content</p>
+      <h1>读取 role 和 content</h1>
+      <p class="lede">每轮先拿到当前 <code>choice</code>，再取出 <code>message</code> 字典，最后读取两个字段。</p>
+    </section>
+    <main>
+      <section class="section" id="pattern">
+        <h2>读取模板</h2>
+        <pre id="reference-code"><code>import json
+
+response_text = '{"choices": [{"message": {"role": "assistant", "content": "先打印输入"}}, {"message": {"role": "assistant", "content": "再检查条件"}}]}'
+response = json.loads(response_text)
+
+choices = response["choices"]
+for choice in choices:
+    message = choice["message"]
+    print("角色：", message["role"])
+    print("内容：", message["content"])</code></pre>
+      </section>
+      <section class="section" id="shape">
+        <h2>每层数据</h2>
+        <table>
+          <thead><tr><th scope="col">表达式</th><th scope="col">职责</th></tr></thead>
+          <tbody>
+            <tr><td><code>response</code></td><td>最外层字典，直接保存 <code>choices</code></td></tr>
+            <tr><td><code>response["choices"]</code></td><td>全部回复组成的列表</td></tr>
+            <tr><td><code>choice</code></td><td>当前这一份回复字典</td></tr>
+            <tr><td><code>choice["message"]</code></td><td>当前回复里的消息字典</td></tr>
+            <tr><td><code>message["role"]</code></td><td>当前消息的角色</td></tr>
+            <tr><td><code>message["content"]</code></td><td>当前消息的文字内容</td></tr>
+          </tbody>
+        </table>
+      </section>
+      <section class="section" id="checks">
+        <h2>写完检查三处</h2>
+        <ul>
+          <li>只写一个 <code>for</code> 循环；不要为 <code>role</code> 再写第二个循环。</li>
+          <li><code>message = choice["message"]</code> 写在循环里面，因为每轮的 <code>choice</code> 会变。</li>
+          <li>如果出现 <code>KeyError</code>，先检查字段名拼写和当前层级是否正确。</li>
+        </ul>
+        <p class="source-note">依据：<a href="https://docs.python.org/zh-cn/3.13/tutorial/controlflow.html#for-statements">Python 官方 for 教程</a> · <a href="https://docs.python.org/zh-cn/3.13/tutorial/datastructures.html#dictionaries">官方字典教程</a> · <a href="https://docs.python.org/zh-cn/3.13/library/json.html#json.loads">官方 json.loads 文档</a>。</p>
+        <p>随时回到聊天提问；发出完整代码和输出，就能一起定位当前拿到的是哪一层数据。</p>
+      </section>
+    </main>
+    <footer class="footer">Python for AI · 第二十三课速查 · message 里的两个字段</footer>
+  </div>
+</body>
+</html>

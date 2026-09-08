@@ -39,8 +39,11 @@
 - 2026-09-08：已完成第十九次学习，掌握读取模拟 AI 回复。用户亲手编写并运行 `ai_response.py`，能把外部系统返回的 JSON 字符串 `response_text` 用 `json.loads(response_text)` 解析为 Python `dict`，再读取 `response["reply"]`、`response["passed_groups"]`、`response["total_groups"]`。证据保存在 `records/0019-parse-ai-response.md`。
 - 2026-09-08：已完成第二十次学习，掌握读取嵌套 AI 回复。用户亲手编写并运行 `nested_response.py`，能把外部 JSON 字符串解析为外层 Python `dict`，再读取内层 `message` 与 `usage` 字典中的字段，例如 `message["content"]` 和 `usage["total_tokens"]`。用户曾把 `content` key 名字误认为会一起输出，随后理解 key 取出的是 value。证据保存在 `records/0020-nested-ai-response.md`。
 - 2026-09-08：已完成第二十一次学习，掌握读取 `choices` 列表里的 AI 回复。用户亲手编写并运行 `choices_response.py`，能把外部 JSON 字符串解析后，按 `response["choices"][0]["message"]["content"]` 的顺序读取回复文字：先用 key 取出 `choices` 列表，再用 `[0]` 取第一份回复，最后继续用 key 读取内层字段。证据保存在 `records/0021-choices-list-response.md`。
+- 2026-09-08：已完成第二十二次学习，掌握逐条读取 `choices` 里的多份回复。用户能正确预测 `[0]` 读取第一份回复、两份 `choices` 的循环输出，以及三份数据迁移后的三行输出；亲手编写并运行 `all_choices.py`，先修正 `NameError: name 'choices' is not defined`，再用 `choices = response["choices"]` 和 `for choice in choices` 逐份打印 `message["content"]`。证据保存在 `records/0022-loop-through-choices.md`。
+- 2026-09-08：已完成第二十三次学习，掌握在 `choices` 循环中同时读取 `role` 和 `content`。用户能正确预测上一课循环输出，修正了把 `message["role"]` 与同层 `content` 混在一起的误解，亲手改造并运行 `all_choices.py`，在同一轮里打印 `message["role"]` 和 `message["content"]`；换成三份数据后循环保持不变，正确输出六行角色和内容。证据保存在 `records/0023-read-role-and-content.md`。
+- 2026-09-08：已完成第二十四次学习，掌握把多条 `content` 收集进列表。用户能正确预测两份 `choices` 的循环输出，修正了把第一轮后列表误判为全部结果的混淆；亲手新建并运行 `collected_contents.py`，先修正 `NameError: name 'content' is not defined`，再用 `content = message["content"]` 和 `contents.append(content)` 收集两条回复文字；换成三份数据后循环保持不变，正确输出 `['先检查输入', '再检查条件', '最后整理回答']`。证据保存在 `records/0024-collect-ai-contents.md`。
 
 ## 后续教学要点
 
 - 第四课中，用户曾把分支条件与返回值的来源混淆，也曾需要逐项拆解 `def` 那一行；第五课已通过 `result = compare_guess(guess, secret)` 继续巩固“函数返回文字，再由 `print(result)` 显示”的数据流。
-- 聊天教学延续一题一反馈；下一课可以进入“读取 choices 列表里的多条回复”，例如 `for choice in response["choices"]`。继续强调：`dict` 用 key 取 value，`list` 用 index 取元素；如果链式取值看不清，先拆成中间变量。
+- 聊天教学延续一题一反馈；第二十五课可以继续使用收集到的 `contents` 列表做后续处理，例如用 `len(contents)` 统计回复条数，或把多条文字合并成一段输出。
