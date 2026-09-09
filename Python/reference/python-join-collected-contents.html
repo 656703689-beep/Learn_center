@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Python 第二十六课速查：用 join() 把 content 列表合并成文本。">
+  <title>Python 合并 content 速查</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <span>Python for AI · Reference 26</span>
+      <nav aria-label="速查导航">
+        <a href="../lessons/0026-join-collected-contents.html">第二十六课</a>
+        <a href="python-count-collected-contents.html">统计条数</a>
+        <a href="python-collect-ai-contents.html">收集 content</a>
+      </nav>
+    </header>
+    <section class="hero">
+      <p class="eyebrow">Reference / join contents</p>
+      <h1>合并多条 content</h1>
+      <p class="lede">用 <code>分隔符.join(列表)</code> 把字符串列表合成一段文本。</p>
+    </section>
+    <main>
+      <section class="section" id="pattern">
+        <h2>完整模板</h2>
+        <pre id="reference-code"><code>import json
+
+response_text = '{"choices": [{"message": {"role": "assistant", "content": "先检查输入"}}, {"message": {"role": "assistant", "content": "再检查条件"}}, {"message": {"role": "assistant", "content": "最后整理回答"}}]}'
+response = json.loads(response_text)
+
+contents = []
+
+for choice in response["choices"]:
+    message = choice["message"]
+    content = message["content"]
+    contents.append(content)
+
+final_text = "\n".join(contents)
+
+print(final_text)</code></pre>
+      </section>
+      <section class="section" id="shape">
+        <h2>常用分隔符</h2>
+        <table>
+          <thead><tr><th scope="col">代码</th><th scope="col">用途</th><th scope="col">输出形状</th></tr></thead>
+          <tbody>
+            <tr><td><code>"\n".join(contents)</code></td><td>整理步骤、日志、回复块</td><td>每条一行</td></tr>
+            <tr><td><code>"，".join(contents)</code></td><td>合成一句中文</td><td>逗号分隔的一行</td></tr>
+            <tr><td><code>"".join(contents)</code></td><td>直接贴合</td><td>中间没有分隔</td></tr>
+          </tbody>
+        </table>
+      </section>
+      <section class="section" id="checks">
+        <h2>写完检查三处</h2>
+        <ul>
+          <li><code>contents</code> 里必须都是字符串。</li>
+          <li><code>join()</code> 前面的字符串是分隔符。</li>
+          <li>要一条回复一行，分隔符用 <code>"\n"</code>。</li>
+        </ul>
+        <p class="source-note">依据：<a href="https://docs.python.org/zh-cn/3.13/library/stdtypes.html#str.join">Python 官方 str.join()</a> · <a href="https://docs.python.org/zh-cn/3.13/tutorial/datastructures.html#more-on-lists">Python 官方 list.append()</a> · <a href="https://docs.python.org/zh-cn/3.13/library/json.html#json.loads">官方 json.loads 文档</a>。</p>
+      </section>
+    </main>
+    <footer class="footer">Python for AI · 第二十六课速查 · final_text = "\n".join(contents)</footer>
+  </div>
+</body>
+</html>

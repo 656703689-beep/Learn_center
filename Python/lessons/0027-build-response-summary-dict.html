@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Python 第二十七课：把 contents、reply_count 和 final_text 放进一个 dict。">
+  <title>第二十七课：整理 AI 回复摘要字典</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/course.css">
+  <link rel="stylesheet" href="../assets/quiz.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <span>Python for AI · Lesson 27</span>
+      <nav aria-label="课程导航">
+        <a href="0026-join-collected-contents.html">上一课</a>
+        <a href="#warmup">回忆</a>
+        <a href="#summary">摘要</a>
+        <a href="#practice">实作</a>
+        <a href="../reference/python-response-summary-dict.html">本课速查</a>
+      </nav>
+    </header>
+
+    <section class="hero" aria-labelledby="lesson-title">
+      <p class="eyebrow">Session 27 / response summary dict</p>
+      <h1 id="lesson-title">整理 AI 回复摘要字典</h1>
+      <p class="lede">前面已经得到三样结果：回复列表、回复数量、最终文本。今天把它们放进一个 <code>dict</code>，让结果更像一份可继续传递的数据。</p>
+      <div class="meta-row">
+        <span class="pill">约 8 分钟</span>
+        <span class="pill">一个目标：结果打包</span>
+        <span class="pill">复用 dict</span>
+      </div>
+      <div class="pipeline" aria-label="把处理结果打包成字典的数据流">
+        <div class="pipeline-step"><small>列表</small><strong>contents</strong></div>
+        <div class="pipeline-step"><small>数量</small><strong>reply_count</strong></div>
+        <div class="pipeline-step"><small>文本</small><strong>final_text</strong></div>
+        <div class="pipeline-step"><small>摘要</small><strong>summary = {...}</strong></div>
+      </div>
+    </section>
+
+    <main>
+      <section class="section" id="warmup">
+        <span class="step-label">01 · 回忆 · 1 分钟</span>
+        <h2>先看上一课的最终文本</h2>
+        <p>先别运行。下面代码会输出什么？</p>
+        <pre id="warmup-code"><code>contents = ["先检查输入", "再检查条件"]
+final_text = "\n".join(contents)
+
+print(final_text)</code></pre>
+        <details>
+          <summary>回答后核对</summary>
+          <div class="answer">
+            <pre><code>先检查输入
+再检查条件</code></pre>
+            <p><code>"\n"</code> 是换行分隔符，所以两条回复分成两行显示。</p>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="summary">
+        <span class="step-label">02 · 新增一步 · 3 分钟</span>
+        <h2>把多个结果放进一个 dict</h2>
+        <p>当一个程序产生多个结果时，用 <code>dict</code> 给每个结果起名字。后续代码就能通过 key 读取需要的字段。</p>
+        <pre id="summary-code"><code>contents = ["先检查输入", "再检查条件"]
+reply_count = len(contents)
+final_text = "\n".join(contents)
+
+summary = {
+    "contents": contents,
+    "reply_count": reply_count,
+    "final_text": final_text
+}
+
+print(summary["reply_count"])
+print(summary["final_text"])</code></pre>
+        <table>
+          <thead><tr><th scope="col">key</th><th scope="col">value 来自哪里</th><th scope="col">用途</th></tr></thead>
+          <tbody>
+            <tr><td><code>"contents"</code></td><td><code>contents</code> 列表</td><td>保留每条原始回复</td></tr>
+            <tr><td><code>"reply_count"</code></td><td><code>len(contents)</code> 的结果</td><td>知道一共有几条</td></tr>
+            <tr><td><code>"final_text"</code></td><td><code>"\n".join(contents)</code> 的结果</td><td>拿到最终可读文本</td></tr>
+          </tbody>
+        </table>
+        <div class="callout">
+          <strong>本课只记一句：</strong>
+          <code>dict</code> 用 key 给结果命名，后面用同一个 key 把 value 取出来。
+        </div>
+        <p class="source-note">依据：<a href="https://docs.python.org/zh-cn/3.13/tutorial/datastructures.html#dictionaries">Python 官方：字典</a> 说明字典通过 key 存储和提取 value。</p>
+      </section>
+
+      <section class="section" id="check">
+        <span class="step-label">03 · 即时检查 · 1 分钟</span>
+        <h2>确认 key 取出的是什么</h2>
+        <form class="quiz" data-quiz data-correct="count">
+          <fieldset>
+            <legend><code>summary["reply_count"]</code> 会取出哪一个 value？</legend>
+            <label><input type="radio" name="summary-field" value="list" data-explanation="这个字段对应的是 contents 列表。">contents</label>
+            <label><input type="radio" name="summary-field" value="count" data-explanation="这个字段对应的是回复数量。">reply_count</label>
+            <label><input type="radio" name="summary-field" value="text" data-explanation="这个字段对应的是最终文本。">final_text</label>
+          </fieldset>
+          <button type="submit">检查答案</button>
+          <p data-feedback role="status" aria-live="polite" aria-atomic="true"></p>
+        </form>
+        <noscript><p>当前未启用 JavaScript，请用下面的核对说明检查答案。</p></noscript>
+        <details>
+          <summary>纸面学习：核对说明</summary>
+          <div class="answer"><p>答案：<code>reply_count</code>。key <code>"reply_count"</code> 对应的 value 是数量。</p></div>
+        </details>
+      </section>
+
+      <section class="section" id="practice">
+        <span class="step-label">04 · 亲手完成 · 3 分钟</span>
+        <h2>新建 response_summary.py</h2>
+        <p>在 <code>Python</code> 文件夹中新建 <code>response_summary.py</code>。先写下面代码，再自己补全 <code>summary</code> 字典。</p>
+        <pre id="practice-starter"><code>import json
+
+response_text = '{"choices": [{"message": {"role": "assistant", "content": "先检查输入"}}, {"message": {"role": "assistant", "content": "再检查条件"}}, {"message": {"role": "assistant", "content": "最后整理回答"}}]}'
+response = json.loads(response_text)
+
+contents = []
+
+for choice in response["choices"]:
+    message = choice["message"]
+    content = message["content"]
+    contents.append(content)
+
+reply_count = len(contents)
+final_text = "\n".join(contents)
+
+# 在下面补全：把 contents、reply_count、final_text 放进 summary
+
+print(summary["reply_count"])
+print(summary["final_text"])</code></pre>
+        <p>目标输出：</p>
+        <pre id="practice-output"><code>3
+先检查输入
+再检查条件
+最后整理回答</code></pre>
+        <details>
+          <summary>卡住时看提示</summary>
+          <div class="answer">
+            <pre><code>summary = {
+    "contents": contents,
+    "reply_count": reply_count,
+    "final_text": final_text
+}</code></pre>
+            <p>冒号左边是 key，右边是已经算好的变量。</p>
+          </div>
+        </details>
+        <p>运行：</p>
+        <div class="terminal-line">python response_summary.py</div>
+        <p>完成后，再加一行 <code>print(summary["contents"])</code>，先预测再运行。</p>
+        <div class="next-action">
+          <h3>回到聊天，一题一反馈</h3>
+          <p>先发你对开场代码的预测。我会检查后再带你写 <code>response_summary.py</code>。</p>
+        </div>
+        <p>复习时，先默写三个 key：<code>"contents"</code>、<code>"reply_count"</code>、<code>"final_text"</code>，再用<a href="../reference/python-response-summary-dict.html">本课速查</a>核对。</p>
+      </section>
+
+      <section class="section" id="sources">
+        <span class="step-label">官方阅读 · 按需</span>
+        <h2>只读一小段</h2>
+        <p>读 <a href="https://docs.python.org/zh-cn/3.13/tutorial/datastructures.html#dictionaries">Python 3.13 教程 §5.5 字典</a> 中 key-value 的说明即可。本课只用字典把多个处理结果打包起来。</p>
+        <p>需要回顾时：<a href="0026-join-collected-contents.html">上一课合并文本</a> · <a href="0012-dict-report.html">第 12 课 dict</a> · <a href="../reference/python-join-collected-contents.html">合并 content 速查</a>。</p>
+      </section>
+    </main>
+    <footer class="footer">Python for AI · 第二十七课 · summary dict</footer>
+  </div>
+</body>
+</html>

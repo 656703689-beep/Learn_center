@@ -47,3 +47,6 @@
 
 - 第四课中，用户曾把分支条件与返回值的来源混淆，也曾需要逐项拆解 `def` 那一行；第五课已通过 `result = compare_guess(guess, secret)` 继续巩固“函数返回文字，再由 `print(result)` 显示”的数据流。
 - 聊天教学延续一题一反馈；第二十五课可以继续使用收集到的 `contents` 列表做后续处理，例如用 `len(contents)` 统计回复条数，或把多条文字合并成一段输出。
+- 2026-09-09：已完成第二十五课：统计收集到几条回复。用户能把第十一课的 `len()` 迁移到 AI 回复列表：先完成 `contents` 收集，再用 `reply_count = len(contents)` 得到回复条数；也能区分 `len(contents)` 数列表项、`len(content)` 数当前字符串字符数。用户亲手运行 `content_count.py`，两条数据输出 `回复数量： 2`，三条数据输出 `['先检查输入', '再检查条件', '最后整理回答']` 与 `回复数量： 3`。证据保存在 `records/0025-count-collected-contents.md`。
+- 2026-09-09：已完成第二十六课：合并多条回复文字。用户能用 `final_text = "\n".join(contents)` 把已收集的字符串列表合并成一段最终文本，一条回复一行；也能把分隔符迁移为中文逗号 `，`，理解 `join()` 前面的字符串就是插入到每两项之间的分隔符。用户亲手运行 `final_text.py`，先输出三行文本，再输出 `先检查输入，再检查条件，最后整理回答`。证据保存在 `records/0026-join-collected-contents.md`。
+- 2026-09-09：已完成第二十七课：整理 AI 回复摘要字典。用户能把 `contents`、`reply_count`、`final_text` 放进 `summary` 字典，并通过 `summary["reply_count"]`、`summary["final_text"]`、`summary["contents"]` 读取字段。用户曾把 `summary["contents"]` 误判为合并文本，随后能正确指出它输出原始列表；亲手运行 `response_summary.py`，输出数量 `3` 和三行最终文本。证据保存在 `records/0027-response-summary-dict.md`。

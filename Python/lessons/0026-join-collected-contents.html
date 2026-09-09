@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Python 第二十六课：用 join() 把收集到的多条 content 合并成一段文本。">
+  <title>第二十六课：合并多条回复文字</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/course.css">
+  <link rel="stylesheet" href="../assets/quiz.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <span>Python for AI · Lesson 26</span>
+      <nav aria-label="课程导航">
+        <a href="0025-count-collected-contents.html">上一课</a>
+        <a href="#warmup">回忆</a>
+        <a href="#join">合并</a>
+        <a href="#practice">实作</a>
+        <a href="../reference/python-join-collected-contents.html">本课速查</a>
+      </nav>
+    </header>
+
+    <section class="hero" aria-labelledby="lesson-title">
+      <p class="eyebrow">Session 26 / "\n".join(contents)</p>
+      <h1 id="lesson-title">合并多条回复文字</h1>
+      <p class="lede">前两课已经能收集回复并统计条数。今天把 <code>contents</code> 列表合并成一段可阅读的文本。</p>
+      <div class="meta-row">
+        <span class="pill">约 8 分钟</span>
+        <span class="pill">一个目标：列表 → 字符串</span>
+        <span class="pill">新增 join()</span>
+      </div>
+      <div class="pipeline" aria-label="从列表合并成文本的数据流">
+        <div class="pipeline-step"><small>已有列表</small><strong>contents</strong></div>
+        <div class="pipeline-step"><small>选分隔符</small><strong>"\n"</strong></div>
+        <div class="pipeline-step"><small>合并文本</small><strong>final_text = "\n".join(contents)</strong></div>
+        <div class="pipeline-step"><small>显示结果</small><strong>print(final_text)</strong></div>
+      </div>
+    </section>
+
+    <main>
+      <section class="section" id="warmup">
+        <span class="step-label">01 · 回忆 · 1 分钟</span>
+        <h2>先看已有列表</h2>
+        <p>先别运行。下面代码会输出什么？</p>
+        <pre id="warmup-code"><code>contents = ["先检查输入", "再检查条件"]
+print(len(contents))</code></pre>
+        <details>
+          <summary>回答后核对</summary>
+          <div class="answer">
+            <pre><code>2</code></pre>
+            <p><code>len(contents)</code> 数的是列表里有几项。</p>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="join">
+        <span class="step-label">02 · 新增一步 · 3 分钟</span>
+        <h2>用分隔符把列表合成文本</h2>
+        <p><code>join()</code> 的形状有点反直觉：分隔符写在前面，列表写在括号里。</p>
+        <pre id="join-code"><code>contents = ["先检查输入", "再检查条件", "最后整理回答"]
+
+final_text = "\n".join(contents)
+
+print(final_text)</code></pre>
+        <p>输出会变成三行普通文本：</p>
+        <pre><code>先检查输入
+再检查条件
+最后整理回答</code></pre>
+        <table>
+          <thead><tr><th scope="col">代码</th><th scope="col">分隔符</th><th scope="col">结果形状</th></tr></thead>
+          <tbody>
+            <tr><td><code>"\n".join(contents)</code></td><td>换行</td><td>一行一个回复</td></tr>
+            <tr><td><code>"，".join(contents)</code></td><td>中文逗号</td><td>合成一句话</td></tr>
+          </tbody>
+        </table>
+        <div class="callout">
+          <strong>本课只记一句：</strong>
+          要把多条字符串合成一段文本，用 <code>分隔符.join(列表)</code>。
+        </div>
+        <p class="source-note">依据：<a href="https://docs.python.org/zh-cn/3.13/library/stdtypes.html#str.join">Python 官方：str.join()</a> 会把 iterable 里的字符串拼接成一个新字符串，分隔符由调用它的字符串提供。</p>
+      </section>
+
+      <section class="section" id="check">
+        <span class="step-label">03 · 即时检查 · 1 分钟</span>
+        <h2>确认谁是分隔符</h2>
+        <form class="quiz" data-quiz data-correct="newline">
+          <fieldset>
+            <legend>想让每条回复单独一行，应该用哪一个？</legend>
+            <label><input type="radio" name="join-separator" value="comma" data-explanation="中文逗号会把回复合成一行。">"，".join(contents)</label>
+            <label><input type="radio" name="join-separator" value="newline" data-explanation="换行符会放在每两条回复之间，所以输出时一条一行。">"\n".join(contents)</label>
+            <label><input type="radio" name="join-separator" value="empty" data-explanation="空字符串会直接贴在一起，中间没有分隔。">"".join(contents)</label>
+          </fieldset>
+          <button type="submit">检查答案</button>
+          <p data-feedback role="status" aria-live="polite" aria-atomic="true"></p>
+        </form>
+        <noscript><p>当前未启用 JavaScript，请用下面的核对说明检查答案。</p></noscript>
+        <details>
+          <summary>纸面学习：核对说明</summary>
+          <div class="answer"><p>答案：<code>"\n".join(contents)</code>。<code>"\n"</code> 是换行符。</p></div>
+        </details>
+      </section>
+
+      <section class="section" id="practice">
+        <span class="step-label">04 · 亲手完成 · 3 分钟</span>
+        <h2>新建 final_text.py</h2>
+        <p>在 <code>Python</code> 文件夹中新建 <code>final_text.py</code>。先写下面代码，再自己补全合并文本的一行。</p>
+        <pre id="practice-starter"><code>import json
+
+response_text = '{"choices": [{"message": {"role": "assistant", "content": "先检查输入"}}, {"message": {"role": "assistant", "content": "再检查条件"}}, {"message": {"role": "assistant", "content": "最后整理回答"}}]}'
+response = json.loads(response_text)
+
+contents = []
+
+for choice in response["choices"]:
+    message = choice["message"]
+    content = message["content"]
+    contents.append(content)
+
+# 在下面补全：把 contents 合并成一段文本，一条回复一行
+
+print(final_text)</code></pre>
+        <p>目标输出：</p>
+        <pre id="practice-output"><code>先检查输入
+再检查条件
+最后整理回答</code></pre>
+        <details>
+          <summary>卡住时看提示</summary>
+          <div class="answer">
+            <pre><code>final_text = "\n".join(contents)</code></pre>
+            <p><code>"\n"</code> 表示换行；<code>contents</code> 是要合并的字符串列表。</p>
+          </div>
+        </details>
+        <p>运行：</p>
+        <div class="terminal-line">python final_text.py</div>
+        <p>完成后，把分隔符改成 <code>"，"</code>，保持列表不变，先预测再运行。</p>
+        <pre id="transfer-code"><code>final_text = "，".join(contents)</code></pre>
+        <div class="next-action">
+          <h3>回到聊天，一题一反馈</h3>
+          <p>先发你对开场代码的预测。我会检查后再带你写 <code>final_text.py</code>。</p>
+        </div>
+        <p>复习时，先默写 <code>final_text = "\n".join(contents)</code>，再用<a href="../reference/python-join-collected-contents.html">本课速查</a>核对。</p>
+      </section>
+
+      <section class="section" id="sources">
+        <span class="step-label">官方阅读 · 按需</span>
+        <h2>只读一小段</h2>
+        <p>读 <a href="https://docs.python.org/zh-cn/3.13/library/stdtypes.html#str.join">Python 3.13 字符串方法 str.join()</a> 的定义和示例即可。本课只用它把 <code>contents</code> 里的多条字符串合并成最终文本。</p>
+        <p>需要回顾时：<a href="0025-count-collected-contents.html">上一课统计回复条数</a> · <a href="0024-collect-ai-contents.html">第 24 课收集 content</a> · <a href="../reference/python-count-collected-contents.html">统计回复条数速查</a>。</p>
+      </section>
+    </main>
+    <footer class="footer">Python for AI · 第二十六课 · "\n".join(contents)</footer>
+  </div>
+</body>
+</html>

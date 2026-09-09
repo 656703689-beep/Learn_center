@@ -40,6 +40,7 @@ body {
 a {
   color: var(--cobalt-dark);
   text-underline-offset: 0.2em;
+  overflow-wrap: anywhere;
 }
 
 a:hover {
@@ -66,6 +67,8 @@ code {
   background: var(--soft-blue);
   border-radius: 5px;
   font-size: 0.92em;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 pre {
@@ -86,6 +89,7 @@ pre code {
   background: transparent;
   border-radius: 0;
   font-size: 0.9em;
+  white-space: pre-wrap;
 }
 
 kbd {
@@ -543,6 +547,7 @@ th {
 .source-note {
   color: var(--muted);
   font-size: 0.85rem;
+  overflow-wrap: anywhere;
 }
 
 .footer {
